@@ -8,6 +8,8 @@
 #include "chrono"
 #include "ctime"
 #include "string"
+#include "fstream"
+#include "iostream"
 using namespace std;
 
 class file {
@@ -16,18 +18,23 @@ private:
     // TODO 位置
     int size;
     // TODO 所属用户
-    char masterPrivilege;                       // 所有者权限
-    char otherPrivilege;                        // 其他人权限
-    chrono::system_clock::time_point createTime;// 创建时间
-    chrono::system_clock::time_point modifyTime;// 修改时间
-    long long point;                            // 保存在数据文件中的位置
+    char masterPrivilege;
+    char otherPrivilege;
+    chrono::system_clock::time_point createTime;
+    chrono::system_clock::time_point modifyTime;
+    long long point;   // 保存在数据文件中的位置
+    fstream fileHandle;// 声明文件句柄
 
 private:
     bool updateTime();// 更新文件修改时间
 
 public:
-    file();
+    file(string &fileName);
     ~file();
+
+public:
+    bool setMasterPrivilege (char masterPrivilege); // 设置文件所有者权限
+    bool setOtherPrivilege (char otherPrivilege); // 设置其他用户的权限
 };
 
 
