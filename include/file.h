@@ -32,11 +32,14 @@ public:
     file(string &fileName);
     ~file();
 
+
 public:
-    bool setMasterPrivilege(char masterPrivilege);// 设置文件所有者权限
-    bool setOtherPrivilege(char otherPrivilege);  // 设置其他用户的权限
-    bool deleteFile();                            // 删除文件
-    string readFile();                            // 读取的文件内容
+    bool setMasterPrivilege (char masterPrivilege); // 设置文件所有者权限
+    bool setOtherPrivilege (char otherPrivilege); // 设置其他用户的权限
+    bool deleteFile();;// 删除文件
+    string readFile(); // 读取的文件内容
+    char getMasterPrivilege(char masterPrivilege);           // 获取所有者权限
+    char getOtherPrivilege(char otherPrivilege);            // 获取其他用户权限
 };
 
 
