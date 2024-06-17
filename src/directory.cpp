@@ -55,3 +55,6 @@ char directory::checkMasterPrivilege(char masterPrivilege) {
 char directory::checkOtherPrivilege(char otherPrivilege) {
     return this->otherPrivilege == otherPrivilege;
 }
+
+
+directory::~directory() {}
