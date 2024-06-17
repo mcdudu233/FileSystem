@@ -4,7 +4,9 @@
 
 int main(int argc, char *argv[]) {
     // 初始化数据
-    initData();
+    if (!initData()) {
+        cerr << "Fail to init data.";
+    }
 
     QApplication a(argc, argv);
     // 运行主窗口

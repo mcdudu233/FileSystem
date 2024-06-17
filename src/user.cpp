@@ -14,6 +14,8 @@ user::user(std::string name, std::string password, bool superuser) {
     this->superuser = superuser;
 }
 
+user::~user() {}
+
 bool user::changePassword(std::string password) {
     this->password = password;
     return true;

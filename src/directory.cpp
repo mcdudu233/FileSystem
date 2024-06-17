@@ -16,3 +16,5 @@ directory::directory(string name, directory *father, user master) {
     this->modifyTime = chrono::system_clock::now();
     this->father = father;
 }
+
+directory::~directory() {}
