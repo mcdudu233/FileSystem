@@ -16,7 +16,7 @@ using namespace std;
 class directory {
 private:
     string name;                                // 目录名
-    user user;                                  // 所属用户
+    user master;                                // 所属用户
     char masterPrivilege;                       // 所有者权限
     char otherPrivilege;                        // 其他人权限
     chrono::system_clock::time_point createTime;// 创建时间
@@ -26,11 +26,17 @@ private:
     vector<file *> files;                       // 目录下的文件
 
 public:
+    directory(string name, directory *father, user master);
+    ~directory();
     string getName();                    // 获取目录名
-    class user getUser();                // 获取所属用户
+    user getUser();                      // 获取所属用户
     vector<directory *> getDirectories();// 获取所有子目录
     vector<file *> getFiles();           // 获取所有文件
+    bool addFile(file file);             // 新增文件
+    bool addDirectory(directory dir);    // 新增目录
 };
 
+// 根目录
+extern directory dir_root;
 
 #endif//FILESYSTEM_DIRECTORY_H
