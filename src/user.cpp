@@ -5,6 +5,6 @@
 #include "user.h"
 
 bool user::changePassword(std::string password) {
-    this->password=password;
+    this->password = password;
     return true;
 }

@@ -20,6 +20,7 @@ private:
 public:
     bool changePassword(string password); // 改密码命令
 
+
 };
 
 
