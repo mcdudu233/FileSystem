@@ -37,7 +37,7 @@ bool file::setMasterPrivilege(char privilege) {
     return true;
 }
  bool file::setOtherPrivilege(char privilege) {
-    this->otherPrivilege = privilege;
+    this->otherPrivilege =privilege;
     return true;
 }
 

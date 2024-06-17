@@ -34,7 +34,7 @@ public:
 
 public:
     bool setMasterPrivilege (char masterPrivilege); // 设置文件所有者权限
-    bool setOtherPrivilege (char otherPrivilege); // 设置其他用户权限
+    bool setOtherPrivilege (char otherPrivilege); // 设置其他用户的权限
 };
 
 
