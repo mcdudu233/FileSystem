@@ -7,17 +7,17 @@
 
 #include "chrono"
 #include "ctime"
-#include "string"
 #include "fstream"
 #include "iostream"
+#include "string"
+#include "user.h"
 using namespace std;
 
 class file {
 private:
     string name;
-    // TODO 位置
     int size;
-    // TODO 所属用户
+    user master;
     char masterPrivilege;
     char otherPrivilege;
     chrono::system_clock::time_point createTime;
@@ -32,12 +32,11 @@ public:
     file(string &fileName);
     ~file();
 
-
 public:
-    bool setMasterPrivilege (char masterPrivilege); // 设置文件所有者权限
-    bool setOtherPrivilege (char otherPrivilege); // 设置其他用户的权限
-    bool deleteFile();;// 删除文件
-    string readFile(); // 读取的文件内容
+    bool setMasterPrivilege(char masterPrivilege);// 设置文件所有者权限
+    bool setOtherPrivilege(char otherPrivilege);  // 设置其他用户的权限
+    bool deleteFile();                            // 删除文件
+    string readFile();                            // 读取的文件内容
 };
 
 
