@@ -16,7 +16,12 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(filesystem main.cpp)
+aux_source_directory(src SRC)
+aux_source_directory(form FORM)
+include_directories(include)
+add_executable(filesystem ${SRC} ${FORM})
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
 target_link_libraries(filesystem
         Qt::Core
         Qt::Gui

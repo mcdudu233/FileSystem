@@ -2,4 +2,6 @@
 .idea/
 cmake-build-debug
 cmake-build-debug/
+bin
+bin/
 QT_PATH
