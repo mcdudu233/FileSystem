@@ -1,0 +1,36 @@
+//
+// Created by dudu233 on 2024/6/17.
+//
+
+#ifndef FILESYSTEM_DIRECTORY_H
+#define FILESYSTEM_DIRECTORY_H
+
+#include "chrono"
+#include "ctime"
+#include "file.h"
+#include "string"
+#include "user.h"
+#include "vector"
+using namespace std;
+
+class directory {
+private:
+    string name;                                // 目录名
+    user user;                                  // 所属用户
+    char masterPrivilege;                       // 所有者权限
+    char otherPrivilege;                        // 其他人权限
+    chrono::system_clock::time_point createTime;// 创建时间
+    chrono::system_clock::time_point modifyTime;// 修改时间
+    directory *father;                          // 父目录
+    vector<directory *> directories;            // 子目录
+    vector<file *> files;                       // 目录下的文件
+
+public:
+    string getName();                    // 获取目录名
+    class user getUser();                // 获取所属用户
+    vector<directory *> getDirectories();// 获取所有子目录
+    vector<file *> getFiles();           // 获取所有文件
+};
+
+
+#endif//FILESYSTEM_DIRECTORY_H

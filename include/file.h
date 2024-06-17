@@ -16,11 +16,11 @@ private:
     // TODO 位置
     int size;
     // TODO 所属用户
-    char masterPrivilege;
-    char otherPrivilege;
-    chrono::system_clock::time_point createTime;
-    chrono::system_clock::time_point modifyTime;
-    long long point;// 保存在数据文件中的位置
+    char masterPrivilege;                       // 所有者权限
+    char otherPrivilege;                        // 其他人权限
+    chrono::system_clock::time_point createTime;// 创建时间
+    chrono::system_clock::time_point modifyTime;// 修改时间
+    long long point;                            // 保存在数据文件中的位置
 
 private:
     bool updateTime();// 更新文件修改时间
