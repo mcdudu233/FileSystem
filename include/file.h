@@ -37,7 +37,7 @@ public:
     bool setMasterPrivilege (char masterPrivilege); // 设置文件所有者权限
     bool setOtherPrivilege (char otherPrivilege); // 设置其他用户的权限
     bool deleteFile();;// 删除文件
-    int  readFile; // 读取的文件内容
+    string readFile(); // 读取的文件内容
 };
 
 
