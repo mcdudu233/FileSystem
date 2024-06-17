@@ -10,20 +10,17 @@
 #include "string"
 using namespace std;
 
-typedef struct {
+class file {
+private:
     string name;
     // TODO 位置
     int size;
     // TODO 所属用户
     char masterPrivilege;
     char otherPrivilege;
-    std::chrono::system_clock::time_point createTime;
-    std::chrono::system_clock::time_point modifyTime;
-} FCB;
-
-class file {
-private:
-    FCB fcb;
+    chrono::system_clock::time_point createTime;
+    chrono::system_clock::time_point modifyTime;
+    long long point;// 保存在数据文件中的位置
 
 private:
     bool updateTime();// 更新文件修改时间
