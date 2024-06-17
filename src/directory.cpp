@@ -17,7 +17,7 @@ directory::directory(string name, directory *father, user master) {
     this->father = father;
 }
 
-//获取目录名
+// 获取目录名
 string directory::getName() {
     return name;
 }

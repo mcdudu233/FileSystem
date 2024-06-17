@@ -37,7 +37,7 @@ public:
     char getMasterPrivilege();           // 获取所有者权限
     char getOtherPrivilege();            // 获取其他用户权限
     char checkMasterPrivilege(char masterPrivilege);         // 检查所有者权限
-    char checkOtherPrivilege( char otherPrivilege);          //检查其他用户权限
+    char checkOtherPrivilege( char otherPrivilege);          // 检查其他用户权限
 
 };
 
