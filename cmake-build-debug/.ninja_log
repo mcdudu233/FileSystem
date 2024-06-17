@@ -1,8 +1,0 @@
-# ninja log v6
-5	155	7402930746162424	filesystem_autogen/timestamp	c8e9e4f1a8f80276
-5	155	7402930746162424	filesystem_autogen/mocs_compilation.cpp	c8e9e4f1a8f80276
-5	155	7402930746162424	D:/C/filesystem/cmake-build-debug/filesystem_autogen/timestamp	c8e9e4f1a8f80276
-5	155	7402930746162424	D:/C/filesystem/cmake-build-debug/filesystem_autogen/mocs_compilation.cpp	c8e9e4f1a8f80276
-156	204	7402930746535906	CMakeFiles/filesystem.dir/filesystem_autogen/mocs_compilation.cpp.obj	7ed2436b5be8fa6b
-158	2256	7402930746561208	CMakeFiles/filesystem.dir/main.cpp.obj	633c39aeaacbda2f
-2258	2718	7402930767556703	filesystem.exe	73bef423de02f757
