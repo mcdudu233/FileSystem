@@ -40,4 +40,23 @@ bool file::setMasterPrivilege(char privilege) {
     this->otherPrivilege =privilege;
     return true;
 }
+// 删除文件
+bool file::deleteFile() {
+    fileHandle.close(); // 确保文件句柄已关闭
+    // 删除文件
+    if (remove(name.c_str()) == 0) {
+        return true; // 文件删除成功
+    } else {
+        return false; // 文件删除失败
+    }
+}
+// 读取文件内容的方法
+string file::readFile() {
+    string content;
+    string line;
+    while (getline(fileHandle, line)) {
+        content += line + "\n"; // 将每行添加到content中，并用换行符分隔
+    }
+    return content;
+}
 
