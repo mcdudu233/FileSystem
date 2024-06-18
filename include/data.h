@@ -8,17 +8,28 @@
 #include "filesystem"
 #include "fstream"
 #include "iostream"
-using namespace std;
+
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::fstream;
+using std::ifstream;
+using std::ios;
+using std::ofstream;
+using std::string;
 namespace fs = std::filesystem;
 
 // 文件系统数据的存放路径
-#define DATA_PATH "./data"
+#define DATA_PATH "./"
+#define DATA_SUFFIX ".hwh.xb.fs"
 
-// 文件系统块的大小
-extern int block_size;
-
-bool initData();
+bool initData(string name);
 bool closeData();
+bool existData(string name);
+int getSpaceSize();
+bool setSpaceSize(int size);
+int getBlockSize();
+bool setBlockSize(int size);
 bool setPosition(long long block);          // 设置读写指针位置
 char *read(long long size);                 // 读取
 char *read(long long block, long long size);// 读取

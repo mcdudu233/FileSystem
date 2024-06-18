@@ -11,7 +11,16 @@
 #include "iostream"
 #include "string"
 #include "user.h"
-using namespace std;
+
+namespace chrono = std::chrono;
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::fstream;
+using std::ifstream;
+using std::ios;
+using std::ofstream;
+using std::runtime_error;
 
 class file {
 private:
@@ -30,16 +39,18 @@ private:
 
 public:
     file(string &fileName);
+    file(const file &file);
     ~file();
 
 
 public:
-    bool setMasterPrivilege (char masterPrivilege); // 设置文件所有者权限
-    bool setOtherPrivilege (char otherPrivilege); // 设置其他用户的权限
-    bool deleteFile();;// 删除文件
-    string readFile(); // 读取的文件内容
-    char getMasterPrivilege(char masterPrivilege);           // 获取所有者权限
-    char getOtherPrivilege(char otherPrivilege);            // 获取其他用户权限
+    bool setMasterPrivilege(char masterPrivilege);// 设置文件所有者权限
+    bool setOtherPrivilege(char otherPrivilege);  // 设置其他用户的权限
+    bool deleteFile();
+    ;                                             // 删除文件
+    string readFile();                            // 读取的文件内容
+    char getMasterPrivilege(char masterPrivilege);// 获取所有者权限
+    char getOtherPrivilege(char otherPrivilege);  // 获取其他用户权限
 };
 
 

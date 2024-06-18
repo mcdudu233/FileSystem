@@ -8,7 +8,8 @@
 #include "chrono"
 #include "ctime"
 #include "string"
-using namespace std;
+
+using std::string;
 
 class user {
 private:

@@ -6,27 +6,65 @@
 
 fstream file;
 
-// 块的大小 单位：字节
-int block_size = 512;
+string data_path;                  // 文件系统数据路径
+int block_size = 512;              // 块的大小 单位：字节
+int space_size = 128 * 1024 * 1024;// 文件系统的容量 单位：字节
 
-bool initData() {
-    ofstream tmp(DATA_PATH);
-    if (tmp.is_open()) {
-        tmp.close();
-    } else {
-        return false;
+bool existData(string name) {
+    data_path = DATA_PATH + name + DATA_SUFFIX;
+    if (fs::exists(data_path)) {
+        return true;
+    }
+    return false;
+}
+
+bool initData(string name) {
+    data_path = DATA_PATH + name + DATA_SUFFIX;
+
+    // 文件不存在则初始化一个
+    if (!existData(name)) {
+        ofstream tmp(data_path, ios::out | ios::binary);
+        if (tmp.is_open()) {
+            if (!tmp.write(new char[space_size]{0}, space_size).good()) {
+                cerr << "Write new system data fail!" << endl;
+                return false;
+            }
+            tmp.close();
+        } else {
+            cerr << "Create new system data fail!" << endl;
+            return false;
+        }
     }
 
-    file.open(DATA_PATH, ios::in | ios::out | ios::binary);
+    file.open(data_path, ios::in | ios::out | ios::binary);
     if (file.is_open()) {
         return true;
     } else {
+        cerr << "Open system data fail!" << endl;
         return false;
     }
 }
 
 bool closeData() {
     file.close();
+    return true;
+}
+
+int getBlockSize() {
+    return block_size;
+}
+
+bool setBlockSize(int size) {
+    block_size = size;
+    return true;
+}
+
+int getSpaceSize() {
+    return space_size;
+}
+
+bool setSpaceSize(int size) {
+    space_size = size;
     return true;
 }
 
