@@ -29,16 +29,17 @@ private:
 public:
     directory(string name, directory *father, user master);
     ~directory();
-    string getName();                               // 获取目录名
-    user getUser();                                 // 获取所属用户
-    vector<directory> getDirectories();             // 获取所有子目录
-    vector<file> getFiles();                        // 获取所有文件
-    bool addFile(file file);                        // 新增文件
-    bool addDirectory(directory dir);               // 新增目录
-    char getMasterPrivilege();                      // 获取所有者权限
-    char getOtherPrivilege();                       // 获取其他用户权限
-    char checkMasterPrivilege(char masterPrivilege);// 检查所有者权限
-    char checkOtherPrivilege(char otherPrivilege);  // 检查其他用户权限
+    string getName();                    // 获取目录名
+    user getUser();                      // 获取所属用户
+    vector<directory > getDirectories();// 获取所有子目录
+    vector<file> getFiles();           // 获取所有文件
+    bool addFile(file file);             // 新增文件
+    bool addDirectory(directory dir);    // 新增目录
+    char getMasterPrivilege();           // 获取所有者权限
+    char getOtherPrivilege();            // 获取其他用户权限
+    bool checkMasterPrivilege(char masterPrivilege);         // 检查所有者权限
+    bool checkOtherPrivilege( char otherPrivilege);          // 检查其他用户权限
+
 };
 
 // 根目录
