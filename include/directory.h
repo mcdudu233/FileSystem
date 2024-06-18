@@ -27,19 +27,23 @@ private:
     vector<file> files;                         // 目录下的文件
 
 public:
+    directory();
     directory(string name, directory *father, user master);
+    directory(const directory &dir);
     ~directory();
-    string getName();                    // 获取目录名
-    user getUser();                      // 获取所属用户
-    vector<directory > getDirectories();// 获取所有子目录
-    vector<file> getFiles();           // 获取所有文件
-    bool addFile(file file);             // 新增文件
-    bool addDirectory(directory dir);    // 新增目录
-    char getMasterPrivilege();           // 获取所有者权限
-    char getOtherPrivilege();            // 获取其他用户权限
-    bool checkMasterPrivilege(char masterPrivilege);         // 检查所有者权限
-    bool checkOtherPrivilege( char otherPrivilege);          // 检查其他用户权限
+    string getName();                               // 获取目录名
+    user getUser();                                 // 获取所属用户
+    vector<directory> getDirectories();             // 获取所有子目录
+    vector<file> getFiles();                        // 获取所有文件
+    bool addFile(file file);                        // 新增文件
+    bool addDirectory(directory dir);               // 新增目录
+    char getMasterPrivilege();                      // 获取所有者权限
+    char getOtherPrivilege();                       // 获取其他用户权限
+    bool checkMasterPrivilege(char masterPrivilege);// 检查所有者权限
+    bool checkOtherPrivilege(char otherPrivilege);  // 检查其他用户权限
 
+    void serialize(fstream &out) const;
+    void deserialize(fstream &in);
 };
 
 // 根目录

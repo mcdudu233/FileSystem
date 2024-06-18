@@ -7,8 +7,10 @@
 
 #include "chrono"
 #include "ctime"
+#include "fstream"
 #include "string"
 
+using std::fstream;
 using std::string;
 
 class user {
@@ -22,6 +24,8 @@ public:
     user(string name, string password = "", bool superuser = false);
     ~user();
     bool changePassword(string password);// 改密码命令
+    void serialize(fstream &out) const;  // 序列化
+    void deserialize(fstream &in);       // 反序列化
 };
 
 // 默认用户

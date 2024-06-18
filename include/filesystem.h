@@ -16,13 +16,15 @@ public:
     int space_size;// 空间大小
     int block_size;// 块大小
 
-    //    user master = user_root;  // 根用户
-    //    directory tree = dir_root;// 根目录
+    user master = user_root;  // 根用户
+    directory tree = dir_root;// 根目录
 
 public:
     filesystem();
     filesystem(const string &name, int space, int block);
     ~filesystem();
+    void serialize(fstream &out) const;
+    void deserialize(fstream &in);
 };
 
 // 外部可调用的文件系统变量
