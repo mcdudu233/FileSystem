@@ -10,7 +10,7 @@ string data_path;                  // 文件系统数据路径
 int block_size = 512;              // 块的大小 单位：字节
 int space_size = 128 * 1024 * 1024;// 文件系统的容量 单位：字节
 
-bool existData(string name) {
+bool existData(const string &name) {
     data_path = DATA_PATH + name + DATA_SUFFIX;
     if (fs::exists(data_path)) {
         return true;
@@ -18,7 +18,7 @@ bool existData(string name) {
     return false;
 }
 
-bool initData(string name) {
+bool initData(const string &name) {
     data_path = DATA_PATH + name + DATA_SUFFIX;
 
     // 文件不存在则初始化一个
@@ -94,4 +94,8 @@ bool write(char *data) {
 bool write(long long block, char *data) {
     setPosition(block);
     return write(data);
+}
+
+fstream *getData() {
+    return &file;
 }

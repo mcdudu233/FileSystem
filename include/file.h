@@ -26,7 +26,7 @@ class file {
 private:
     string name;
     int size;
-    user master;
+    user master = user_root;
     char masterPrivilege;
     char otherPrivilege;
     chrono::system_clock::time_point createTime;

@@ -17,7 +17,7 @@ using std::vector;
 class directory {
 private:
     string name;                                // 目录名
-    user master;                                // 所属用户
+    user master = user_root;                    // 所属用户
     char masterPrivilege;                       // 所有者权限
     char otherPrivilege;                        // 其他人权限
     chrono::system_clock::time_point createTime;// 创建时间

@@ -6,6 +6,7 @@
 #define FILESYSTEM_DATA_H
 
 #include "filesystem"
+#include "filesystem.h"
 #include "fstream"
 #include "iostream"
 
@@ -23,9 +24,9 @@ namespace fs = std::filesystem;
 #define DATA_PATH "./"
 #define DATA_SUFFIX ".hwh.xb.fs"
 
-bool initData(string name);
+bool initData(const string &name);
 bool closeData();
-bool existData(string name);
+bool existData(const string &name);
 int getSpaceSize();
 bool setSpaceSize(int size);
 int getBlockSize();
@@ -35,5 +36,6 @@ char *read(long long size);                 // 读取
 char *read(long long block, long long size);// 读取
 bool write(char *data);                     // 写入
 bool write(long long block, char *data);    // 写入
+fstream *getData();                         // 获取file
 
 #endif//FILESYSTEM_DATA_H

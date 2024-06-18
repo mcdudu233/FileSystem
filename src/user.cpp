@@ -6,8 +6,6 @@
 
 user user_root("root", "root", true);
 
-user::user() {}
-
 user::user(std::string name, std::string password, bool superuser) {
     this->name = name;
     this->password = password;

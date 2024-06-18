@@ -19,7 +19,6 @@ private:
     int uid;        // 用户uid
 
 public:
-    user();
     user(string name, string password = "", bool superuser = false);
     ~user();
     bool changePassword(string password);// 改密码命令

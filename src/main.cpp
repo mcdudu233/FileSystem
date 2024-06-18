@@ -4,7 +4,8 @@
 
 int main(int argc, char *argv[]) {
     // 调试区
-    filesystem fs("test", 128 * 1024 * 1024, 512);
+    startFileSystem("test", 128 * 1024 * 1024, 512);
+    closeFileSystem();
     // 调试区结束
 
     QApplication a(argc, argv);
