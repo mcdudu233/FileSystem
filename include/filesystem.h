@@ -20,16 +20,10 @@ public:
     directory tree = dir_root;// 根目录
 
 public:
-    filesystem();
     filesystem(const string &name, int space, int block);
     ~filesystem();
     void serialize(fstream &out) const;
     void deserialize(fstream &in);
 };
-
-// 外部可调用的文件系统变量
-extern filesystem *newfs;
-filesystem *startFileSystem(const string &name, int space, int block);
-void closeFileSystem();
 
 #endif//FILESYSTEM_FILESYSTEM_H

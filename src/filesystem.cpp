@@ -4,10 +4,11 @@
 
 #include "filesystem.h"
 
-filesystem *newfs;
+filesystem::filesystem(const string &name, int space, int block) {
+    this->name = name;
+    this->space_size = space;
+    this->block_size = block;
 
-filesystem *startFileSystem(const string &name, int space, int block) {
-    newfs = new filesystem(name, space, block);
     setSpaceSize(space);
     setBlockSize(block);
     // 初始化文件系统数据
@@ -17,25 +18,12 @@ filesystem *startFileSystem(const string &name, int space, int block) {
         }
         // 然后加载文件系统数据
         setPosition(0);
-        newfs->deserialize(*getData());
+        deserialize(*getData());
     } else {
         if (!initData(name)) {
             cerr << "Fail to init data." << endl;
         }
     }
-    return newfs;
-}
-
-void closeFileSystem() {
-    delete newfs;
-}
-
-filesystem::filesystem() = default;
-
-filesystem::filesystem(const string &name, int space, int block) {
-    this->name = name;
-    this->space_size = space;
-    this->block_size = block;
 }
 
 filesystem::~filesystem() {
