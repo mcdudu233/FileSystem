@@ -32,7 +32,6 @@ private:
     chrono::system_clock::time_point createTime;
     chrono::system_clock::time_point modifyTime;
     long long point;   // 保存在数据文件中的位置
-    fstream fileHandle;// 声明文件句柄
 
 private:
     bool updateTime();// 更新文件修改时间
@@ -44,13 +43,12 @@ public:
 
 
 public:
-    bool setMasterPrivilege(char masterPrivilege);// 设置文件所有者权限
-    bool setOtherPrivilege(char otherPrivilege);  // 设置其他用户的权限
-    bool deleteFile();
-    ;                                             // 删除文件
-    string readFile();                            // 读取的文件内容
-    char getMasterPrivilege(char masterPrivilege);// 获取所有者权限
-    char getOtherPrivilege(char otherPrivilege);  // 获取其他用户权限
+    bool setMasterPrivilege (char masterPrivilege); // 设置文件所有者权限
+    bool setOtherPrivilege (char otherPrivilege); // 设置其他用户的权限
+    bool deleteFile();;// 删除文件
+    string readFile(); // 读取的文件内容
+    char getMasterPrivilege(char masterPrivilege);           // 获取所有者权限
+    char getOtherPrivilege(char otherPrivilege);            // 获取其他用户权限
 };
 
 

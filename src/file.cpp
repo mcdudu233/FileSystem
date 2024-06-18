@@ -3,34 +3,35 @@
 //
 
 #include "file.h"
+#include "data.h"
 // 文件类构造函数
-file::file(string &fileName) {
+file::file(string &fileName ) {
     this->name = fileName;
-    // 尝试打开文件
-    fileHandle.open(name.c_str(), ios::in | ios::out);// 打开文件用于读写
-    if (!fileHandle.is_open()) {
-        // 如果文件打开失败，处理错误
-        cerr << "无法打开文件：" << name << endl;
-        // 可以抛出异常或返回错误代码，取决于错误处理策略
-        throw runtime_error("文件打开失败");
-    }
     this->createTime = chrono::system_clock::now();
     updateTime();
-    this->masterPrivilege = 7;// 给予文件所有者所有权限
+    this->masterPrivilege = 7; // 给予文件所有者所有权限
     this->otherPrivilege = 1; // 其他用户无权限
-    this->point = -1;         // 假设-1表示文件尚未分配存储位置
-    this->size = 0;           // 初始文件大小为0；
+    this->point = -1; // 假设-1表示文件尚未分配存储位置
+    this->size = 0; // 初始文件大小为0；
 }
 
 file::file(const file &file) {
+    this->name=file.name;
+    this->size = file.size;
+    this->createTime = file.createTime;
+    this->modifyTime=file.modifyTime;
+    this->masterPrivilege = file.masterPrivilege;
+    this->otherPrivilege = file.otherPrivilege;
+    this->point = file.point;
+
 }
 
-file::~file() {
-    // 析构函数中关闭文件句柄
-    if (fileHandle.is_open()) {
-        fileHandle.close();
-    }
+file::~file(){
+
 }
+
+
+
 bool file::updateTime() {
     this->modifyTime = chrono::system_clock::now();
     return true;
@@ -44,22 +45,35 @@ bool file::setOtherPrivilege(char privilege) {
     this->otherPrivilege = privilege;
     return true;
 }
-// 删除文件
-bool file::deleteFile() {
-    fileHandle.close();// 确保文件句柄已关闭
-    // 删除文件
-    if (remove(name.c_str()) == 0) {
-        return true;// 文件删除成功
-    } else {
-        return false;// 文件删除失败
-    }
-}
 // 读取文件内容的方法
 string file::readFile() {
-    string content;
-    string line;
-    while (getline(fileHandle, line)) {
-        content += line + "\n";// 将每行添加到content中，并用换行符分隔
-    }
-    return content;
+    if (this->point == -1LL || this->size == 0) {
+        // 如果文件没有分配位置或者大小为0，返回空字符串
+        return string();
+    } // 分配足够大小的缓冲区来存储文件内容
+    char *buffer = new char[size];   // 从数据文件中读取内容
+    char *readBuf = read(point, size); // 如果读取失败，释放缓冲区并返回空字符串
+    if (!readBuf) {
+        delete[] buffer;
+        return readBuf;
+    }  // 将读取的内容复制到字符串缓冲区
 }
+
+//bool file::deleteFile() {
+//    if (point != -1 && size > 0) {
+//        // 清空文件内容（可选，取决于文件系统的实现）
+//        char *emptyData = new char[size];
+//        for (long long i = 0; i < size; ++i) {
+//            emptyData[i] = 0;
+//        }
+//        write(point, emptyData); // 写入空数据覆盖原有内容
+//        delete[] emptyData;
+//        point = -1; // 重置文件的位置和大小
+//        size = 0;
+//    }
+//    // 重置文件的创建和修改时间
+//    createTime = chrono::system_clock::now();
+//    modifyTime = chrono::system_clock::now();
+//    return true;
+//}
+
