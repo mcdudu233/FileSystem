@@ -29,9 +29,7 @@ file::file(const file &file) {
 file::~file(){
 
 }
-
-
-
+// 更新文件修改时间
 bool file::updateTime() {
     this->modifyTime = chrono::system_clock::now();
     return true;
