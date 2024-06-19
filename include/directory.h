@@ -39,11 +39,15 @@ public:
     bool addDirectory(directory dir);               // 新增目录
     char getMasterPrivilege();                      // 获取所有者权限
     char getOtherPrivilege();                       // 获取其他用户权限
-    bool checkMasterPrivilege(char masterPrivilege);// 检查所有者权限
-    bool checkOtherPrivilege(char otherPrivilege);  // 检查其他用户权限
-
-    void serialize(fstream &out) const;
-    void deserialize(fstream &in);
+    bool setName(string name);                      // 设置用户名
+    bool hasMasterPrivilege_read( char masterPrivilege);      // 判断所有者是否有读取权限
+    bool hasMasterPrivilege_write( char masterPrivilege);     // 判断所有者是否有写入权限
+    bool hasMasterPrivilege_execute( char masterPrivilege);   // 判断所有者是否有执行权限
+    bool hasOtherPrivilege_read(char otherPrivilege);         //判断其他用户是否有读取权限
+    bool hasOtherPrivilege_write(char otherPrivilege);         //判断其他用户是否有写入权限
+    bool hasOtherPrivilege_execute(char otherPrivilege);       //判断其他用户是否有执行权限
+    void serialize(fstream &out) const;                        // 序列化
+    void deserialize(fstream &in);                             // 反序列化
 };
 
 // 根目录

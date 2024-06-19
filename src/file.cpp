@@ -31,6 +31,20 @@ file::file(const file &f)
 
 file::~file() {
 }
+// 获取用户名
+string  file::getName()
+{
+    return this->name;
+}
+// 设置用户名
+bool file::setName(string name){
+    this->name=name;
+    return true;
+}
+// 获取文件大小
+int file::getSize(){
+    return this->size;
+}
 // 更新文件修改时间
 bool file::updateTime() {
     this->modifyTime = chrono::system_clock::now();
@@ -47,18 +61,38 @@ bool file::setOtherPrivilege(char privilege) {
 }
 // 读取文件内容的方法
 string file::readFile() {
-    if (this->point == -1LL || this->size == 0) {
-        // 如果文件没有分配位置或者大小为0，返回空字符串
+    if (this->point == -1 || this->size == 0) {
         return string();
-    }// 分配足够大小的缓冲区来存储文件内容
-    char *buffer = new char[size];    // 从数据文件中读取内容
-    char *readBuf = read(point, size);// 如果读取失败，释放缓冲区并返回空字符串
-    if (!readBuf) {
-        delete[] buffer;
-        return readBuf;
-    }// 将读取的内容复制到字符串缓冲区
+    }
+    char *readBuf = read(point, size);
+    return readBuf;
 }
 
+bool file::hasMasterPrivilege_read( char masterPrivilege) {     // 判断所有者是否有读取权限
+    if(this->masterPrivilege==1||3||5||7)
+        return true;
+}
+bool file::hasMasterPrivilege_write( char masterPrivilege){      // 判断所有者是否有写入权
+    if(this->masterPrivilege==2||3||6||7)
+        return true;
+}
+bool file::hasMasterPrivilege_execute(char masterPrivilege) {     //判断所有者是否具有写入权
+    if(this->masterPrivilege==4||5||6||7)
+        return true;
+}
+
+bool file::hasOtherPrivilege_read( char masterPrivilege) {     // 判断其他用户是否有读取权限
+    if(this->masterPrivilege==1||3||5||7)
+        return true;
+}
+bool file::hasOtherPrivilege_write( char masterPrivilege){      // 判断其他用户是否有写入权
+    if(this->masterPrivilege==2||3||6||7)
+        return true;
+}
+bool file::hasOtherPrivilege_execute(char masterPrivilege) {     //判断其他用户是否具有执行权
+    if(this->masterPrivilege==4||5||6||7)
+        return true;
+}
 //bool file::deleteFile() {
 //    if (point != -1 && size > 0) {
 //        // 清空文件内容（可选，取决于文件系统的实现）

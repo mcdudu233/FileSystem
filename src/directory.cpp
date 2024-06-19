@@ -34,22 +34,55 @@ directory::directory(const directory &dir) : name(dir.name),
 directory::~directory() {
     // 释放资源
 }
-
+//判断所有者是否有读取权限
+bool directory::hasMasterPrivilege_read( char masterPrivilege) {
+    if(this->masterPrivilege==1||3||5||7)
+        return true;
+}
+// 判断所有者是否有写入权限
+bool directory::hasMasterPrivilege_write( char masterPrivilege){
+    if(this->masterPrivilege==2||3||6||7)
+        return true;
+}
+// 判断所有者是否执行入权
+bool directory::hasMasterPrivilege_execute(char masterPrivilege) {
+    if(this->masterPrivilege==4||5||6||7)
+        return true;
+}
+//判断所有者是否具有读取权
+bool directory::hasOtherPrivilege_read( char masterPrivilege) {
+    if(this->masterPrivilege==1||3||5||7)
+        return true;
+}// 判断其他用户是否有写入权限
+bool directory::hasOtherPrivilege_write( char masterPrivilege){
+    if(this->masterPrivilege==2||3||6||7)
+        return true;
+}
+//判断其他用户是否具有执行权
+bool directory::hasOtherPrivilege_execute(char masterPrivilege) {
+    if(this->masterPrivilege==4||5||6||7)
+        return true;
+}
+//获取目录名
+string directory::getName(){
+    return this->name;
+}
+// 设置用户名
+bool directory::setName(string name){
+    this->name=name;
+    return true;
+}
+// 添加文件
 bool directory::addFile(file file) {
     this->files.push_back(file);
     modifyTime = chrono::system_clock::now();// 更新修改时间
     return true;                             // 假设文件添加总是成功
 }
-
+// 添加目录
 bool directory::addDirectory(directory dir) {
     this->directories.push_back(dir);
     modifyTime = chrono::system_clock::now();// 更新修改时间
     return true;                             // 假设目录添加总是成功
-}
-
-// 获取目录名
-string directory::getName() {
-    return this->name;
 }
 
 // 获取所属用户
@@ -66,17 +99,15 @@ char directory::getMasterPrivilege() {
 char directory::getOtherPrivilege() {
     return this->otherPrivilege;
 }
-
-// 检查所有者权限
-bool directory::checkMasterPrivilege(char masterPrivilege) {
-    return this->masterPrivilege == masterPrivilege;
+// 获取所有子目录
+vector<directory> directory::getDirectories() {
+    return directories;
 }
-
-// 检查其他人权限
-bool directory::checkOtherPrivilege(char otherPrivilege) {
-    return this->otherPrivilege == otherPrivilege;
+// 获取目录下的文件
+vector<file> directory::getFiles(){
+    return files;
 }
-
+//序列化
 void directory::serialize(fstream &out) const {
     size_t nameLength = name.size();
     out.write(reinterpret_cast<const char *>(&nameLength), sizeof(nameLength));
@@ -108,7 +139,7 @@ void directory::serialize(fstream &out) const {
         f.serialize(out);
     }
 }
-
+// 反序列化
 void directory::deserialize(fstream &in) {
     size_t nameLength;
     in.read(reinterpret_cast<char *>(&nameLength), sizeof(nameLength));
