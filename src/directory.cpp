@@ -107,6 +107,10 @@ vector<directory> directory::getDirectories() {
 vector<file> directory::getFiles(){
     return files;
 }
+//获取父目录名
+string directory::getFather(){
+    return this->father;
+}
 //序列化
 void directory::serialize(fstream &out) const {
     size_t nameLength = name.size();
