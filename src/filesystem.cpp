@@ -4,7 +4,22 @@
 
 #include "filesystem.h"
 
+void split(string str, vector<string> &v, string spacer) {
+    int pos1, pos2;
+    int len = spacer.length();//记录分隔符的长度
+    pos1 = 0;
+    pos2 = str.find(spacer);
+    while (pos2 != string::npos) {
+        v.push_back(str.substr(pos1, pos2 - pos1));
+        pos1 = pos2 + len;
+        pos2 = str.find(spacer, pos1);// 从str的pos1位置开始搜寻spacer
+    }
+    if (pos1 != str.length())//分割最后一个部分
+        v.push_back(str.substr(pos1));
+}
+
 filesystem::filesystem(const string &name, int space, int block) {
+    this->path = "./";
     this->name = name;
     this->space_size = space;
     this->block_size = block;
@@ -75,4 +90,9 @@ void filesystem::deserialize(fstream &in) {
     tree.deserialize(in);
 
     in.close();
+}
+
+vector<List> filesystem::ls(string path) {
+    
+    return vector<List>();
 }
