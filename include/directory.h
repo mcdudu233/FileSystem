@@ -22,13 +22,13 @@ private:
     char otherPrivilege;                        // 其他人权限
     chrono::system_clock::time_point createTime;// 创建时间
     chrono::system_clock::time_point modifyTime;// 修改时间
-    directory *father;                          // 父目录
+    string father;                              // 父目录的目录名
     vector<directory> directories;              // 子目录
     vector<file> files;                         // 目录下的文件
 
 public:
     directory();
-    directory(string name, directory *father, user master);
+    directory(string name, string father, user master);
     directory(const directory &dir);
     ~directory();
     string getName();                               // 获取目录名

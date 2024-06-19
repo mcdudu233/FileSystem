@@ -8,6 +8,8 @@ filesystem::filesystem(const string &name, int space, int block) {
     this->name = name;
     this->space_size = space;
     this->block_size = block;
+    this->users.push_back(user_root);
+    this->tree = dir_root;
 
     setSpaceSize(space);
     setBlockSize(block);
@@ -23,11 +25,14 @@ filesystem::filesystem(const string &name, int space, int block) {
         if (!initData(name)) {
             cerr << "Fail to init data." << endl;
         }
+        // 建立初始的目录和文件
+        tree.addDirectory(*new directory("root", ".", user_root));
     }
 }
 
 filesystem::~filesystem() {
     // 保存文件系统数据
+    setPosition(0);
     serialize(*getData());
     closeData();
 }
@@ -40,7 +45,12 @@ void filesystem::serialize(fstream &out) const {
     out.write(reinterpret_cast<const char *>(&space_size), sizeof(space_size));
     out.write(reinterpret_cast<const char *>(&block_size), sizeof(block_size));
 
-    master.serialize(out);
+    size_t usersSize = users.size();
+    out.write(reinterpret_cast<const char *>(&usersSize), sizeof(usersSize));
+    for (const auto &u: users) {
+        u.serialize(out);
+    }
+
     tree.serialize(out);
 
     out.close();
@@ -55,7 +65,13 @@ void filesystem::deserialize(fstream &in) {
     in.read(reinterpret_cast<char *>(&space_size), sizeof(space_size));
     in.read(reinterpret_cast<char *>(&block_size), sizeof(block_size));
 
-    master.deserialize(in);
+    size_t usersSize;
+    in.read(reinterpret_cast<char *>(&usersSize), sizeof(usersSize));
+    users.resize(usersSize);
+    for (auto &u: users) {
+        u.deserialize(in);
+    }
+
     tree.deserialize(in);
 
     in.close();

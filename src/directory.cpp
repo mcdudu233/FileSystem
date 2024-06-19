@@ -5,12 +5,12 @@
 #include "directory.h"
 
 // 根目录
-directory dir_root("", nullptr, user_root);
+directory dir_root(".", "..", user_root);
 
 directory::directory() {
 }
 
-directory::directory(string name, directory *father, user master) {
+directory::directory(string name, string father, user master) {
     this->name = name;
     this->master = master;
     this->masterPrivilege = 7;// 文件所有者有全部权限
@@ -84,6 +84,10 @@ void directory::serialize(fstream &out) const {
     out.write(reinterpret_cast<const char *>(&createTimeTimeT), sizeof(createTimeTimeT));
     out.write(reinterpret_cast<const char *>(&modifyTimeTimeT), sizeof(modifyTimeTimeT));
 
+    size_t fatherLength = father.size();
+    out.write(reinterpret_cast<const char *>(&fatherLength), sizeof(fatherLength));
+    out.write(father.c_str(), fatherLength);
+
     size_t directoriesSize = directories.size();
     out.write(reinterpret_cast<const char *>(&directoriesSize), sizeof(directoriesSize));
     for (const auto &dir: directories) {
@@ -114,6 +118,11 @@ void directory::deserialize(fstream &in) {
     in.read(reinterpret_cast<char *>(&modifyTimeTimeT), sizeof(modifyTimeTimeT));
     createTime = chrono::system_clock::from_time_t(createTimeTimeT);
     modifyTime = chrono::system_clock::from_time_t(modifyTimeTimeT);
+
+    size_t fatherLength;
+    in.read(reinterpret_cast<char *>(&fatherLength), sizeof(fatherLength));
+    father.resize(fatherLength);
+    in.read(&father[0], fatherLength);
 
     size_t directoriesSize;
     in.read(reinterpret_cast<char *>(&directoriesSize), sizeof(directoriesSize));

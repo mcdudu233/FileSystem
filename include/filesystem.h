@@ -16,8 +16,8 @@ public:
     int space_size;// 空间大小
     int block_size;// 块大小
 
-    user master = user_root;  // 根用户
-    directory tree = dir_root;// 根目录
+    vector<user> users;// 所有用户
+    directory tree;    // 根目录
 
 public:
     filesystem(const string &name, int space, int block);
