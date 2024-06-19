@@ -19,15 +19,15 @@ file::file(string &fileName) {
     this->size = 0;           // 初始文件大小为0；
 }
 
-file::file(const file &file) {
-    this->name = file.name;
-    this->size = file.size;
-    this->createTime = file.createTime;
-    this->modifyTime = file.modifyTime;
-    this->masterPrivilege = file.masterPrivilege;
-    this->otherPrivilege = file.otherPrivilege;
-    this->point = file.point;
-}
+file::file(const file &f)
+    : name(f.name),
+      size(f.size),
+      master(f.master),
+      masterPrivilege(f.masterPrivilege),
+      otherPrivilege(f.otherPrivilege),
+      createTime(f.createTime),
+      modifyTime(f.modifyTime),
+      point(f.point) {}
 
 file::~file() {
 }

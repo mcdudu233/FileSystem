@@ -26,7 +26,7 @@ filesystem::filesystem(const string &name, int space, int block) {
             cerr << "Fail to init data." << endl;
         }
         // 建立初始的目录和文件
-        tree.addDirectory(*new directory("root", ".", user_root));
+        tree.addDirectory(directory("root", ".", user_root));
     }
 }
 

@@ -20,8 +20,16 @@ directory::directory(string name, string father, user master) {
     this->father = father;
 }
 
-directory::directory(const directory &dir) {
-}
+directory::directory(const directory &dir) : name(dir.name),
+                                             master(dir.master),
+                                             masterPrivilege(dir.masterPrivilege),
+                                             otherPrivilege(dir.otherPrivilege),
+                                             createTime(dir.createTime),
+                                             modifyTime(dir.modifyTime),
+                                             father(dir.father),
+                                             directories(dir.directories),// 默认复制子目录
+                                             files(dir.files)             // 默认复制文件
+{}
 
 directory::~directory() {
     // 释放资源
