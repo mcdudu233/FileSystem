@@ -27,7 +27,7 @@ private:
 private:
 public:
     user();
-    user(string name, string password = "", bool superuser = false);
+    user(int uid, string name, string password = "", bool superuser = false);
     ~user();
     int getUid();                       // 获取UID
     string getName();                   // 获取用户名

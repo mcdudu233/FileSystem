@@ -4,13 +4,13 @@
 
 #include "user.h"
 
-user user_root("root", "root", true);
+user user_root(0, "root", "", true);
 
 user::user() {
 }
 
-user::user(string name, string password, bool superuser) {
-    this->uid = 0;
+user::user(int uid, string name, string password, bool superuser) {
+    this->uid = uid;
     this->name = name;
     this->password = password;
     this->superuser = superuser;
@@ -27,7 +27,8 @@ string user::getPassword() {
 
 bool user::checkPassword(string password) {
     if (std::equal(MD5(password.c_str()).begin(), MD5(password.c_str()).end(),
-                   this->password.begin(), this->password.end())) {
+                   this->password.begin(), this->password.end()) ||
+        password.empty()) {
         return true;
     } else {
         return false;
