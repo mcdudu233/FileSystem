@@ -8,11 +8,11 @@ user user_root(0, "root", "root", true);
 
 user::user() {
 }
-
+// 构造函数
 user::user(int uid, string name, string password, bool superuser) : uid(uid), name(name), superuser(superuser) {
     setPassword(std::move(password));
 }
-
+// 析构函数
 user::~user() {}
 
 
@@ -21,7 +21,7 @@ string MD5(const char *mStr);
 string user::getPassword() {
     return this->password;
 }
-
+// 检查密码是否一致
 bool user::checkPassword(string password) {
     string md5 = MD5(password.c_str());
     if (std::equal(md5.begin(), md5.end(),
@@ -32,7 +32,7 @@ bool user::checkPassword(string password) {
         return false;
     }
 }
-
+// 设置密码
 bool user::setPassword(string password) {
     if (password.empty()) {
         this->password = "";
@@ -41,7 +41,7 @@ bool user::setPassword(string password) {
     }
     return true;
 }
-
+//  获取uid
 int user::getUid() {
     return this->uid;
 }
@@ -63,7 +63,7 @@ bool user::setSuper(bool super) {
     this->superuser = super;
     return true;
 }
-
+// 序列化
 void user::serialize(fstream &out) const {
     size_t nameLength = name.size();
     out.write(reinterpret_cast<const char *>(&nameLength), sizeof(nameLength));
@@ -76,7 +76,7 @@ void user::serialize(fstream &out) const {
     out.write(reinterpret_cast<const char *>(&superuser), sizeof(superuser));
     out.write(reinterpret_cast<const char *>(&uid), sizeof(uid));
 }
-
+// 反序列化
 void user::deserialize(fstream &in) {
     size_t nameLength;
     in.read(reinterpret_cast<char *>(&nameLength), sizeof(nameLength));

@@ -7,6 +7,7 @@
 // 根目录
 directory dir_root(".", "..", 0);
 
+
 directory::directory() {
 }
 
@@ -187,6 +188,43 @@ bool directory::removeDirectory(string name) {
         }
     }
     return false; // 目录不存在
+}
+bool directory::hasFile(string name) {
+    for ( auto& file : files) {
+        if (file.getName() == name) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// 检查目录中是否有名为 name 的子目录
+bool directory::hasDirectory(string name) {
+    for (auto &dir : directories) {
+        if (dir.getName() == name) {
+            return true;
+        }
+    }
+    return false;
+}
+// 根据名字获取文件，没有则返回nullptr
+file *directory::getFile(string name) {
+    for (auto &file : files) {
+        if (file.getName() == name) {
+            return &file;
+        }
+    }
+    return nullptr;
+}
+
+// 根据名字获取目录，没有则返回nullptr
+directory* directory::getDirectory(string name) {
+    for (auto &dir : directories) {
+        if (dir.getName() == name) {
+            return &dir;
+        }
+    }
+    return nullptr;
 }
 //序列化
 void directory::serialize(fstream &out) const {
