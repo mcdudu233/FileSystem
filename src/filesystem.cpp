@@ -123,6 +123,24 @@ bool filesystem::cd(string path) {
     return true;
 }
 
+int filesystem::useradd(string name, string password, bool super) {
+    user usr(users.size(), name, password, super);
+    users.push_back(usr);
+    return usr.getUid();
+}
+
+bool filesystem::usercrg(int uid, string name, string password, bool super) {
+    for (auto u: users) {
+        if (u.getUid() == uid) {
+            u.setName(name);
+            u.setPassword(password);
+            u.setSuper(super);
+            return true;
+        }
+    }
+    return false;
+}
+
 /* 静态方法 工具类 */
 void filesystem::split(const string &str, vector<string> &v, const string &spacer) {
     int pos1, pos2;
