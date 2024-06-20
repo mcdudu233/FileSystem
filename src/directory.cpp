@@ -36,31 +36,67 @@ directory::~directory() {
 }
 //判断所有者是否有读取权限
 bool directory::hasMasterPrivilege_read(char masterPrivilege) {
-    if (this->masterPrivilege == 1 || 3 || 5 || 7)
+    if (this->masterPrivilege == 1 )
+        return true;
+    if (this->masterPrivilege == 3 )
+        return true;
+    if (this->masterPrivilege == 5 )
+        return true;
+    if (this->masterPrivilege == 7 )
         return true;
 }
 // 判断所有者是否有写入权限
 bool directory::hasMasterPrivilege_write(char masterPrivilege) {
-    if (this->masterPrivilege == 2 || 3 || 6 || 7)
+    if (this->masterPrivilege == 2 )
+        return true;
+    if (this->masterPrivilege == 3 )
+        return true;
+    if (this->masterPrivilege == 6 )
+        return true;
+    if (this->masterPrivilege == 7 )
         return true;
 }
 // 判断所有者是否执行入权
 bool directory::hasMasterPrivilege_execute(char masterPrivilege) {
-    if (this->masterPrivilege == 4 || 5 || 6 || 7)
+    if (this->masterPrivilege == 4 )
+        return true;
+    if (this->masterPrivilege == 5 )
+        return true;
+    if (this->masterPrivilege == 6 )
+        return true;
+    if (this->masterPrivilege == 7 )
         return true;
 }
 //判断所有者是否具有读取权
 bool directory::hasOtherPrivilege_read(char masterPrivilege) {
-    if (this->masterPrivilege == 1 || 3 || 5 || 7)
+    if (this->masterPrivilege == 1 )
+        return true;
+    if (this->masterPrivilege == 3 )
+        return true;
+    if (this->masterPrivilege == 5 )
+        return true;
+    if (this->masterPrivilege == 7 )
         return true;
 }// 判断其他用户是否有写入权限
 bool directory::hasOtherPrivilege_write(char masterPrivilege) {
-    if (this->masterPrivilege == 2 || 3 || 6 || 7)
+    if (this->masterPrivilege == 2 )
+        return true;
+    if (this->masterPrivilege == 3 )
+        return true;
+    if (this->masterPrivilege == 6 )
+        return true;
+    if (this->masterPrivilege == 7 )
         return true;
 }
 //判断其他用户是否具有执行权
 bool directory::hasOtherPrivilege_execute(char masterPrivilege) {
-    if (this->masterPrivilege == 4 || 5 || 6 || 7)
+    if (this->masterPrivilege == 4 )
+        return true;
+    if (this->masterPrivilege == 5 )
+        return true;
+    if (this->masterPrivilege == 6 )
+        return true;
+    if (this->masterPrivilege == 7)
         return true;
 }
 //获取目录名
@@ -89,7 +125,11 @@ bool directory::addDirectory(directory dir) {
 int directory::getUser() {
     return this->master;
 }
-
+// 设置所属用户
+bool directory::setUser(int uid) {
+    this->master=uid;
+    return true;
+}
 // 获取所有者权限
 char directory::getMasterPrivilege() {
     return this->masterPrivilege;
@@ -110,6 +150,43 @@ vector<file> directory::getFiles() {
 //获取父目录名
 string directory::getFather() {
     return this->father;
+}
+// 设置父目录名
+bool directory::setFather(string father){
+    this->father=father;
+    return true;
+}
+// 删除文件
+bool directory::removeFile(string name) {
+    // 遍历文件向量
+    for (auto it = files.begin(); it != files.end(); ++it) {
+        if (it->getName() == name) {
+            // 权限检查
+            if (!hasMasterPrivilege_write(masterPrivilege)) {
+                // 如果没有写入权限，则不能删除文件
+                return false;
+            }
+            files.erase(it); // 删除文件
+            return true;
+        }
+    }
+    return false; // 文件不存在
+}
+// 删除目录
+bool directory::removeDirectory(string name) {
+    // 遍历目录向量
+    for (auto it = directories.begin(); it != directories.end(); ++it) {
+        if (it->getName() == name) {
+            // 权限检查
+            if (!hasMasterPrivilege_write(masterPrivilege)) {
+                // 如果没有写入权限，则不能删除目录
+                return false;
+            }
+            directories.erase(it); // 删除目录
+            return true;
+        }
+    }
+    return false; // 目录不存在
 }
 //序列化
 void directory::serialize(fstream &out) const {

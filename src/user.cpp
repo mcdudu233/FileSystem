@@ -43,6 +43,24 @@ bool user::setPassword(string password) {
 int user::getUid() {
     return this->uid;
 }
+// 获取用户名
+string user::getName(){
+    return this->name;
+}
+// 设置用户名
+bool user::setName(string name){
+    this->name=name;
+    return true;
+}
+// 判断是否为超级用户
+bool user::getSuper(){
+    return this->superuser;
+}
+// 设置是否为超级用户
+bool user::setSuper(bool super){
+    this->superuser=super;
+    return true;
+}
 
 void user::serialize(fstream &out) const {
     size_t nameLength = name.size();

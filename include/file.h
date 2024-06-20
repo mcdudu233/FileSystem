@@ -25,6 +25,7 @@ private:
     /* 基本信息 */
     string name;    // *关键字：文件名
     long long point;// 数据块的位置
+    int user;       // 用户名
     /* 存取控制 */
     int master = user_root.getUid();// 所属用户
     char masterPrivilege;           // 主用户权限
