@@ -49,8 +49,8 @@ public:
     int getSize();            //获取文件大小
 
     /* 文件操作 */
-    string readFile();// 读取的文件内容
-    bool deleteFile();// 删除文件
+    char *readFile();          // 读取的文件内容
+    bool writeFile(char *data);// 写入文件内容
 
     /* 存取控制 */
     int getUser();                                        // 获取用户

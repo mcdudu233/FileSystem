@@ -46,6 +46,8 @@ public:
     vector<file> getFiles();           // 获取所有文件
     bool addFile(file file);           // 新增文件
     bool addDirectory(directory dir);  // 新增目录
+    bool removeFile(string name);      // 删除文件
+    bool removeDirectory(string name); // 删除目录
 
     /* 存取控制 */
     int getUser();                                        // 获取所属用户

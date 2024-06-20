@@ -59,9 +59,9 @@ bool file::setOtherPrivilege(char privilege) {
     return true;
 }
 // 读取文件内容的方法
-string file::readFile() {
+char *file::readFile() {
     if (this->point == -1 || this->size == 0) {
-        return string();
+        return nullptr;
     }
     char *readBuf = read(point, size);
     return readBuf;
@@ -92,23 +92,6 @@ bool file::hasOtherPrivilege_execute(char masterPrivilege) {//判断其他用户
     if (this->masterPrivilege == 4 || 5 || 6 || 7)
         return true;
 }
-//bool file::deleteFile() {
-//    if (point != -1 && size > 0) {
-//        // 清空文件内容（可选，取决于文件系统的实现）
-//        char *emptyData = new char[size];
-//        for (long long i = 0; i < size; ++i) {
-//            emptyData[i] = 0;
-//        }
-//        write(point, emptyData); // 写入空数据覆盖原有内容
-//        delete[] emptyData;
-//        point = -1; // 重置文件的位置和大小
-//        size = 0;
-//    }
-//    // 重置文件的创建和修改时间
-//    createTime = chrono::system_clock::now();
-//    modifyTime = chrono::system_clock::now();
-//    return true;
-//}
 
 void file::serialize(fstream &out) const {
     size_t nameLength = name.size();
