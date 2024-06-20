@@ -22,6 +22,10 @@ bool user::changePassword(std::string password) {
     return true;
 }
 
+int user::getUid() {
+    return this->uid;
+}
+
 void user::serialize(fstream &out) const {
     size_t nameLength = name.size();
     out.write(reinterpret_cast<const char *>(&nameLength), sizeof(nameLength));

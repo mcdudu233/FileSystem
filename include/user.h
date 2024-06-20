@@ -15,15 +15,16 @@ using std::string;
 
 class user {
 private:
-    int uid;        // 用户uid
+    int uid;        // *关键字：用户uid
     string name;    // 用户名
-    string password;// 用户密码
-    bool superuser; // 超级用户
+    string password;// 用户密码 采用MD5加密
+    bool superuser; // 是否是超级用户
 
 public:
     user();
     user(string name, string password = "", bool superuser = false);
     ~user();
+    int getUid();
     bool changePassword(string password);// 改密码命令
     void serialize(fstream &out) const;  // 序列化
     void deserialize(fstream &in);       // 反序列化

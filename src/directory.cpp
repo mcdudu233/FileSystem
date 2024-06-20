@@ -35,41 +35,41 @@ directory::~directory() {
     // 释放资源
 }
 //判断所有者是否有读取权限
-bool directory::hasMasterPrivilege_read( char masterPrivilege) {
-    if(this->masterPrivilege==1||3||5||7)
+bool directory::hasMasterPrivilege_read(char masterPrivilege) {
+    if (this->masterPrivilege == 1 || 3 || 5 || 7)
         return true;
 }
 // 判断所有者是否有写入权限
-bool directory::hasMasterPrivilege_write( char masterPrivilege){
-    if(this->masterPrivilege==2||3||6||7)
+bool directory::hasMasterPrivilege_write(char masterPrivilege) {
+    if (this->masterPrivilege == 2 || 3 || 6 || 7)
         return true;
 }
 // 判断所有者是否执行入权
 bool directory::hasMasterPrivilege_execute(char masterPrivilege) {
-    if(this->masterPrivilege==4||5||6||7)
+    if (this->masterPrivilege == 4 || 5 || 6 || 7)
         return true;
 }
 //判断所有者是否具有读取权
-bool directory::hasOtherPrivilege_read( char masterPrivilege) {
-    if(this->masterPrivilege==1||3||5||7)
+bool directory::hasOtherPrivilege_read(char masterPrivilege) {
+    if (this->masterPrivilege == 1 || 3 || 5 || 7)
         return true;
 }// 判断其他用户是否有写入权限
-bool directory::hasOtherPrivilege_write( char masterPrivilege){
-    if(this->masterPrivilege==2||3||6||7)
+bool directory::hasOtherPrivilege_write(char masterPrivilege) {
+    if (this->masterPrivilege == 2 || 3 || 6 || 7)
         return true;
 }
 //判断其他用户是否具有执行权
 bool directory::hasOtherPrivilege_execute(char masterPrivilege) {
-    if(this->masterPrivilege==4||5||6||7)
+    if (this->masterPrivilege == 4 || 5 || 6 || 7)
         return true;
 }
 //获取目录名
-string directory::getName(){
+string directory::getName() {
     return this->name;
 }
 // 设置用户名
-bool directory::setName(string name){
-    this->name=name;
+bool directory::setName(string name) {
+    this->name = name;
     return true;
 }
 // 添加文件
@@ -86,7 +86,7 @@ bool directory::addDirectory(directory dir) {
 }
 
 // 获取所属用户
-user directory::getUser() {
+int directory::getUser() {
     return this->master;
 }
 
@@ -104,11 +104,11 @@ vector<directory> directory::getDirectories() {
     return directories;
 }
 // 获取目录下的文件
-vector<file> directory::getFiles(){
+vector<file> directory::getFiles() {
     return files;
 }
 //获取父目录名
-string directory::getFather(){
+string directory::getFather() {
     return this->father;
 }
 //序列化
@@ -116,9 +116,21 @@ void directory::serialize(fstream &out) const {
     size_t nameLength = name.size();
     out.write(reinterpret_cast<const char *>(&nameLength), sizeof(nameLength));
     out.write(name.c_str(), nameLength);
+    size_t fatherLength = father.size();
+    out.write(reinterpret_cast<const char *>(&fatherLength), sizeof(fatherLength));
+    out.write(father.c_str(), fatherLength);
+    size_t directoriesSize = directories.size();
+    out.write(reinterpret_cast<const char *>(&directoriesSize), sizeof(directoriesSize));
+    for (const auto &dir: directories) {
+        dir.serialize(out);
+    }
+    size_t filesSize = files.size();
+    out.write(reinterpret_cast<const char *>(&filesSize), sizeof(filesSize));
+    for (const auto &f: files) {
+        f.serialize(out);
+    }
 
-    master.serialize(out);
-
+    out.write(reinterpret_cast<const char *>(&master), sizeof(master));
     out.write(reinterpret_cast<const char *>(&masterPrivilege), sizeof(masterPrivilege));
     out.write(reinterpret_cast<const char *>(&otherPrivilege), sizeof(otherPrivilege));
 
@@ -126,22 +138,6 @@ void directory::serialize(fstream &out) const {
     auto modifyTimeTimeT = chrono::system_clock::to_time_t(modifyTime);
     out.write(reinterpret_cast<const char *>(&createTimeTimeT), sizeof(createTimeTimeT));
     out.write(reinterpret_cast<const char *>(&modifyTimeTimeT), sizeof(modifyTimeTimeT));
-
-    size_t fatherLength = father.size();
-    out.write(reinterpret_cast<const char *>(&fatherLength), sizeof(fatherLength));
-    out.write(father.c_str(), fatherLength);
-
-    size_t directoriesSize = directories.size();
-    out.write(reinterpret_cast<const char *>(&directoriesSize), sizeof(directoriesSize));
-    for (const auto &dir: directories) {
-        dir.serialize(out);
-    }
-
-    size_t filesSize = files.size();
-    out.write(reinterpret_cast<const char *>(&filesSize), sizeof(filesSize));
-    for (const auto &f: files) {
-        f.serialize(out);
-    }
 }
 // 反序列化
 void directory::deserialize(fstream &in) {
@@ -149,9 +145,24 @@ void directory::deserialize(fstream &in) {
     in.read(reinterpret_cast<char *>(&nameLength), sizeof(nameLength));
     name.resize(nameLength);
     in.read(&name[0], nameLength);
+    size_t fatherLength;
+    in.read(reinterpret_cast<char *>(&fatherLength), sizeof(fatherLength));
+    father.resize(fatherLength);
+    in.read(&father[0], fatherLength);
+    size_t directoriesSize;
+    in.read(reinterpret_cast<char *>(&directoriesSize), sizeof(directoriesSize));
+    directories.resize(directoriesSize);
+    for (auto &dir: directories) {
+        dir.deserialize(in);
+    }
+    size_t filesSize;
+    in.read(reinterpret_cast<char *>(&filesSize), sizeof(filesSize));
+    files.resize(filesSize);
+    for (auto &f: files) {
+        f.deserialize(in);
+    }
 
-    master.deserialize(in);
-
+    in.read(reinterpret_cast<char *>(&master), sizeof(master));
     in.read(reinterpret_cast<char *>(&masterPrivilege), sizeof(masterPrivilege));
     in.read(reinterpret_cast<char *>(&otherPrivilege), sizeof(otherPrivilege));
 
@@ -161,23 +172,4 @@ void directory::deserialize(fstream &in) {
     in.read(reinterpret_cast<char *>(&modifyTimeTimeT), sizeof(modifyTimeTimeT));
     createTime = chrono::system_clock::from_time_t(createTimeTimeT);
     modifyTime = chrono::system_clock::from_time_t(modifyTimeTimeT);
-
-    size_t fatherLength;
-    in.read(reinterpret_cast<char *>(&fatherLength), sizeof(fatherLength));
-    father.resize(fatherLength);
-    in.read(&father[0], fatherLength);
-
-    size_t directoriesSize;
-    in.read(reinterpret_cast<char *>(&directoriesSize), sizeof(directoriesSize));
-    directories.resize(directoriesSize);
-    for (auto &dir: directories) {
-        dir.deserialize(in);
-    }
-
-    size_t filesSize;
-    in.read(reinterpret_cast<char *>(&filesSize), sizeof(filesSize));
-    files.resize(filesSize);
-    for (auto &f: files) {
-        f.deserialize(in);
-    }
 }
