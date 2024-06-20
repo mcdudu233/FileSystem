@@ -24,11 +24,12 @@ private:
     string password;// 用户密码 采用MD5加密
     bool superuser; // 是否是超级用户
 
-private:
 public:
     user();
     user(int uid, string name, string password = "", bool superuser = false);
     ~user();
+
+public:
     int getUid();                       // 获取UID
     string getName();                   // 获取用户名
     bool setName(string name);          // 设置用户名
@@ -37,8 +38,10 @@ public:
     bool checkPassword(string password);// 检测密码是否一致
     bool getSuper();                    // 判断是否为超级用户
     bool setSuper(bool super);          // 设置是否为超级用户
-    void serialize(fstream &out) const; // 序列化
-    void deserialize(fstream &in);      // 反序列化
+
+    /* 序列化 */
+    void serialize(fstream &out) const;// 序列化
+    void deserialize(fstream &in);     // 反序列化
 };
 
 // 默认用户
