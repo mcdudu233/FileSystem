@@ -37,8 +37,12 @@ public:
     void deserialize(fstream &in);
 
 public:
+    /* 基本 */
+    string getCurrentPath();// 获取当前所在的路径
+    /* 命令 */
     bool ls(vector<List> &v);             // 列出当前文件夹下的文件
     bool ls(string path, vector<List> &v);// 列出某个文件夹下的文件
+    bool cd(string path);                 // 跳转到某个文件夹
 };
 
 #endif//FILESYSTEM_FILESYSTEM_H

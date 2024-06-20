@@ -4,6 +4,8 @@
 
 #include "filesystem.h"
 
+#include <utility>
+
 filesystem::filesystem(const string &name, int space, int block) {
     this->current.emplace_back(".");
     this->name = name;
@@ -78,14 +80,18 @@ void filesystem::deserialize(fstream &in) {
     in.close();
 }
 
+string filesystem::getCurrentPath() {
+    return concat(this->current);
+}
+
 bool filesystem::ls(vector<List> &v) {
-    return ls(concat(current), v);
+    return ls(getCurrentPath(), v);
 }
 
 bool filesystem::ls(string path, vector<List> &v) {
     vector<string> names;
     // 找不到路径则退出
-    if (!getAbsolutePath(path, names)) {
+    if (!getAbsolutePath(std::move(path), names)) {
         return false;
     }
     directory *tmp = &tree;
@@ -108,6 +114,14 @@ bool filesystem::ls(string path, vector<List> &v) {
     return true;
 }
 
+bool filesystem::cd(string path) {
+    vector<string> names;
+    if (!getAbsolutePath(std::move(path), names)) {
+        return false;
+    }
+    this->current = names;
+    return true;
+}
 
 /* 静态方法 工具类 */
 void filesystem::split(const string &str, vector<string> &v, const string &spacer) {
