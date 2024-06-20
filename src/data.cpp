@@ -4,8 +4,11 @@
 
 #include "data.h"
 
-fstream file;
+#include <utility>
 
+fstream file;// 数据文件
+
+vector<bool> *available;           // 空闲盘块 位视图法
 string data_path;                  // 文件系统数据路径
 int block_size = 512;              // 块的大小 单位：字节
 int space_size = 128 * 1024 * 1024;// 文件系统的容量 单位：字节
@@ -47,6 +50,11 @@ bool initData(const string &name) {
 
 bool closeData() {
     file.close();
+    return true;
+}
+
+bool setAvailable(vector<bool> *v) {
+    available = v;
     return true;
 }
 

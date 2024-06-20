@@ -17,6 +17,7 @@ filesystem::filesystem(const string &name, int space, int block) {
     setSpaceSize(space);
     setBlockSize(block);
     // 初始化文件系统数据
+    setAvailable(&available);
     if (existData(name)) {
         if (!initData(name)) {
             cerr << "Fail to init data." << endl;
@@ -28,6 +29,8 @@ filesystem::filesystem(const string &name, int space, int block) {
         if (!initData(name)) {
             cerr << "Fail to init data." << endl;
         }
+        // 建立空闲分区表
+        available.assign(space_size / block_size, false);
         // 建立初始的目录和文件
         tree.addDirectory(directory("root", ".", 0));
     }
@@ -56,6 +59,12 @@ void filesystem::serialize(fstream &out) const {
 
     tree.serialize(out);
 
+    size_t availableSize = available.size();
+    out.write(reinterpret_cast<const char *>(&availableSize), sizeof(availableSize));
+    for (const auto a: available) {
+        out.write(reinterpret_cast<const char *>(&a), sizeof(a));
+    }
+
     out.close();
 }
 
@@ -76,6 +85,13 @@ void filesystem::deserialize(fstream &in) {
     }
 
     tree.deserialize(in);
+
+    size_t availableSize;
+    in.read(reinterpret_cast<char *>(&availableSize), sizeof(availableSize));
+    available.resize(availableSize);
+    for (auto a: available) {
+        in.read(reinterpret_cast<char *>(&a), sizeof(a));
+    }
 
     in.close();
 }

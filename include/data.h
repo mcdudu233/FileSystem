@@ -9,6 +9,7 @@
 #include "filesystem.h"
 #include "fstream"
 #include "iostream"
+#include "vector"
 
 using std::cerr;
 using std::cout;
@@ -18,6 +19,7 @@ using std::ifstream;
 using std::ios;
 using std::ofstream;
 using std::string;
+using std::vector;
 namespace fs = std::filesystem;
 
 // 文件系统数据的存放路径
@@ -27,6 +29,7 @@ namespace fs = std::filesystem;
 bool initData(const string &name);
 bool closeData();
 bool existData(const string &name);
+bool setAvailable(vector<bool> *v);
 int getSpaceSize();
 bool setSpaceSize(int size);
 int getBlockSize();

@@ -25,6 +25,8 @@ private:
     vector<user> users;// 所有用户
     directory tree;    // 根目录
 
+    vector<bool> available;// 空闲盘块 位视图法
+
 private:
     static string concat(vector<string> v);                                       // 拼接路径
     static void split(const string &str, vector<string> &v, const string &spacer);// 用于分割路径
