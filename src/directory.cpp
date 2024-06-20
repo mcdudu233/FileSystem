@@ -5,12 +5,12 @@
 #include "directory.h"
 
 // 根目录
-directory dir_root(".", "..", user_root);
+directory dir_root(".", "..", 0);
 
 directory::directory() {
 }
 
-directory::directory(string name, string father, user master) {
+directory::directory(string name, string father, int master) {
     this->name = name;
     this->master = master;
     this->masterPrivilege = 7;// 文件所有者有全部权限

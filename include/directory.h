@@ -31,7 +31,7 @@ private:
 
 public:
     directory();
-    directory(string name, string father, user master);
+    directory(string name, string father, int master);
     directory(const directory &dir);
     ~directory();
     string getName();                                     // 获取目录名
