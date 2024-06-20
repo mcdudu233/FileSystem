@@ -32,33 +32,40 @@ file::file(const file &f)
 
 file::~file() {
 }
+
 // 获取用户名
 string file::getName() {
     return this->name;
 }
+
 // 设置用户名
 bool file::setName(string name) {
     this->name = name;
     return true;
 }
+
 // 获取文件大小
 int file::getSize() {
     return this->size;
 }
+
 // 更新文件修改时间
 bool file::updateTime() {
     this->modifyTime = chrono::system_clock::now();
     return true;
 }
+
 // 设置用户权限
 bool file::setMasterPrivilege(char privilege) {
     this->masterPrivilege = privilege;
     return true;
 }
+
 bool file::setOtherPrivilege(char privilege) {
     this->otherPrivilege = privilege;
     return true;
 }
+
 // 读取文件内容的方法
 char *file::readFile() {
     if (this->point == -1 || this->size == 0) {
@@ -69,79 +76,87 @@ char *file::readFile() {
 }
 
 bool file::hasMasterPrivilege_read(char masterPrivilege) {// 判断所有者是否有读取权限
-    if (this->masterPrivilege == 1 )
+    if (this->masterPrivilege == 1)
         return true;
-    if (this->masterPrivilege == 3 )
+    if (this->masterPrivilege == 3)
         return true;
-    if (this->masterPrivilege == 5 )
-        return true;
-    if (this->masterPrivilege == 7 )
-        return true;
-}
-bool file::hasMasterPrivilege_write(char masterPrivilege) {// 判断所有者是否有写入权
-    if (this->masterPrivilege == 2 )
-        return true;
-    if (this->masterPrivilege == 3 )
-        return true;
-    if (this->masterPrivilege == 6 )
-        return true;
-    if (this->masterPrivilege == 7 )
-        return true;
-}
-bool file::hasMasterPrivilege_execute(char masterPrivilege) {//判断所有者是否具有写入权
-    if (this->masterPrivilege == 4 )
-        return true;
-    if (this->masterPrivilege == 5 )
-        return true;
-    if (this->masterPrivilege == 6 )
-        return true;
-    if (this->masterPrivilege == 7 )
-        return true;
-}
-
-bool file::hasOtherPrivilege_read(char masterPrivilege) {// 判断其他用户是否有读取权限
-    if (this->masterPrivilege == 1 )
-        return true;
-    if (this->masterPrivilege == 3 )
-        return true;
-    if (this->masterPrivilege == 5 )
-        return true;
-    if (this->masterPrivilege == 7 )
-        return true;
-}
-bool file::hasOtherPrivilege_write(char masterPrivilege) {// 判断其他用户是否有写入权
-    if (this->masterPrivilege == 2 )
-        return true;
-    if (this->masterPrivilege == 3 )
-        return true;
-    if (this->masterPrivilege == 6 )
-        return true;
-    if (this->masterPrivilege == 7 )
-        return true;
-}
-bool file::hasOtherPrivilege_execute(char masterPrivilege) {//判断其他用户是否具有执行权
-    if (this->masterPrivilege == 4 )
-        return true;
-    if (this->masterPrivilege == 5 )
-        return true;
-    if (this->masterPrivilege == 6 )
+    if (this->masterPrivilege == 5)
         return true;
     if (this->masterPrivilege == 7)
         return true;
 }
+
+bool file::hasMasterPrivilege_write(char masterPrivilege) {// 判断所有者是否有写入权
+    if (this->masterPrivilege == 2)
+        return true;
+    if (this->masterPrivilege == 3)
+        return true;
+    if (this->masterPrivilege == 6)
+        return true;
+    if (this->masterPrivilege == 7)
+        return true;
+}
+
+bool file::hasMasterPrivilege_execute(char masterPrivilege) {//判断所有者是否具有写入权
+    if (this->masterPrivilege == 4)
+        return true;
+    if (this->masterPrivilege == 5)
+        return true;
+    if (this->masterPrivilege == 6)
+        return true;
+    if (this->masterPrivilege == 7)
+        return true;
+}
+
+bool file::hasOtherPrivilege_read(char masterPrivilege) {// 判断其他用户是否有读取权限
+    if (this->masterPrivilege == 1)
+        return true;
+    if (this->masterPrivilege == 3)
+        return true;
+    if (this->masterPrivilege == 5)
+        return true;
+    if (this->masterPrivilege == 7)
+        return true;
+}
+
+bool file::hasOtherPrivilege_write(char masterPrivilege) {// 判断其他用户是否有写入权
+    if (this->masterPrivilege == 2)
+        return true;
+    if (this->masterPrivilege == 3)
+        return true;
+    if (this->masterPrivilege == 6)
+        return true;
+    if (this->masterPrivilege == 7)
+        return true;
+}
+
+bool file::hasOtherPrivilege_execute(char masterPrivilege) {//判断其他用户是否具有执行权
+    if (this->masterPrivilege == 4)
+        return true;
+    if (this->masterPrivilege == 5)
+        return true;
+    if (this->masterPrivilege == 6)
+        return true;
+    if (this->masterPrivilege == 7)
+        return true;
+}
+
 // 获取用户
 int file::getUser() {
     return this->user;
-    }
+}
+
 // 设置用户
-bool file::setUser(int uid){
-    this->user=uid;
+bool file::setUser(int uid) {
+    this->user = uid;
     return true;
 }
+
 // 写入文件
-bool file:: writeFile(char *data){
-        write(data);
-    }
+bool file::writeFile(char *data) {
+    write(data);
+}
+
 void file::serialize(fstream &out) const {
     size_t nameLength = name.size();
     out.write(reinterpret_cast<const char *>(&nameLength), sizeof(nameLength));

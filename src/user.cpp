@@ -4,16 +4,13 @@
 
 #include "user.h"
 
-user user_root(0, "root", "", true);
+user user_root(0, "root", "root", true);
 
 user::user() {
 }
 
-user::user(int uid, string name, string password, bool superuser) {
-    this->uid = uid;
-    this->name = name;
-    this->password = password;
-    this->superuser = superuser;
+user::user(int uid, string name, string password, bool superuser) : uid(uid), name(name), superuser(superuser) {
+    setPassword(std::move(password));
 }
 
 user::~user() {}
@@ -26,7 +23,8 @@ string user::getPassword() {
 }
 
 bool user::checkPassword(string password) {
-    if (std::equal(MD5(password.c_str()).begin(), MD5(password.c_str()).end(),
+    string md5 = MD5(password.c_str());
+    if (std::equal(md5.begin(), md5.end(),
                    this->password.begin(), this->password.end()) ||
         password.empty()) {
         return true;
@@ -36,7 +34,11 @@ bool user::checkPassword(string password) {
 }
 
 bool user::setPassword(string password) {
-    this->password = MD5(password.c_str());
+    if (password.empty()) {
+        this->password = "";
+    } else {
+        this->password = MD5(password.c_str());
+    }
     return true;
 }
 
@@ -44,21 +46,21 @@ int user::getUid() {
     return this->uid;
 }
 // 获取用户名
-string user::getName(){
+string user::getName() {
     return this->name;
 }
 // 设置用户名
-bool user::setName(string name){
-    this->name=name;
+bool user::setName(string name) {
+    this->name = name;
     return true;
 }
 // 判断是否为超级用户
-bool user::getSuper(){
+bool user::getSuper() {
     return this->superuser;
 }
 // 设置是否为超级用户
-bool user::setSuper(bool super){
-    this->superuser=super;
+bool user::setSuper(bool super) {
+    this->superuser = super;
     return true;
 }
 

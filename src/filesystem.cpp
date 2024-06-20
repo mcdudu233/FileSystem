@@ -19,7 +19,7 @@ void split(string str, vector<string> &v, string spacer) {
 }
 
 filesystem::filesystem(const string &name, int space, int block) {
-    this->path = "./";
+    this->current = "./";
     this->name = name;
     this->space_size = space;
     this->block_size = block;

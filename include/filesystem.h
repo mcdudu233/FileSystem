@@ -17,7 +17,7 @@ typedef struct {
 
 class filesystem {
 private:
-    string path;   // 当前所在的路径
+    string current;// 当前所在的路径
     string name;   // 文件系统数据的文件名
     int space_size;// 空间大小
     int block_size;// 块大小
