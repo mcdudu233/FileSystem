@@ -4,22 +4,8 @@
 
 #include "filesystem.h"
 
-void split(string str, vector<string> &v, string spacer) {
-    int pos1, pos2;
-    int len = spacer.length();//记录分隔符的长度
-    pos1 = 0;
-    pos2 = str.find(spacer);
-    while (pos2 != string::npos) {
-        v.push_back(str.substr(pos1, pos2 - pos1));
-        pos1 = pos2 + len;
-        pos2 = str.find(spacer, pos1);// 从str的pos1位置开始搜寻spacer
-    }
-    if (pos1 != str.length())//分割最后一个部分
-        v.push_back(str.substr(pos1));
-}
-
 filesystem::filesystem(const string &name, int space, int block) {
-    this->current = "./";
+    this->current.emplace_back(".");
     this->name = name;
     this->space_size = space;
     this->block_size = block;
@@ -92,7 +78,90 @@ void filesystem::deserialize(fstream &in) {
     in.close();
 }
 
-vector<List> filesystem::ls(string path) {
+bool filesystem::ls(vector<List> &v) {
+    return ls(concat(current), v);
+}
 
-    return vector<List>();
+bool filesystem::ls(string path, vector<List> &v) {
+    vector<string> names;
+    // 找不到路径则退出
+    if (!getAbsolutePath(path, names)) {
+        return false;
+    }
+    directory *tmp = &tree;
+    for (int i = 0; i < names.size() - 1; i++) {
+        if (tmp->hasDirectory(tree.getName())) {
+            tmp = tmp->getDirectory(tree.getName());
+        } else {
+            return false;
+        }
+    }
+    // 找到所有文件和子目录
+    for (auto dir: tmp->getDirectories()) {
+        List l = {dir.getName()};
+        v.push_back(l);
+    }
+    for (auto file: tmp->getFiles()) {
+        List l = {file.getName()};
+        v.push_back(l);
+    }
+    return true;
+}
+
+
+/* 静态方法 工具类 */
+void filesystem::split(const string &str, vector<string> &v, const string &spacer) {
+    int pos1, pos2;
+    int len = spacer.length();//记录分隔符的长度
+    pos1 = 0;
+    pos2 = str.find(spacer);
+    while (pos2 != string::npos) {
+        v.push_back(str.substr(pos1, pos2 - pos1));
+        pos1 = pos2 + len;
+        pos2 = str.find(spacer, pos1);// 从str的pos1位置开始搜寻spacer
+    }
+    //分割最后一个部分
+    if (pos1 != str.length()) {
+        v.push_back(str.substr(pos1));
+    }
+}
+
+string filesystem::concat(vector<string> v) {
+    string tmp;
+    for (auto t: v) {
+        tmp += t + "/";
+    }
+    tmp = tmp.substr(0, tmp.size() - 1);
+    return tmp;
+}
+
+bool filesystem::getAbsolutePath(string path, vector<string> &v) {
+    vector<string> names;
+    split(path, names, "/");
+    // 为空则有问题
+    if (names.empty()) {
+        return false;
+    }
+    // 判断是相对路径还是绝对路径
+    if (names[0] == ".") {
+        // 为绝对路径
+        v = names;
+    } else if (names[0] == "..") {
+        // 多级目录返回
+        int i = 0;
+        while (names[i] == "..") {
+            i++;
+        }
+        if (i > current.size() - 1) {
+            return false;
+        }
+        // 路径拼接
+        names.erase(names.begin(), names.begin() + i);
+        names.insert(names.begin(), current.begin(), current.begin() + current.size() - i);
+        v = names;
+    } else {
+        names.insert(names.begin(), current.begin(), current.end());
+        v = names;
+    }
+    return true;
 }
