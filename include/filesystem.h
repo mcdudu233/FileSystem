@@ -9,6 +9,7 @@
 #include "directory.h"
 #include "file.h"
 #include "user.h"
+#include "utility"
 
 // 返回的目录和文件列表
 typedef struct {
@@ -21,6 +22,7 @@ private:
     string name;           // 文件系统数据的文件名
     int space_size;        // 空间大小
     int block_size;        // 块大小
+    int block_data;        // 开始存数据部分的块地址
 
     vector<user> users;// 所有用户
     directory tree;    // 根目录

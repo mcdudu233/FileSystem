@@ -4,8 +4,6 @@
 
 #include "filesystem.h"
 
-#include <utility>
-
 filesystem::filesystem(const string &name, int space, int block) {
     this->current.emplace_back(".");
     this->name = name;
@@ -13,6 +11,8 @@ filesystem::filesystem(const string &name, int space, int block) {
     this->block_size = block;
     this->users.push_back(user_root);
     this->tree = dir_root;
+
+    this->block_data = 5 * space / block;// TODO 可以调整存文件系统结构部分的容量
 
     setSpaceSize(space);
     setBlockSize(block);
@@ -31,6 +31,9 @@ filesystem::filesystem(const string &name, int space, int block) {
         }
         // 建立空闲分区表
         available.assign(space_size / block_size, false);
+        for (int i = 0; i < block_data; i++) {
+            available[i] = true;
+        }
         // 建立初始的目录和文件
         tree.addDirectory(directory("root", ".", 0));
     }
@@ -50,6 +53,7 @@ void filesystem::serialize(fstream &out) const {
 
     out.write(reinterpret_cast<const char *>(&space_size), sizeof(space_size));
     out.write(reinterpret_cast<const char *>(&block_size), sizeof(block_size));
+    out.write(reinterpret_cast<const char *>(&block_data), sizeof(block_data));
 
     size_t usersSize = users.size();
     out.write(reinterpret_cast<const char *>(&usersSize), sizeof(usersSize));
@@ -76,6 +80,7 @@ void filesystem::deserialize(fstream &in) {
 
     in.read(reinterpret_cast<char *>(&space_size), sizeof(space_size));
     in.read(reinterpret_cast<char *>(&block_size), sizeof(block_size));
+    in.read(reinterpret_cast<char *>(&block_data), sizeof(block_data));
 
     size_t usersSize;
     in.read(reinterpret_cast<char *>(&usersSize), sizeof(usersSize));
