@@ -201,7 +201,7 @@ void file::serialize(fstream &out) const {
     out.write(name.c_str(), nameLength);
     size_t pointSize = point.size();
     out.write(reinterpret_cast<const char *>(&pointSize), sizeof(pointSize));
-    for (const auto &p: point) {
+    for (const auto p: point) {
         out.write(reinterpret_cast<const char *>(&p), sizeof(p));
     }
 
@@ -221,11 +221,10 @@ void file::deserialize(fstream &in) {
     in.read(reinterpret_cast<char *>(&nameLength), sizeof(nameLength));
     name.resize(nameLength);
     in.read(&name[0], nameLength);
-    in.read(reinterpret_cast<char *>(&point), sizeof(point));
     size_t pointSize;
     in.read(reinterpret_cast<char *>(&pointSize), sizeof(pointSize));
     point.resize(pointSize);
-    for (auto &p: point) {
+    for (auto p: point) {
         in.read(reinterpret_cast<char *>(&p), sizeof(p));
     }
 
