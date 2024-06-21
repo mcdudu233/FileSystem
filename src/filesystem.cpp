@@ -23,7 +23,7 @@ filesystem::filesystem(const string &name, int size, int block) {
     setSpaceSize(size);
     setBlockSize(block);
     // 初始化文件系统数据
-    setAvailable(&available);
+    setAvailable(&available, block_data);
     if (existData(name)) {
         if (!initData(name)) {
             cerr << "Fail to init data." << endl;

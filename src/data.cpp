@@ -9,6 +9,7 @@
 fstream file;// 数据文件
 
 vector<bool> *available;           // 空闲盘块 位视图法
+int block_data;                    // 数据区域开始的块
 string data_path;                  // 文件系统数据路径
 int block_size = 512;              // 块的大小 单位：字节
 int space_size = 128 * 1024 * 1024;// 文件系统的容量 单位：字节
@@ -53,8 +54,9 @@ bool closeData() {
     return true;
 }
 
-bool setAvailable(vector<bool> *v) {
+bool setAvailable(vector<bool> *v, int start) {
     available = v;
+    block_data = start;
     return true;
 }
 
@@ -106,4 +108,39 @@ bool write(long long block, char *data) {
 
 fstream *getData() {
     return &file;
+}
+
+
+/* 文件数据读写方法 */
+
+bool hasData(int block) {
+    return (*available)[block];
+}
+
+int availableData(int block) {
+    // 从数据区域开始获取
+    for (int i = block_data; i < (*available).size(); i++) {
+        if (!(*available)[i]) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+bool useData(int block) {
+    (*available)[block] = true;
+    return true;
+}
+
+bool releaseData(int block) {
+    (*available)[block] = false;
+    return true;
+}
+
+char *readData(long long block, long long size) {
+    return read(block, size);
+}
+
+bool writeData(long long block, char *data) {
+    return write(block, data);
 }
