@@ -4,17 +4,23 @@
 
 #include "filesystem.h"
 
-filesystem::filesystem(const string &name, int space, int block) {
+filesystem::filesystem(const string &name, int size, int block) {
     this->current.emplace_back(".");
     this->name = name;
-    this->space_size = space;
+    this->space_size = size;
     this->block_size = block;
     this->users.push_back(user_root);
     this->tree = dir_root;
 
-    this->block_data = 5 * space / block;// TODO 可以调整存文件系统结构部分的容量
+    // 默认10倍空闲分区表的空间储存结构
+    this->block_data = 10 * (size / block) / block;
+    if (block_data < this->space_size * 0.02 / block) {
+        // 采用2%的空间储存结构
+        this->block_data = (int) (this->space_size * 0.02 / block);
+    }
 
-    setSpaceSize(space);
+
+    setSpaceSize(size);
     setBlockSize(block);
     // 初始化文件系统数据
     setAvailable(&available);
