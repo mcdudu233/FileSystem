@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>reformat</string>
   </property>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="capacityComboBox">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -59,7 +59,7 @@
     <string>文件系统(F)</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_2">
+  <widget class="QComboBox" name="fileSystemComboBox">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -87,7 +87,7 @@
     <string>分块大小</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_3">
+  <widget class="QComboBox" name="blockSizeComboBox">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -117,7 +117,7 @@
     </property>
    </item>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="restoreDefaultsButton">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -130,7 +130,7 @@
     <string>还原设备的默认值</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="reformatButton">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -143,7 +143,7 @@
     <string>开始</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="exitButton">
    <property name="geometry">
     <rect>
      <x>130</x>
