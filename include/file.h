@@ -51,8 +51,9 @@ public:
     int getSize();            //获取文件大小
 
     /* 文件操作 */
-    char *readFile();          // 读取的文件内容
-    bool writeFile(char *data);// 写入文件内容
+    bool clearFile();                    // 清空所有文件内容
+    char *readFile();                    // 读取的文件内容
+    bool writeFile(char *data, int size);// 写入文件内容
 
     /* 存取控制 */
     int getUser();                                        // 获取用户

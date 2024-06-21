@@ -39,7 +39,7 @@ fstream *getData();         // 获取file
 
 /* 文件数据读写方法 */
 bool hasBlock(int block);                        // 判断块是否已经有数据了
-int availableBlock(int block);                   // 获取空闲块
+int availableBlock();                            // 获取空闲块
 bool useBlock(int block);                        // 使用空闲块
 bool releaseBlock(int block);                    // 释放已经使用的块
 char *readBlock(int block);                      // 读取某一块

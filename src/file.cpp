@@ -142,16 +142,54 @@ bool file::setUser(int uid) {
     return true;
 }
 
+bool file::clearFile() {
+    if (this->point.empty() || this->size == 0) {
+        return false;
+    }
+    // 清空所有块
+    for (auto p: point) {
+        releaseBlock(p);
+    }
+    point.erase(point.begin(), point.end());
+    return true;
+}
+
 // 读取文件内容的方法
 char *file::readFile() {
     if (this->point.empty() || this->size == 0) {
         return nullptr;
     }
-    return nullptr;
+    char *buff = new char[point.size() * getBlockSize()];
+    // 读取每一块数据
+    for (int i = 0; i < point.size(); i++) {
+        char *tmp = readBlock(point[i]);
+        memcpy(buff + i * getBlockSize(), tmp, getBlockSize());
+        delete[] tmp;
+    }
+    return buff;
 }
 
 // 写入文件
-bool file::writeFile(char *data) {
+bool file::writeFile(char *data, int size) {
+    int block = size / getBlockSize() + 1;// 要保存在多少块里
+    // 清空重写
+    clearFile();
+    for (int i = 0; i < block; i++) {
+        int b = availableBlock();
+        // 如果获取不到空闲块 则分区已满
+        if (b == -1) {
+            return false;
+        }
+        point.push_back(b);
+
+        char *tmp = new char[getBlockSize()];
+        if (size - i * getBlockSize() < 512) {
+            memcpy(tmp, data + i * getBlockSize(), size - i * getBlockSize());
+        } else {
+            memcpy(tmp, data + i * getBlockSize(), getBlockSize());
+        }
+        writeBlock(b, tmp, getBlockSize());
+    }
     return true;
 }
 

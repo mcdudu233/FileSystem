@@ -97,7 +97,7 @@ bool hasBlock(int block) {
     return (*available)[block];
 }
 
-int availableBlock(int block) {
+int availableBlock() {
     // 从数据区域开始获取
     for (int i = block_data; i < (*available).size(); i++) {
         if (!(*available)[i]) {
@@ -139,5 +139,6 @@ bool writeBlock(int block, char *data, int size) {
     } else {
         file.write(data, block_size);
     }
+    delete[] data;
     return true;
 }
