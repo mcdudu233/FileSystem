@@ -42,6 +42,10 @@ filesystem::filesystem(const string &name, int size, int block) {
         }
         // 建立初始的目录和文件
         tree.addDirectory(directory("root", ".", 0));
+        file welcome("welcome.txt");// 欢迎文件
+        string tmp = "welcome to use file system made by xb and hwh!";
+        welcome.writeFile(tmp.data(), tmp.length());
+        tree.addFile(welcome);
     }
 }
 

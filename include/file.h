@@ -41,7 +41,7 @@ private:
 
 public:
     file();
-    file(string &fileName);
+    file(const string &fileName);
     file(const file &file);
     ~file();
 

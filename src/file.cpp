@@ -10,7 +10,7 @@ file::file() {
 }
 
 // 文件类构造函数
-file::file(string &fileName) {
+file::file(const string &fileName) {
     this->name = fileName;
     this->createTime = chrono::system_clock::now();
     updateTime();
@@ -151,6 +151,7 @@ bool file::clearFile() {
         releaseBlock(p);
     }
     point.erase(point.begin(), point.end());
+    size = 0;
     return true;
 }
 
@@ -190,6 +191,7 @@ bool file::writeFile(char *data, int size) {
         }
         writeBlock(b, tmp, getBlockSize());
     }
+    this->size = size;
     return true;
 }
 
