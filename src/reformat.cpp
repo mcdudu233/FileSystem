@@ -24,3 +24,36 @@ reformat::reformat(QWidget *parent) : QWidget(parent), ui(new Ui::reformat) {
 reformat::~reformat() {
     delete ui;
 }
+// ... 现有的槽函数实现
+
+
+void reformat::onFileSystemSelected(const QString &fsType) {
+
+}
+
+void reformat::onBlockSizeSelected(const QString &size) {
+
+}
+
+void reformat::onCapacitySelected(const QString &capacity) {
+    // 用户输入了新的容量，可以在这里处理
+    qDebug() << "Selected capacity:" << capacity;
+}
+
+void reformat::onRestoreDefaultsClicked() {
+    // 还原默认值
+    // ... 现有的还原默认值逻辑
+
+    // 容量默认为空
+
+}
+
+void reformat::onReformatButtonClicked() {
+
+    }
+}
+
+void reformat::onExitClicked() {
+    // 处理退出前的清理工作，如果需要的话
+    QApplication::quit(); // 关闭应用程序
+}
