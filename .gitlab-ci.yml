@@ -17,17 +17,19 @@ build-job:
   artifacts:
     paths:
       - bin/
-      - build/
 
 deploy-job:
   stage: deploy
   script:
     - echo "Deploying QT application..."
-    - cd build
+    - cd bin
     - windeployqt filesystem.exe
     - echo "Application successfully deployed."
   tags:
     - win2012
+  artifacts:
+    paths:
+      - bin/
 
 test-job:
   stage: test
@@ -37,3 +39,6 @@ test-job:
     - echo "Test ok."
   tags:
     - win2012
+  artifacts:
+    paths:
+      - bin/filesystem.exe
