@@ -25,10 +25,10 @@ private:
     Ui::mainwindow *ui;
 
 public slots:
-    void
 
 
-    ;
+
+
 
 
 
