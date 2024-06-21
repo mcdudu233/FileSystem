@@ -226,6 +226,15 @@ directory* directory::getDirectory(string name) {
     }
     return nullptr;
 }
+// 目录中有这个文件(目录或者文件)
+bool directory:: has(string name) {
+    for (auto &file : files) {
+        if (file.getName() == name) {
+        return true;
+        }
+    }
+    return false;
+}
 //序列化
 void directory::serialize(fstream &out) const {
     size_t nameLength = name.size();
