@@ -10,6 +10,7 @@
 #include "iostream"
 #include "string"
 #include "user.h"
+#include "vector"
 
 namespace chrono = std::chrono;
 using std::cerr;
@@ -19,13 +20,13 @@ using std::ifstream;
 using std::ios;
 using std::ofstream;
 using std::runtime_error;
+using std::vector;
 
 class file {
 private:
     /* 基本信息 */
-    string name;    // *关键字：文件名
-    long long point;// 数据块的位置
-    int user;       // 用户名
+    string name;      // *关键字：文件名
+    vector<int> point;// 所有数据块的指针
     /* 存取控制 */
     int master = user_root.getUid();// 所属用户
     char masterPrivilege;           // 主用户权限

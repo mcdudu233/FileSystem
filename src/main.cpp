@@ -4,7 +4,9 @@
 
 int main(int argc, char *argv[]) {
     // 调试区
-    user_root.setPassword("test");
+    char *tmp = new char[65];
+    cout << sizeof(tmp) << endl;
+    cout << sizeof(*tmp);
     filesystem fs("data", 128 * 1024 * 1024, 512);
     // 调试区结束
 

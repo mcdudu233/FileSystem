@@ -79,31 +79,11 @@ bool setSpaceSize(int size) {
 }
 
 // 设置数据指向的位置
-bool setPosition(long long block) {
+bool setPosition(int block) {
     // 指针从头位置开始偏移
     file.seekg(block * block_size, ios::beg);
     file.seekg(block * block_size, ios::beg);
     return true;
-}
-
-char *read(long long size) {
-    char *readBuf = new char[size];
-    file.read(readBuf, size);
-    return readBuf;
-}
-
-char *read(long long block, long long size) {
-    setPosition(block);
-    return read(size);
-}
-
-bool write(char *data) {
-    return file.write(data, sizeof(data)).good();
-}
-
-bool write(long long block, char *data) {
-    setPosition(block);
-    return write(data);
 }
 
 fstream *getData() {
@@ -113,11 +93,11 @@ fstream *getData() {
 
 /* 文件数据读写方法 */
 
-bool hasData(int block) {
+bool hasBlock(int block) {
     return (*available)[block];
 }
 
-int availableData(int block) {
+int availableBlock(int block) {
     // 从数据区域开始获取
     for (int i = block_data; i < (*available).size(); i++) {
         if (!(*available)[i]) {
@@ -127,20 +107,37 @@ int availableData(int block) {
     return -1;
 }
 
-bool useData(int block) {
+bool useBlock(int block) {
     (*available)[block] = true;
     return true;
 }
 
-bool releaseData(int block) {
+bool releaseBlock(int block) {
     (*available)[block] = false;
     return true;
 }
 
-char *readData(long long block, long long size) {
-    return read(block, size);
+char *readBlock(int block) {
+    char *data = new char[block_size];
+    setPosition(block);
+    file.read(data, block_size);
+    return data;
 }
 
-bool writeData(long long block, char *data) {
-    return write(block, data);
+bool writeBlock(int block, char *data, int size) {
+    setPosition(block);
+    if (size > block_size) {
+        char *buff = new char[block_size]{0};
+        memcpy(buff, data, block_size);
+        file.write(buff, block_size);
+        delete[] buff;
+    } else if (size < block_size) {
+        char *buff = new char[block_size]{0};
+        memcpy(buff, data, size);
+        file.write(buff, block_size);
+        delete[] buff;
+    } else {
+        file.write(data, block_size);
+    }
+    return true;
 }

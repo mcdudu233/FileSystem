@@ -16,8 +16,7 @@ file::file(string &fileName) {
     updateTime();
     this->masterPrivilege = 7;// 给予文件所有者所有权限
     this->otherPrivilege = 1; // 其他用户无权限
-    this->point = -1;         // 假设-1表示文件尚未分配存储位置
-    this->size = 0;           // 初始文件大小为0；
+    this->size = 0;           // 初始文件大小为0
 }
 
 file::file(const file &f)
@@ -64,15 +63,6 @@ bool file::setMasterPrivilege(char privilege) {
 bool file::setOtherPrivilege(char privilege) {
     this->otherPrivilege = privilege;
     return true;
-}
-
-// 读取文件内容的方法
-char *file::readFile() {
-    if (this->point == -1 || this->size == 0) {
-        return nullptr;
-    }
-    char *readBuf = read(point, size);
-    return readBuf;
 }
 
 bool file::hasMasterPrivilege_read(char masterPrivilege) {// 判断所有者是否有读取权限
@@ -143,25 +133,37 @@ bool file::hasOtherPrivilege_execute(char masterPrivilege) {//判断其他用户
 
 // 获取用户
 int file::getUser() {
-    return this->user;
+    return this->master;
 }
 
 // 设置用户
 bool file::setUser(int uid) {
-    this->user = uid;
+    this->master = uid;
     return true;
+}
+
+// 读取文件内容的方法
+char *file::readFile() {
+    if (this->point.empty() || this->size == 0) {
+        return nullptr;
+    }
+    return nullptr;
 }
 
 // 写入文件
 bool file::writeFile(char *data) {
-    write(data);
+    return true;
 }
 
 void file::serialize(fstream &out) const {
     size_t nameLength = name.size();
     out.write(reinterpret_cast<const char *>(&nameLength), sizeof(nameLength));
     out.write(name.c_str(), nameLength);
-    out.write(reinterpret_cast<const char *>(&point), sizeof(point));
+    size_t pointSize = point.size();
+    out.write(reinterpret_cast<const char *>(&pointSize), sizeof(pointSize));
+    for (const auto &p: point) {
+        out.write(reinterpret_cast<const char *>(&p), sizeof(p));
+    }
 
     out.write(reinterpret_cast<const char *>(&master), sizeof(master));
     out.write(reinterpret_cast<const char *>(&masterPrivilege), sizeof(masterPrivilege));
@@ -180,6 +182,12 @@ void file::deserialize(fstream &in) {
     name.resize(nameLength);
     in.read(&name[0], nameLength);
     in.read(reinterpret_cast<char *>(&point), sizeof(point));
+    size_t pointSize;
+    in.read(reinterpret_cast<char *>(&pointSize), sizeof(pointSize));
+    point.resize(pointSize);
+    for (auto &p: point) {
+        in.read(reinterpret_cast<char *>(&p), sizeof(p));
+    }
 
     in.read(reinterpret_cast<char *>(&master), sizeof(master));
     in.read(reinterpret_cast<char *>(&masterPrivilege), sizeof(masterPrivilege));
