@@ -1,4 +1,3 @@
-# 阶段
 stages:
   - build
   - deploy
@@ -14,7 +13,7 @@ build-job:
     - cmake --build .
     - echo "Compile complete."
   tags:
-    - win2012    # 使用 windows服务器 编译
+    - win2012
 
 
 deploy-job:
@@ -24,7 +23,7 @@ deploy-job:
     - windeployqt filesystem.exe
     - echo "Application successfully deployed."
   tags:
-    - win2012    # 使用 windows服务器 编译
+    - win2012
 
 test-job:
   stage: test
@@ -33,4 +32,4 @@ test-job:
     - sleep 1
     - echo "Test ok."
   tags:
-    - win2012    # 使用 windows服务器 编译
+    - win2012
