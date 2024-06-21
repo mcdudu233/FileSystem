@@ -28,7 +28,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - mkdir build
     - cd build
     - cmake -G "MinGW Makefiles" ..
-    - cmake --build ..
+    - cmake --build .
     - echo "Compile complete."
   tags:
     - win2012    # 使用 windows服务器 编译
