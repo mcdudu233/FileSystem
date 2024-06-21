@@ -23,7 +23,13 @@ public:
 
 private:
     Ui::mainwindow *ui;
-};
+
+public slots:
+    void
+
+
+    ;
+
 
 
 #endif//FILESYSTEM_MAINWINDOW_H
