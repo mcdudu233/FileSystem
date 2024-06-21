@@ -14,12 +14,16 @@ build-job:
     - echo "Compile complete."
   tags:
     - win2012
-
+  artifacts:
+    paths:
+      - bin/
+      - build/
 
 deploy-job:
   stage: deploy
   script:
     - echo "Deploying QT application..."
+    - cd build
     - windeployqt filesystem.exe
     - echo "Application successfully deployed."
   tags:
