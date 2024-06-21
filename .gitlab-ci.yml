@@ -25,6 +25,11 @@ build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Compiling the code..."
+    - mkdir build
+    - cd build
+    - dir
+    - cmake ..
+    - cmake --build .
     - echo "Compile complete."
   tags:
     - win2012    # 使用 windows服务器 编译
