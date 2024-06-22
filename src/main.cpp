@@ -2,15 +2,16 @@
 #include "filesystem.h"
 #include "mainwindow.h"
 
-int main(int argc, char *argv[]) {
-    // 调试区
-    filesystem fs("data", 1 * 1024 * 1024, 512);
-    // 调试区结束
 
-    QApplication a(argc, argv);
-    // 运行主窗口
-    mainwindow mw;
-    mw.show();
-    QApplication::exec();
-    return 0;
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+
+
+    // 用户登录逻辑
+    //connect(loginWindow, &LoginWindow::loginSuccess, this, &mainwindow::show);
+    //connect(loginWindow, &LoginWindow::loginFailed, this, &mainwindow::showLoginFailedMessage);
+
+    return app.exec(); // 启动应用程序的事件循环
 }
+

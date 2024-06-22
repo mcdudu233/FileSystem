@@ -6,42 +6,41 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>540</width>
-    <height>613</height>
+    <width>864</width>
+    <height>772</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>mainwindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>100</y>
-      <width>256</width>
-      <height>192</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QTreeView" name="treeView">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>300</y>
-      <width>256</width>
-      <height>192</height>
+      <x>40</x>
+      <y>120</y>
+      <width>791</width>
+      <height>591</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="searchEdit">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>50</y>
-      <width>113</width>
-      <height>20</height>
+      <x>140</x>
+      <y>40</y>
+      <width>241</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>宋体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -49,12 +48,107 @@
      <rect>
       <x>40</x>
       <y>40</y>
-      <width>41</width>
+      <width>111</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>宋体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>搜索框</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>100</y>
+      <width>54</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>40</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>宋体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>当前</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>40</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>宋体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>剩余</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="diskCapacityLabel">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>40</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>宋体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="remainingDiskCapacityLabel">
+    <property name="geometry">
+     <rect>
+      <x>723</x>
+      <y>45</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>宋体</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
@@ -63,8 +157,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>540</width>
-     <height>33</height>
+     <width>864</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
