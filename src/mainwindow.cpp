@@ -38,7 +38,7 @@ void mainwindow::onSearchTextChanged(const QString &text) {
 }
 
 
-// 显示文件管理系统窗口的槽函数
+//// 显示文件管理系统窗口的槽函数
 void mainwindow::showFileManager() {
     // 如果MainWindow是隐藏的，显示它
     if (!isVisible()) {
@@ -46,11 +46,11 @@ void mainwindow::showFileManager() {
         raise(); // 使窗口在所有窗口中位于最顶层
     }
 }
-// 显示登录失败消息的槽函数
+ //显示登录失败消息的槽函数
 void mainwindow::showLoginFailedMessage() {
     QMessageBox::critical(this, "登录失败", "用户名或密码错误。");
 }
-// 磁盘容量更新函数
+ // 磁盘容量更新函数
 void mainwindow::updateDiskCapacity() {
     // 获取磁盘的总容量和剩余容量
     // 更新界面上的标签
@@ -62,4 +62,6 @@ void mainwindow::onCurrentItemChanged(const QModelIndex &current, const QModelIn
         // 更新磁盘容量信息
         updateDiskCapacity();
     }
+}
+void mainwindow::onFileSelected(const QModelIndex &index) {
 }
