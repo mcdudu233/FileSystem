@@ -26,7 +26,7 @@
     <string>还原设备的默认值</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -47,12 +47,27 @@
      <widget class="QComboBox" name="capacityComboBox">
       <item>
        <property name="text">
-        <string>200GB</string>
+        <string>200MB</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>100GB</string>
+        <string>100MB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>50MB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>1MB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string/>
        </property>
       </item>
      </widget>
@@ -106,13 +121,13 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>240</y>
      <width>158</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
