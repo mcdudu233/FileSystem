@@ -35,11 +35,11 @@ zip-job:
   stage: zip
   script:
     - echo "Running zip..."
-    - Compress-Archive -Path "./bin/*" -CompressionLevel Optimal -DestinationPath "./target.zip"
+    # - Compress-Archive -Path "./bin/*" -CompressionLevel Optimal -DestinationPath "./target.zip"
     - echo "Zip ok."
   tags:
     - win2012
   artifacts:
     name: "filesystem.zip"
     paths:
-      - target.zip
+      - bin/
