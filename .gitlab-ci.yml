@@ -1,7 +1,7 @@
 stages:
   - build
   - deploy
-  - test
+  - zip
 
 build-job:
   stage: build
@@ -31,14 +31,14 @@ deploy-job:
     paths:
       - bin/
 
-test-job:
-  stage: test
+zip-job:
+  stage: zip
   script:
-    - echo "Running unit tests..."
-    - sleep 1
-    - echo "Test ok."
+    - echo "Running zip..."
+    - Compress-Archive -Path "./bin/" -CompressionLevel Optimal -DestinationPath "./target.zip"
+    - echo "Zip ok."
   tags:
     - win2012
   artifacts:
     paths:
-      - bin/filesystem.exe
+      - target.zip
