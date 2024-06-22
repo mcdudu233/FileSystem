@@ -1,7 +1,7 @@
 stages:
   - build
   - deploy
-  - zip
+  - output
 
 build-job:
   stage: build
@@ -15,7 +15,7 @@ build-job:
   tags:
     - win2012
   artifacts:
-    expire_in: 1h
+    expire_in: 1 h
     paths:
       - bin/
 
@@ -29,19 +29,19 @@ deploy-job:
   tags:
     - win2012
   artifacts:
-    expire_in: 1h
+    expire_in: 1 h
     paths:
       - bin/
 
-zip-job:
-  stage: zip
+output-job:
+  stage: output
   script:
-    - echo "Running zip..."
+    - echo "Running output..."
     # - Compress-Archive -Path "./bin/*" -CompressionLevel Optimal -DestinationPath "./target.zip"
-    - echo "Zip ok."
+    - echo "Output ok."
   tags:
     - win2012
   artifacts:
-    name: "filesystem.zip"
+    name: "filesystem"
     paths:
       - bin/
