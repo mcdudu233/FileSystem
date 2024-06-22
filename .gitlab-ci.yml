@@ -14,7 +14,8 @@ build-job:
     - echo "Compile complete."
   tags:
     - win2012
-  cache:
+  artifacts:
+    expire_in: 1h
     paths:
       - bin/
 
@@ -27,7 +28,8 @@ deploy-job:
     - echo "Application successfully deployed."
   tags:
     - win2012
-  cache:
+  artifacts:
+    expire_in: 1h
     paths:
       - bin/
 
