@@ -14,7 +14,7 @@ build-job:
     - echo "Compile complete."
   tags:
     - win2012
-  artifacts:
+  cache:
     paths:
       - bin/
 
@@ -27,7 +27,7 @@ deploy-job:
     - echo "Application successfully deployed."
   tags:
     - win2012
-  artifacts:
+  cache:
     paths:
       - bin/
 
@@ -35,10 +35,11 @@ zip-job:
   stage: zip
   script:
     - echo "Running zip..."
-    - Compress-Archive -Path "./bin/" -CompressionLevel Optimal -DestinationPath "./target.zip"
+    # - Compress-Archive -Path "./bin/*" -CompressionLevel Optimal -DestinationPath "./target.zip"
     - echo "Zip ok."
   tags:
     - win2012
   artifacts:
+    name: "filesystem.zip"
     paths:
-      - target.zip
+      - bin/*
