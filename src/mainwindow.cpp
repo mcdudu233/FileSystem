@@ -34,6 +34,7 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     //    } else {
     //        closeFileSystem();
     //    }
+    closeFileSystem();
 }
 
 mainwindow::~mainwindow() {
