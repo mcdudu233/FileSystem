@@ -8,9 +8,13 @@
 #include "filelistview.h"
 #include "filesystem.h"
 #include "reformat.h"
+#include <QAction>
+#include <QComboBox>
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QAction>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <utility>
 
 
 QT_BEGIN_NAMESPACE
@@ -57,6 +61,52 @@ public:
     void openFileSystem(QString name);         // 打开文件系统
     void openFileSystem(filesystem *fs);       // 打开文件系统
     void closeFileSystem();                    //关闭文件系统
+};
+
+// 盘符选择窗口
+class DriveSelectionDialog : public QDialog {
+    Q_OBJECT
+
+private:
+    QComboBox *comboBox;
+    string selected;
+
+public:
+    void setPath(vector<fs::path> path) {
+        for (auto p: path) {
+            comboBox->addItem(QString::fromStdString(p.filename().string()).replace(DATA_SUFFIX, "").toUpper());
+        }
+    }
+    string getSelected() {
+        return selected;
+    }
+
+public:
+    DriveSelectionDialog(QWidget *parent = nullptr) : QDialog(parent) {
+        QVBoxLayout *layout = new QVBoxLayout(this);
+
+        // 创建一个下拉菜单
+        comboBox = new QComboBox(this);
+
+        // 创建一个确认按钮
+        QPushButton *okButton = new QPushButton("确认", this);
+
+        // 将下拉菜单和按钮添加到布局中
+        layout->addWidget(comboBox);
+        layout->addWidget(okButton);
+
+        // 连接确认按钮的点击信号到槽函数
+        connect(okButton, &QPushButton::clicked, [this]() {
+            QString selectedDrive = comboBox->currentText();
+            selected = selectedDrive.toStdString();
+            accept();
+        });
+
+        setLayout(layout);
+        setFixedWidth(200);
+        setFixedHeight(100);
+        setWindowTitle("请选择要打开的盘符");
+    };
 };
 
 #endif//FILESYSTEM_MAINWINDOW_H

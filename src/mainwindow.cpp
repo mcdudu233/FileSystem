@@ -115,11 +115,21 @@ void mainwindow::openButtonCliked() {
             return;
         }
     } else {
-        string fs_name = fss[0].filename().string();
-        //        QMessageBox::information(this,
-        //                                 "成功",
-        //                                 QString::fromStdString("找到文件系统数据：" + fs_name + "。\n成功打开文件系统！"));
-        openFileSystem(QString::fromStdString(fs_name));
+        if (fss.size() == 1) {
+            string fs_name = fss[0].filename().string();
+            //        QMessageBox::information(this,
+            //                                 "成功",
+            //                                 QString::fromStdString("找到文件系统数据：" + fs_name + "。\n成功打开文件系统！"));
+            openFileSystem(QString::fromStdString(fs_name));
+        } else {
+            DriveSelectionDialog dsd;
+            dsd.setPath(fss);
+            if (dsd.exec() == QDialog::Accepted) {
+                openFileSystem(QString::fromStdString(dsd.getSelected()));
+            } else {
+                return;
+            }
+        }
     }
 }
 
@@ -177,22 +187,27 @@ void mainwindow::closeFileSystem() {
     ui->openButton->setDisabled(false);
     ui->closeButton->setDisabled(true);
 }
+
 // 新建用户
 void mainwindow::newUser() {
 
 };
+
 // 删除用户
 void mainwindow::deleteUser() {
 
 };
+
 // 新开文件
 void mainwindow::newFile() {
 
 };
+
 // 删除文件
 void mainwindow::deleteFile() {
 
 };
+
 //关于
 void mainwindow::about() {
     QMessageBox msgBox;
@@ -214,12 +229,15 @@ void mainwindow::about() {
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.exec();
 };
+
 // 新建系统
 void mainwindow::newSystem() {
 }
+
 // 删除系统
 void mainwindow::deleteSystem() {
 }
+
 //退出系统
 void mainwindow::exitSystem() {
 }
