@@ -208,17 +208,98 @@
     </property>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>561</width>
-     <height>33</height>
+     <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>用户</string>
+    </property>
+    <addaction name="actionNewUser"/>
+    <addaction name="actionDeleteUser"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionNewFile"/>
+    <addaction name="separator"/>
+    <addaction name="actionDeleteFile"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>系统</string>
+    </property>
+    <addaction name="actionNewsystem"/>
+    <addaction name="separator"/>
+    <addaction name="actionDeleteSystem"/>
+    <addaction name="separator"/>
+    <addaction name="actionExitSystem"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionNewUser">
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="actionNewsystem">
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="actionDeleteSystem">
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </action>
+  <action name="actionNewFile">
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="actionDeleteFile">
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionDeleteUser">
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="actionExitSystem">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

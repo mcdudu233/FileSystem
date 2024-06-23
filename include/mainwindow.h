@@ -9,6 +9,7 @@
 #include "filesystem.h"
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QAction>
 
 
 QT_BEGIN_NAMESPACE
@@ -41,6 +42,15 @@ public slots:
     void openButtonCliked();                              // 打开文件按钮按下
     void closeButtonClicked();                            // 关闭文件按钮按下
     void reformatButtonClicked();                         // 格式化按钮按下
+    void newUser();                                       // 新建用户
+    void deleteUser();                                    // 删除用户
+    void newFile();                                       // 新开文件
+    void deleteFile();                                    // 删除文件
+    void about();                                         //关于
+    void newSystem();                                     // 新建系统
+    void deleteSystem();                                  // 删除系统
+    void exitSystem();                                    // 退出系统
+
 public:
     static vector<fs::path> searchFileSystem();           // 搜索当前文件夹下的所有文件系统
     void openFileSystem(QString name);                    // 打开文件系统
