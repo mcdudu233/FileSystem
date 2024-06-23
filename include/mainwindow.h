@@ -26,7 +26,7 @@ public:
 
 private:
     Ui::mainwindow *ui;
-    filesystem *fsx;
+    filesystem *fsx = nullptr;
     FileListView *fileListView;
 
 public slots:
@@ -39,6 +39,8 @@ public slots:
     void showFileManager();                               // 显示文件管理系统的信号
     void updateDiskCapacity();                            // 更新磁盘容量
     static vector<fs::path> searchFileSystem();           // 搜索当前文件夹下的所有文件系统
+    void openFileSystem(QString name);                    // 打开文件系统
+    void closeFileSystem();                               // 关闭文件系统
 };
 
 #endif//FILESYSTEM_MAINWINDOW_H

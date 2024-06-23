@@ -24,8 +24,12 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
                                       QMessageBox::Yes | QMessageBox::No,
                                       QMessageBox::No);
         if (reply == QMessageBox::Yes) {
-            fsx = new filesystem(fs_name);
+            openFileSystem(QString::fromStdString(fs_name).replace(DATA_SUFFIX, ""));
+        } else {
+            closeFileSystem();
         }
+    } else {
+        closeFileSystem();
     }
 }
 
@@ -97,4 +101,19 @@ vector<fs::path> mainwindow::searchFileSystem() {
         }
     }
     return fs_files;
+}
+
+void mainwindow::openFileSystem(QString name) {
+    fsx = new filesystem(name.toStdString());
+    ui->openButton->setDisabled(true);
+    ui->closeButton->setDisabled(false);
+}
+
+void mainwindow::closeFileSystem() {
+    if (fsx != nullptr) {
+        delete fsx;
+        fsx = nullptr;
+    }
+    ui->openButton->setDisabled(false);
+    ui->closeButton->setDisabled(true);
 }

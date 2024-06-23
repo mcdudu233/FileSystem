@@ -1,7 +1,5 @@
 #include "QApplication"
-#include "login.h"
 #include "mainwindow.h"
-#include "reformat.h"
 
 
 int main(int argc, char *argv[]) {
