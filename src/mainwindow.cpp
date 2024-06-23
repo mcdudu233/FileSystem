@@ -12,9 +12,9 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     ui->setupUi(this);
     connect(ui->treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCurrentItemChanged(const QModelIndex &)));
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
-    connect(ui->openButton,SIGNAL(clicked()),this,SLOT(openButtonCliked()));
-    connect(ui->closeButton,SIGNAL(clicked()),this,SLOT(closeButtonClicked()));
-    connect(ui->reformatButton,SIGNAL(clicked()),this,SLOT(reformatButtonClicked()));
+    connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openButtonCliked()));
+    connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(closeButtonClicked()));
+    connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatButtonClicked()));
     const vector<fs::path> &fss = searchFileSystem();
     if (!fss.empty()) {
         // 如果当前文件下有文件系统 则询问是否打开第一个
@@ -26,7 +26,7 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
                                       QMessageBox::Yes | QMessageBox::No,
                                       QMessageBox::No);
         if (reply == QMessageBox::Yes) {
-            openFileSystem(QString::fromStdString(fs_name).replace(DATA_SUFFIX, ""));
+            openFileSystem(QString::fromStdString(fs_name));
         } else {
             closeFileSystem();
         }
@@ -82,18 +82,46 @@ void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
         updateDiskCapacity();
     }
 }
+
 // 打开文件系统
 void mainwindow::openButtonCliked() {
-
+    const vector<fs::path> &fss = searchFileSystem();
+    if (fss.empty()) {
+        QMessageBox::StandardButton reply = QMessageBox::critical(this,
+                                                                  "错误",
+                                                                  "没有找到文件系统！是否立即格式化一个？",
+                                                                  QMessageBox::Yes | QMessageBox::No,
+                                                                  QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            reformat rf;
+            if (rf.exec() == QDialog::Accepted) {
+                openFileSystem(rf.getFileSystem());
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+    } else {
+        string fs_name = fss[0].filename().string();
+        //        QMessageBox::information(this,
+        //                                 "成功",
+        //                                 QString::fromStdString("找到文件系统数据：" + fs_name + "。\n成功打开文件系统！"));
+        openFileSystem(QString::fromStdString(fs_name));
+    }
 }
+
 // 关闭文件系统
 void mainwindow::closeButtonClicked() {
-
+    closeFileSystem();
 }
+
 // 格式化
 void mainwindow::reformatButtonClicked() {
-
+    reformat rf;
+    rf.exec();
 }
+
 void mainwindow::onFileSelected(const QModelIndex &index) {
 }
 
@@ -116,12 +144,17 @@ vector<fs::path> mainwindow::searchFileSystem() {
     return fs_files;
 }
 
+// 打开文件系统
 void mainwindow::openFileSystem(QString name) {
-    fsx = new filesystem(name.toStdString());
+    openFileSystem(new filesystem(name.replace(DATA_SUFFIX, "").toStdString()));
+}
+void mainwindow::openFileSystem(filesystem *fs) {
+    fsx = fs;
     ui->openButton->setDisabled(true);
     ui->closeButton->setDisabled(false);
 }
 
+// 关闭文件系统
 void mainwindow::closeFileSystem() {
     if (fsx != nullptr) {
         delete fsx;
