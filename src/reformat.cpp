@@ -55,7 +55,7 @@ void reformat::onReformatButtonClicked() {
     int capacity;
     tmp = ui->capacityComboBox->currentText().replace("B", "");
     if (tmp.contains("G")) {
-        capacity = tmp.replace("G", "").toInt() * 1024 * 1024;
+        capacity = tmp.replace("G", "").toInt() * 1024 * 1024 * 1024;
     } else if (tmp.contains("M")) {
         capacity = tmp.replace("M", "").toInt() * 1024 * 1024;
     } else if (tmp.contains("K")) {
