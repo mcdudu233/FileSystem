@@ -1,5 +1,5 @@
 //
-// Created by 86138 on 2024/6/22.
+// Created by 86138 on 2024/6/23.
 //
 
 // You may need to build the project (run Qt uic code generator) to get "ui_login.h" resolved
@@ -8,14 +8,12 @@
 #include "../form/ui_login.h"
 
 
-login::login(QWidget *parent) : QWidget(parent), ui(new Ui::login) {
+login::login(QWidget *parent) : QDialog(parent), ui(new Ui::login) {
     ui->setupUi(this);
-
     // 连接信号和槽
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
 
 }
-
 
 login::~login() {
     delete ui;

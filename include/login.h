@@ -1,17 +1,11 @@
 //
-// Created by 86138 on 2024/6/22.
+// Created by 86138 on 2024/6/23.
 //
 
 #ifndef FILESYSTEM_LOGIN_H
 #define FILESYSTEM_LOGIN_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QFormLayout>
+#include <QDialog>
 
 
 QT_BEGIN_NAMESPACE
@@ -20,7 +14,7 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-class login : public QWidget {
+class login : public QDialog {
     Q_OBJECT
 
 public:
@@ -30,17 +24,13 @@ public:
 private:
     Ui::login *ui;
 
-
 private slots:
     void onLoginButtonClicked();
     void onRegisterLinkClicked();
     void onForgotPasswordLinkClicked();
-
-
 signals:
-    void loginSuccess(); // 登录成功的信号
-    void loginFailed();  // 登录失败信号
+    void loginSuccess();// 登录成功的信号
+    void loginFailed(); // 登录失败信号;
 };
-
 
 #endif//FILESYSTEM_LOGIN_H
