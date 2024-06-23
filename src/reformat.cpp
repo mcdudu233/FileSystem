@@ -20,6 +20,23 @@ reformat::reformat(QWidget *parent) : QDialog(parent), ui(new Ui::reformat) {
 
     // 初始采用默认值
     onRestoreDefaultsClicked();
+
+    // 删除已经存在的盘符
+    fs::path current_path = fs::current_path();
+    for (const auto &entry: fs::directory_iterator(current_path)) {
+        if (entry.is_regular_file()) {
+            string filename = entry.path().filename().string();
+            if (filename.size() >= sizeof(DATA_SUFFIX) - 1 && filename.substr(filename.size() - (sizeof(DATA_SUFFIX) - 1)) == DATA_SUFFIX) {
+                filename = filename.substr(0, 1);
+                for (int i = 0; i < ui->symbolComboBox->count(); i++) {
+                    if (filename == ui->symbolComboBox->itemText(i).toLower().toStdString()) {
+                        ui->symbolComboBox->removeItem(i);
+                        i--;
+                    }
+                }
+            }
+        }
+    }
 }
 
 reformat::~reformat() {
@@ -63,8 +80,21 @@ void reformat::onReformatButtonClicked() {
     } else {
         capacity = tmp.toInt();
     }
-
-    fs = new filesystem("data", capacity, block);
+    // 获取盘符名
+    string symbol = ui->symbolComboBox->currentText().toLower().toStdString();
+    // 检测是否有重名
+    fs::path current_path = fs::current_path();
+    for (const auto &entry: fs::directory_iterator(current_path)) {
+        if (entry.is_regular_file()) {
+            if (entry.path().filename().string() == symbol + DATA_SUFFIX) {
+                QMessageBox::critical(this,
+                                      "错误",
+                                      "当前已经存在相同类型的盘符！请换一个盘符后重试！");
+                return;
+            }
+        }
+    }
+    fs = new filesystem(symbol, capacity, block);
     accept();
 }
 

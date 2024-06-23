@@ -15,24 +15,25 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openButtonCliked()));
     connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(closeButtonClicked()));
     connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatButtonClicked()));
-    const vector<fs::path> &fss = searchFileSystem();
-    if (!fss.empty()) {
-        // 如果当前文件下有文件系统 则询问是否打开第一个
-        string fs_name = fss[0].filename().string();
-        QMessageBox::StandardButton reply =
-                QMessageBox::question(this,
-                                      "检测到文件系统",
-                                      QString::fromStdString("当前文件夹下存在文件系统：" + fs_name + "，是否要打开？"),
-                                      QMessageBox::Yes | QMessageBox::No,
-                                      QMessageBox::No);
-        if (reply == QMessageBox::Yes) {
-            openFileSystem(QString::fromStdString(fs_name));
-        } else {
-            closeFileSystem();
-        }
-    } else {
-        closeFileSystem();
-    }
+
+    //    const vector<fs::path> &fss = searchFileSystem();
+    //    if (!fss.empty()) {
+    //        // 如果当前文件下有文件系统 则询问是否打开第一个
+    //        string fs_name = fss[0].filename().string();
+    //        QMessageBox::StandardButton reply =
+    //                QMessageBox::question(this,
+    //                                      "检测到文件系统",
+    //                                      QString::fromStdString("当前文件夹下存在文件系统：" + fs_name + "，是否要打开？"),
+    //                                      QMessageBox::Yes | QMessageBox::No,
+    //                                      QMessageBox::No);
+    //        if (reply == QMessageBox::Yes) {
+    //            openFileSystem(QString::fromStdString(fs_name));
+    //        } else {
+    //            closeFileSystem();
+    //        }
+    //    } else {
+    //        closeFileSystem();
+    //    }
 }
 
 mainwindow::~mainwindow() {
@@ -119,7 +120,9 @@ void mainwindow::closeButtonClicked() {
 // 格式化
 void mainwindow::reformatButtonClicked() {
     reformat rf;
-    rf.exec();
+    if (rf.exec() == QDialog::Accepted) {
+        delete rf.getFileSystem();
+    }
 }
 
 void mainwindow::onFileSelected(const QModelIndex &index) {
