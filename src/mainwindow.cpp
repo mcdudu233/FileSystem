@@ -221,7 +221,7 @@ void mainwindow::newSystem(){
 void mainwindow::deleteSystem(){
 
 }
-// 退出系统
+//退出系统
 void mainwindow::exitSystem(){
 
 }

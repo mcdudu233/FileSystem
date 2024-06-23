@@ -224,6 +224,7 @@
     </property>
     <addaction name="actionNewUser"/>
     <addaction name="actionDeleteUser"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
