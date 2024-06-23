@@ -95,16 +95,45 @@ void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
 }
 // 打开文件系统
 void mainwindow::openButtonCliked() {
-
+    const vector<fs::path> &fss = searchFileSystem();
+    if (fss.empty()) {
+        QMessageBox::StandardButton reply = QMessageBox::critical(this,
+                                                                  "错误",
+                                                                  "没有找到文件系统！是否立即格式化一个？",
+                                                                  QMessageBox::Yes | QMessageBox::No,
+                                                                  QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            reformat rf;
+            if (rf.exec() == QDialog::Accepted) {
+                openFileSystem(rf.getFileSystem());
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+    } else {
+        string fs_name = fss[0].filename().string();
+        //        QMessageBox::information(this,
+        //                                 "成功",
+        //                                 QString::fromStdString("找到文件系统数据：" + fs_name + "。\n成功打开文件系统！"));
+        openFileSystem(QString::fromStdString(fs_name));
+    }
 }
+
 // 关闭文件系统
 void mainwindow::closeButtonClicked() {
-
+    closeFileSystem();
 }
+
 // 格式化
 void mainwindow::reformatButtonClicked() {
-
+    reformat rf;
+    if (rf.exec() == QDialog::Accepted) {
+        delete rf.getFileSystem();
+    }
 }
+
 void mainwindow::onFileSelected(const QModelIndex &index) {
 }
 
@@ -127,12 +156,17 @@ vector<fs::path> mainwindow::searchFileSystem() {
     return fs_files;
 }
 
+// 打开文件系统
 void mainwindow::openFileSystem(QString name) {
-    fsx = new filesystem(name.toStdString());
+    openFileSystem(new filesystem(name.replace(DATA_SUFFIX, "").toStdString()));
+}
+void mainwindow::openFileSystem(filesystem *fs) {
+    fsx = fs;
     ui->openButton->setDisabled(true);
     ui->closeButton->setDisabled(false);
 }
 
+// 关闭文件系统
 void mainwindow::closeFileSystem() {
     if (fsx != nullptr) {
         delete fsx;

@@ -7,6 +7,7 @@
 
 #include "filesystem.h"
 #include <QDialog>
+#include <QMessageBox>
 
 
 QT_BEGIN_NAMESPACE

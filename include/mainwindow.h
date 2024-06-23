@@ -7,6 +7,7 @@
 
 #include "filelistview.h"
 #include "filesystem.h"
+#include "reformat.h"
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QAction>
@@ -52,10 +53,10 @@ public slots:
     void exitSystem();                                    // 退出系统
 
 public:
-    static vector<fs::path> searchFileSystem();           // 搜索当前文件夹下的所有文件系统
-    void openFileSystem(QString name);                    // 打开文件系统
-    void closeFileSystem();                               // 关闭文件系统
-
+    static vector<fs::path> searchFileSystem();// 搜索当前文件夹下的所有文件系统
+    void openFileSystem(QString name);         // 打开文件系统
+    void openFileSystem(filesystem *fs);       // 打开文件系统
+    void closeFileSystem();                    // 关闭文件系统
 };
 
 #endif//FILESYSTEM_MAINWINDOW_H
