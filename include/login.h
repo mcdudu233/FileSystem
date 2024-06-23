@@ -36,14 +36,7 @@ private slots:
     void onRegisterLinkClicked();
     void onForgotPasswordLinkClicked();
 
-private:
-    QLineEdit *usernameEdit;
-    QLineEdit *passwordEdit;
-    QPushButton *loginButton;
-    QLabel *loginStatusLabel;
-    QVBoxLayout *mainLayout;
-    QHBoxLayout *formLayout;
-    QFormLayout *loginFormLayout;
+
 signals:
     void loginSuccess(); // 登录成功的信号
     void loginFailed();  // 登录失败信号

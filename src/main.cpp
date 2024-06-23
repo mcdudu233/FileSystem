@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    reformat re;
+    login re;
     re.show();
     mainwindow mw;
     mw.show();

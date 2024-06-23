@@ -10,28 +10,9 @@
 
 login::login(QWidget *parent) : QWidget(parent), ui(new Ui::login) {
     ui->setupUi(this);
-    usernameEdit = new QLineEdit(this);
-    passwordEdit = new QLineEdit(this);
-    loginButton = new QPushButton("登录", this);
-    loginStatusLabel = new QLabel("", this);
-
-    // 设置布局
-    mainLayout = new QVBoxLayout(this);
-    formLayout = new QHBoxLayout();
-    loginFormLayout = new QFormLayout();
-
-    loginFormLayout->addRow("用户名:", usernameEdit);
-    loginFormLayout->addRow("密码:", passwordEdit);
-    formLayout->addLayout(loginFormLayout);
-    formLayout->addWidget(loginButton);
-    mainLayout->addLayout(formLayout);
-    mainLayout->addWidget(loginStatusLabel);
-
-    // 设置布局
-    setLayout(mainLayout);
 
     // 连接信号和槽
-    connect(loginButton, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
+    connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
 
 }
 
@@ -42,13 +23,13 @@ login::~login() {
 void login::onLoginButtonClicked() {
     // 登录逻辑
     // 这里需要实现用户名和密码的验证
-    QString username = usernameEdit->text();
-    QString password = passwordEdit->text();
+    QString username = ui->usernameEdit->text();
+    QString password = ui->passwordEdit->text();
     if (username == "valid_username" && password == "valid_password") {
-        loginStatusLabel->setText("登录成功");
+        ui->loginStatusLabel->setText("登录成功");
         // 继续登录流程
     } else {
-        loginStatusLabel->setText("登录失败");
+        ui->loginStatusLabel->setText("登录失败");
     }
 }
 
