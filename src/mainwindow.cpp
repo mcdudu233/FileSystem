@@ -12,7 +12,9 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     ui->setupUi(this);
     connect(ui->treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCurrentItemChanged(const QModelIndex &)));
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
-
+    connect(ui->openButton,SIGNAL(clicked()),this,SLOT(openButtonCliked()));
+    connect(ui->closeButton,SIGNAL(clicked()),this,SLOT(closeButtonClicked()));
+    connect(ui->reformatButton,SIGNAL(clicked()),this,SLOT(reformatButtonClicked()));
     const vector<fs::path> &fss = searchFileSystem();
     if (!fss.empty()) {
         // 如果当前文件下有文件系统 则询问是否打开第一个
@@ -80,7 +82,18 @@ void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
         updateDiskCapacity();
     }
 }
+// 打开文件系统
+void mainwindow::openButtonCliked() {
 
+}
+// 关闭文件系统
+void mainwindow::closeButtonClicked() {
+
+}
+// 格式化
+void mainwindow::reformatButtonClicked() {
+
+}
 void mainwindow::onFileSelected(const QModelIndex &index) {
 }
 

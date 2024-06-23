@@ -38,9 +38,14 @@ public slots:
     void showLoginFailedMessage();                        // 显示登录信息
     void showFileManager();                               // 显示文件管理系统的信号
     void updateDiskCapacity();                            // 更新磁盘容量
+    void openButtonCliked();                              // 打开文件按钮按下
+    void closeButtonClicked();                            // 关闭文件按钮按下
+    void reformatButtonClicked();                         // 格式化按钮按下
+public:
     static vector<fs::path> searchFileSystem();           // 搜索当前文件夹下的所有文件系统
     void openFileSystem(QString name);                    // 打开文件系统
     void closeFileSystem();                               // 关闭文件系统
+
 };
 
 #endif//FILESYSTEM_MAINWINDOW_H
