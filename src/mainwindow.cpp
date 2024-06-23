@@ -10,40 +10,42 @@
 // 修改相应的模块名
 mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwindow) {
     ui->setupUi(this);
+    setWindowTitle("文件系统管理器");
+
     connect(ui->treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCurrentItemChanged(const QModelIndex &)));
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
-    connect(ui->openButton,SIGNAL(clicked()),this,SLOT(openButtonCliked()));
-    connect(ui->closeButton,SIGNAL(clicked()),this,SLOT(closeButtonClicked()));
-    connect(ui->reformatButton,SIGNAL(clicked()),this,SLOT(reformatButtonClicked()));
-    connect(ui->actionNewUser,SIGNAL(triggered(bool)),this,SLOT(newUser()));
-    connect(ui->actionNewFile,SIGNAL(triggered(bool)),this,SLOT(newFile()));
-    connect(ui->actionNewsystem,SIGNAL(triggered(bool)),this,SLOT(newSystem()));
-    connect(ui->actionDeleteUser,SIGNAL(triggered(bool)),this,SLOT( deleteUser()));
-    connect(ui->actionDeleteFile,SIGNAL(triggered(bool)),this,SLOT( deleteFile()));
-    connect(ui->actionDeleteSystem,SIGNAL(triggered(bool)),this,SLOT( deleteSystem()));
-    connect(ui->actionExitSystem,SIGNAL(triggered(bool)),this,SLOT(exitSystem()));
-    connect(ui->actionAbout,SIGNAL(triggered(bool)),this,SLOT(about()));
+    connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openButtonCliked()));
+    connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(closeButtonClicked()));
+    connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatButtonClicked()));
+    connect(ui->actionNewUser, SIGNAL(triggered(bool)), this, SLOT(newUser()));
+    connect(ui->actionNewFile, SIGNAL(triggered(bool)), this, SLOT(newFile()));
+    connect(ui->actionNewsystem, SIGNAL(triggered(bool)), this, SLOT(newSystem()));
+    connect(ui->actionDeleteUser, SIGNAL(triggered(bool)), this, SLOT(deleteUser()));
+    connect(ui->actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(deleteFile()));
+    connect(ui->actionDeleteSystem, SIGNAL(triggered(bool)), this, SLOT(deleteSystem()));
+    connect(ui->actionExitSystem, SIGNAL(triggered(bool)), this, SLOT(exitSystem()));
+    connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
 
 
-    const vector<fs::path> &fss = searchFileSystem();
-    if (!fss.empty()) {
-        // 如果当前文件下有文件系统 则询问是否打开第一个
-        string fs_name = fss[0].filename().string();
-        QMessageBox::StandardButton reply =
-                QMessageBox::question(this,
-                                      "检测到文件系统",
-                                      QString::fromStdString("当前文件夹下存在文件系统：" + fs_name + "，是否要打开？"),
-                                      QMessageBox::Yes | QMessageBox::No,
-                                      QMessageBox::No);
-        if (reply == QMessageBox::Yes) {
-            openFileSystem(QString::fromStdString(fs_name).replace(DATA_SUFFIX, ""));
-        } else {
-            closeFileSystem();
-        }
-    } else {
-        closeFileSystem();
-    }
-
+    //    const vector<fs::path> &fss = searchFileSystem();
+    //    if (!fss.empty()) {
+    //        // 如果当前文件下有文件系统 则询问是否打开第一个
+    //        string fs_name = fss[0].filename().string();
+    //        QMessageBox::StandardButton reply =
+    //                QMessageBox::question(this,
+    //                                      "检测到文件系统",
+    //                                      QString::fromStdString("当前文件夹下存在文件系统：" + fs_name + "，是否要打开？"),
+    //                                      QMessageBox::Yes | QMessageBox::No,
+    //                                      QMessageBox::No);
+    //        if (reply == QMessageBox::Yes) {
+    //            openFileSystem(QString::fromStdString(fs_name).replace(DATA_SUFFIX, ""));
+    //        } else {
+    //            closeFileSystem();
+    //        }
+    //    } else {
+    //        closeFileSystem();
+    //    }
+    closeFileSystem();
 }
 
 mainwindow::~mainwindow() {
@@ -176,23 +178,23 @@ void mainwindow::closeFileSystem() {
     ui->closeButton->setDisabled(true);
 }
 // 新建用户
-void mainwindow::newUser(){
+void mainwindow::newUser() {
 
 };
 // 删除用户
-void mainwindow::deleteUser(){
+void mainwindow::deleteUser() {
 
 };
 // 新开文件
-void mainwindow::newFile(){
+void mainwindow::newFile() {
 
 };
 // 删除文件
-void mainwindow::deleteFile(){
+void mainwindow::deleteFile() {
 
 };
 //关于
-void mainwindow::about(){
+void mainwindow::about() {
     QMessageBox msgBox;
     msgBox.setWindowTitle("关于");
     msgBox.setText("尊敬的老师：\n"
@@ -211,17 +213,13 @@ void mainwindow::about(){
     msgBox.setIcon(QMessageBox::Information);
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.exec();
-
 };
 // 新建系统
-void mainwindow::newSystem(){
-
+void mainwindow::newSystem() {
 }
 // 删除系统
-void mainwindow::deleteSystem(){
-
+void mainwindow::deleteSystem() {
 }
 //退出系统
-void mainwindow::exitSystem(){
-
+void mainwindow::exitSystem() {
 }

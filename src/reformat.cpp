@@ -9,6 +9,7 @@
 
 reformat::reformat(QWidget *parent) : QDialog(parent), ui(new Ui::reformat) {
     ui->setupUi(this);
+    setWindowTitle("格式化");
 
     // 事件连接
     connect(ui->fileSystemComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onFileSystemSelected(int)));

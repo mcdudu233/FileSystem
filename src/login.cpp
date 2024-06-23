@@ -9,6 +9,8 @@
 
 login::login(QWidget *parent) : QDialog(parent), ui(new Ui::login) {
     ui->setupUi(this);
+    setWindowTitle("登录");
+    
     // 连接信号和槽
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
 }
