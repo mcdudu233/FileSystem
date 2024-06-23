@@ -20,13 +20,7 @@ aux_source_directory(src SRC)
 aux_source_directory(form FORM)
 aux_source_directory(include INCLUDE)
 include_directories(include)
-add_executable(filesystem ${SRC} ${FORM} ${INCLUDE} include/mainwindow.h include/reformat.h
-        src/login.cpp
-        include/login.h
-        form/login.ui
-        src/filelistview.cpp
-        include/filelistview.h
-        form/filelistview.ui)
+add_executable(filesystem ${SRC} ${FORM} ${INCLUDE} include/mainwindow.h include/login.h include/filelistview.h include/reformat.h)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 target_link_libraries(filesystem
