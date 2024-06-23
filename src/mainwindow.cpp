@@ -6,13 +6,13 @@
 
 #include "mainwindow.h"
 #include "../form/ui_mainwindow.h"
-#include <QMessageBox>
 
 // 修改相应的模块名
 mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwindow) {
     ui->setupUi(this);
     connect(ui->treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCurrentItemChanged(const QModelIndex &)));
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
+
 }
 
 mainwindow::~mainwindow() {

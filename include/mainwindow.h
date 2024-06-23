@@ -7,6 +7,7 @@
 
 #include "filelistview.h"
 #include <QMainWindow>
+#include <QMessageBox>
 
 
 QT_BEGIN_NAMESPACE
@@ -36,8 +37,6 @@ public slots:
     void showLoginFailedMessage();                        // 显示登录信息
     void showFileManager();                               // 显示文件管理系统的信号
     void updateDiskCapacity();                            // 更新磁盘容量
-}
-
-;
+};
 
 #endif//FILESYSTEM_MAINWINDOW_H

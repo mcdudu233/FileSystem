@@ -7,27 +7,28 @@
 #include "login.h"
 #include "../form/ui_login.h"
 
-
 login::login(QWidget *parent) : QDialog(parent), ui(new Ui::login) {
     ui->setupUi(this);
     // 连接信号和槽
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
-
 }
 
 login::~login() {
     delete ui;
 }
+
 void login::onLoginButtonClicked() {
     // 登录逻辑
     // 这里需要实现用户名和密码的验证
     QString username = ui->usernameEdit->text();
     QString password = ui->passwordEdit->text();
     if (username == "valid_username" && password == "valid_password") {
-        ui->loginStatusLabel->setText("登录成功");
         // 继续登录流程
+        QMessageBox::information(this, "登录成功", "请继续操作。");
+        accept();
     } else {
-        ui->loginStatusLabel->setText("登录失败");
+        QMessageBox::critical(this, "登录失败", "用户名或密码错误！");
+        reject();
     }
 }
 
