@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>864</width>
-    <height>772</height>
+    <width>693</width>
+    <height>483</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>40</x>
       <y>120</y>
-      <width>791</width>
-      <height>591</height>
+      <width>491</width>
+      <height>251</height>
      </rect>
     </property>
    </widget>
@@ -78,7 +78,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>410</x>
       <y>40</y>
       <width>81</width>
       <height>31</height>
@@ -97,7 +97,7 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>540</x>
       <y>40</y>
       <width>71</width>
       <height>31</height>
@@ -116,7 +116,7 @@
    <widget class="QLabel" name="diskCapacityLabel">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>470</x>
       <y>40</y>
       <width>71</width>
       <height>31</height>
@@ -135,7 +135,7 @@
    <widget class="QLabel" name="remainingDiskCapacityLabel">
     <property name="geometry">
      <rect>
-      <x>723</x>
+      <x>610</x>
       <y>45</y>
       <width>91</width>
       <height>21</height>
@@ -157,8 +157,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>864</width>
-     <height>22</height>
+     <width>693</width>
+     <height>33</height>
     </rect>
    </property>
   </widget>

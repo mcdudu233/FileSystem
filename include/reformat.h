@@ -24,12 +24,12 @@ public:
 private:
     Ui::reformat *ui;
 public slots:
-    void onReformatButtonClicked();    // 开始格式化
-    void onExitClicked();   // 关闭格式化窗口
-    void onBlockSizeSelected(const QString &size);  // 分块大小选择
-    void onRestoreDefaultsClicked(); // 还原默认值
-    void onCapacitySelected(const QString &capacity); // 磁盘容量选择
-    void onFileSystemSelected(const QString &fsType); // 文件系统选择
+    void onReformatButtonClicked();      // 开始格式化
+    void onExitClicked();                // 关闭格式化窗口
+    void onBlockSizeSelected(int index); // 分块大小选择
+    void onRestoreDefaultsClicked();     // 还原默认值
+    void onCapacitySelected(int index);  // 磁盘容量选择
+    void onFileSystemSelected(int index);// 文件系统选择
 };
 
 

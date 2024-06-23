@@ -24,15 +24,15 @@ reformat::~reformat() {
 // ... 现有的槽函数实现
 
 
-void reformat::onFileSystemSelected(const QString &fsType) {
+void reformat::onFileSystemSelected(int index) {
 }
 
-void reformat::onBlockSizeSelected(const QString &size) {
+void reformat::onBlockSizeSelected(int index) {
 }
 
-void reformat::onCapacitySelected(const QString &capacity) {
+void reformat::onCapacitySelected(int index) {
     // 用户输入了新的容量，可以在这里处理
-    qDebug() << "Selected capacity:" << capacity;
+    //    qDebug() << "Selected capacity:" << capacity;
 }
 
 void reformat::onRestoreDefaultsClicked() {

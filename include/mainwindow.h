@@ -5,9 +5,8 @@
 #ifndef FILESYSTEM_MAINWINDOW_H
 #define FILESYSTEM_MAINWINDOW_H
 
-#include <QMainWindow>
 #include "filelistview.h"
-
+#include <QMainWindow>
 
 
 QT_BEGIN_NAMESPACE
@@ -29,14 +28,14 @@ private:
 
 
 public slots:
-    void onCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous);// 处理当前项变化
-    void onFileSelected(const QModelIndex &index);                                     // 文件选择
-    void onFileDoubleClicked(const QModelIndex &index);                                // 双击文件
-    void onFileRightClicked(const QModelIndex &index);                                 // 右击文件
-    void onSearchTextChanged(const QString &text);                                     // 处理搜索文本
-    void showLoginFailedMessage();                                                     // 显示登录信息
-    void showFileManager();                                                            // 显示文件管理系统的信号
-    void updateDiskCapacity();                                                         // 更新磁盘容量
+    void onCurrentItemChanged(const QModelIndex &current);// 处理当前项变化
+    void onFileSelected(const QModelIndex &index);        // 文件选择
+    void onFileDoubleClicked(const QModelIndex &index);   // 双击文件
+    void onFileRightClicked(const QModelIndex &index);    // 右击文件
+    void onSearchTextChanged(const QString &text);        // 处理搜索文本
+    void showLoginFailedMessage();                        // 显示登录信息
+    void showFileManager();                               // 显示文件管理系统的信号
+    void updateDiskCapacity();                            // 更新磁盘容量
 }
 
 ;
