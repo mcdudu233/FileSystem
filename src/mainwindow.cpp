@@ -13,6 +13,20 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     connect(ui->treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCurrentItemChanged(const QModelIndex &)));
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
 
+    const vector<fs::path> &fss = searchFileSystem();
+    if (!fss.empty()) {
+        // 如果当前文件下有文件系统 则询问是否打开第一个
+        string fs_name = fss[0].filename().string();
+        QMessageBox::StandardButton reply =
+                QMessageBox::question(this,
+                                      "检测到文件系统",
+                                      QString::fromStdString("当前文件夹下存在文件系统：" + fs_name + "，是否要打开？"),
+                                      QMessageBox::Yes | QMessageBox::No,
+                                      QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            fsx = new filesystem(fs_name);
+        }
+    }
 }
 
 mainwindow::~mainwindow() {
@@ -64,4 +78,23 @@ void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
 }
 
 void mainwindow::onFileSelected(const QModelIndex &index) {
+}
+
+vector<fs::path> mainwindow::searchFileSystem() {
+    // 搜索当前目录下的数据文件
+    fs::path current_path = fs::current_path();
+    // 用于存储找到的.fs文件的路径
+    vector<fs::path> fs_files;
+    // 遍历当前目录
+    for (const auto &entry: fs::directory_iterator(current_path)) {
+        // 检查是否为常规文件且后缀匹配
+        if (entry.is_regular_file()) {
+            // 获取文件名
+            string filename = entry.path().filename().string();
+            if (filename.size() >= sizeof(DATA_SUFFIX) - 1 && filename.substr(filename.size() - (sizeof(DATA_SUFFIX) - 1)) == DATA_SUFFIX) {
+                fs_files.push_back(entry.path());
+            }
+        }
+    }
+    return fs_files;
 }

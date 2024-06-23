@@ -6,6 +6,7 @@
 #define FILESYSTEM_MAINWINDOW_H
 
 #include "filelistview.h"
+#include "filesystem.h"
 #include <QMainWindow>
 #include <QMessageBox>
 
@@ -25,8 +26,8 @@ public:
 
 private:
     Ui::mainwindow *ui;
+    filesystem *fsx;
     FileListView *fileListView;
-
 
 public slots:
     void onCurrentItemChanged(const QModelIndex &current);// 处理当前项变化
@@ -37,6 +38,7 @@ public slots:
     void showLoginFailedMessage();                        // 显示登录信息
     void showFileManager();                               // 显示文件管理系统的信号
     void updateDiskCapacity();                            // 更新磁盘容量
+    static vector<fs::path> searchFileSystem();           // 搜索当前文件夹下的所有文件系统
 };
 
 #endif//FILESYSTEM_MAINWINDOW_H

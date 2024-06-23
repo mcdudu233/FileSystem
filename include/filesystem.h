@@ -35,7 +35,7 @@ private:
     bool getAbsolutePath(string path, vector<string> &v);                         // 根据路径获得绝对路径
 
 public:
-    filesystem(const string &name, int space, int block);
+    filesystem(const string &name, int space = 0, int block = 0);
     ~filesystem();
     void serialize(fstream &out) const;
     void deserialize(fstream &in);

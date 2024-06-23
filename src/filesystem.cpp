@@ -12,18 +12,6 @@ filesystem::filesystem(const string &name, int size, int block) {
     this->users.push_back(user_root);
     this->tree = dir_root;
 
-    // 默认10倍空闲分区表的空间储存结构
-    this->block_data = 10 * (size / block) / block;
-    if (block_data < this->space_size * 0.02 / block) {
-        // 采用2%的空间储存结构
-        this->block_data = (int) (this->space_size * 0.02 / block);
-    }
-
-
-    setSpaceSize(size);
-    setBlockSize(block);
-    // 初始化文件系统数据
-    setAvailable(&available, block_data);
     if (existData(name)) {
         if (!initData(name)) {
             cerr << "Fail to init data." << endl;
@@ -31,7 +19,19 @@ filesystem::filesystem(const string &name, int size, int block) {
         // 然后加载文件系统数据
         setPosition(0);
         deserialize(*getData());
+        setSpaceSize(size);
+        setBlockSize(block);
+        setAvailable(&available, block_data);
     } else {
+        // 默认10倍空闲分区表的空间储存结构
+        this->block_data = 10 * (size / block) / block;
+        if (block_data < this->space_size * 0.02 / block) {
+            // 采用2%的空间储存结构
+            this->block_data = (int) (this->space_size * 0.02 / block);
+        }
+        setSpaceSize(size);
+        setBlockSize(block);
+        // 初始化数据
         if (!initData(name)) {
             cerr << "Fail to init data." << endl;
         }
@@ -40,6 +40,7 @@ filesystem::filesystem(const string &name, int size, int block) {
         for (int i = 0; i < block_data; i++) {
             available[i] = true;
         }
+        setAvailable(&available, block_data);
         // 建立初始的目录和文件
         tree.addDirectory(directory("root", ".", 0));
         file welcome("welcome.txt");// 欢迎文件
