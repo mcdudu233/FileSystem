@@ -83,13 +83,19 @@ public:
 
 public:
     DriveSelectionDialog(QWidget *parent = nullptr) : QDialog(parent) {
+        // 设置布局和字体
         QVBoxLayout *layout = new QVBoxLayout(this);
+        QFont font;
+        font.setPointSize(12);
 
         // 创建一个下拉菜单
         comboBox = new QComboBox(this);
-
         // 创建一个确认按钮
         QPushButton *okButton = new QPushButton("确认", this);
+
+        // 设置字体
+        comboBox->setFont(font);
+        okButton->setFont(font);
 
         // 将下拉菜单和按钮添加到布局中
         layout->addWidget(comboBox);
@@ -104,7 +110,7 @@ public:
 
         setLayout(layout);
         setFixedWidth(200);
-        setFixedHeight(100);
+        setFixedHeight(120);
         setWindowTitle("请选择要打开的盘符");
     };
 };
