@@ -42,8 +42,8 @@ public:
     bool setFather(string father);// 设置父目录名
 
     /* 目录操作 */
-    vector<directory> getDirectories();  // 获取所有子目录
-    vector<file> getFiles();             // 获取所有文件
+    vector<directory> *getDirectories(); // 获取所有子目录
+    vector<file> *getFiles();            // 获取所有文件
     bool addFile(file file);             // 新增文件
     bool addDirectory(directory dir);    // 新增目录
     bool removeFile(string name);        // 删除文件

@@ -23,6 +23,178 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
+// 自定义的文件系统模型类
+class FileSystemModel : public QAbstractItemModel {
+    Q_OBJECT
+
+private:
+    directory *root = nullptr;
+    enum class ItemType { Directory,
+                          File };
+    typedef struct {
+        void *ptr;
+        ItemType type;
+    } ItemInfo;
+
+public:
+    FileSystemModel(directory *root, QObject *parent = nullptr)
+        : root(root), QAbstractItemModel(parent) {
+    }
+
+    ~FileSystemModel() {
+    }
+
+public:
+    /* 必须实现的虚函数 */
+
+    // 列数量
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override {
+        return ListSize;
+    };
+
+    // 行数量
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override {
+        if (parent.column() > 0) {
+            return 0;
+        }
+
+        directory *parentDir;
+        if (parent.isValid()) {
+            if (isDirectory(parent)) {
+                parentDir = getDirectoryFromIndex(parent);
+            } else {
+                return 0;
+            }
+        } else {
+            parentDir = root;
+        }
+        return parentDir->getDirectories()->size() + parentDir->getFiles()->size();
+    };
+
+    Qt::ItemFlags flags(const QModelIndex &index) const override {
+        if (!index.isValid()) {
+            return Qt::NoItemFlags;
+        }
+        return QAbstractItemModel::flags(index);
+    };
+
+    // 获取每一行的表项数据
+    QVariant data(const QModelIndex &index, int role) const override {
+        if (!index.isValid() || role != Qt::DisplayRole) {
+            return {};
+        }
+
+        if (isDirectory(index)) {
+            directory *dir = getDirectoryFromIndex(index);
+            if (!dir) {
+                return {};
+            }
+            switch (index.column()) {
+                case 0:
+                    return QString::fromStdString(dir->getName());
+                case 1:
+                    return dir->getDirectories()->size() + dir->getFiles()->size();// 子目录和文件总数
+                case 2:
+                    return "目录";
+                case 3:
+                    return QString::fromStdString("time");
+                default:
+                    return {};
+            }
+        } else {
+            file *f = getFileFromIndex(index);
+            if (!f) {
+                return {};
+            }
+            switch (index.column()) {
+                case 0:
+                    return QString::fromStdString(f->getName());
+                case 1:
+                    return f->getSize();
+                case 2:
+                    return "文件";
+                case 3:
+                    return QString::fromStdString("time");
+                default:
+                    return {};
+            }
+        }
+    };
+
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override {
+        if (!hasIndex(row, column, parent)) {
+            return {};
+        }
+
+        directory *parentDir;
+        if (!parent.isValid()) {
+            parentDir = root;// 根目录
+        } else {
+            parentDir = getDirectoryFromIndex(parent);
+        }
+        if (row < parentDir->getDirectories()->size()) {
+            directory *childDir = &parentDir->getDirectories()->at(row);
+            auto *info = new ItemInfo{static_cast<void *>(childDir), ItemType::Directory};
+            return createIndex(row, column, info);
+        } else if (row < parentDir->getDirectories()->size() + parentDir->getFiles()->size()) {
+            file *childFile = &parentDir->getFiles()->at(row - parentDir->getDirectories()->size());
+            auto *info = new ItemInfo{static_cast<void *>(childFile), ItemType::File};
+            return createIndex(row, column, info);
+        } else {
+            return {};
+        }
+    };
+
+    QModelIndex parent(const QModelIndex &index) const override {
+        if (!index.isValid()) {
+            return {};
+        }
+
+        if (isDirectory(index)) {
+            directory *childDir = getDirectoryFromIndex(index);
+            if (!childDir) {
+                return {};
+            }
+
+            directory *parentDir = root;// TODO 假设只有一层目录结构
+            if (childDir->getFather() == parentDir->getName()) {
+                {
+                    return createIndex(0, 0, parentDir);
+                }
+            }
+        } else {
+            return {};
+        }
+        return {};
+    };
+
+public:
+    /* 工具 */
+    bool isDirectory(const QModelIndex &index) const {
+        if (!index.isValid()) {
+            return false;
+        }
+        auto *info = static_cast<ItemInfo *>(index.internalPointer());
+        return info->type == ItemType::Directory;
+    }
+
+    directory *getDirectoryFromIndex(const QModelIndex &index) const {
+        if (!index.isValid()) {
+            return nullptr;
+        }
+        auto *info = static_cast<ItemInfo *>(index.internalPointer());
+        return static_cast<directory *>(info->ptr);
+    }
+
+    file *getFileFromIndex(const QModelIndex &index) const {
+        if (!index.isValid()) {
+            return nullptr;
+        }
+        auto *info = static_cast<ItemInfo *>(index.internalPointer());
+        return static_cast<file *>(info->ptr);
+    }
+};
+
 class mainwindow : public QMainWindow {
     Q_OBJECT
 
@@ -32,7 +204,8 @@ public:
 
 private:
     Ui::mainwindow *ui;
-    filesystem *fsx = nullptr;
+    filesystem *fsX = nullptr;
+    FileSystemModel *fsModel = nullptr;
     FileListView *fileListView;
 
 public slots:
@@ -61,7 +234,9 @@ public:
     void openFileSystem(QString name);         // 打开文件系统
     void openFileSystem(filesystem *fs);       // 打开文件系统
     void closeFileSystem();                    //关闭文件系统
+    void displayFileSystem();                  // 显示文件系统的所有文件
 };
+
 
 // 盘符选择窗口
 class DriveSelectionDialog : public QDialog {

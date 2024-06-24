@@ -37,65 +37,65 @@ directory::~directory() {
 }
 //判断所有者是否有读取权限
 bool directory::hasMasterPrivilege_read(char masterPrivilege) {
-    if (this->masterPrivilege == 1 )
+    if (this->masterPrivilege == 1)
         return true;
-    if (this->masterPrivilege == 3 )
+    if (this->masterPrivilege == 3)
         return true;
-    if (this->masterPrivilege == 5 )
+    if (this->masterPrivilege == 5)
         return true;
-    if (this->masterPrivilege == 7 )
+    if (this->masterPrivilege == 7)
         return true;
 }
 // 判断所有者是否有写入权限
 bool directory::hasMasterPrivilege_write(char masterPrivilege) {
-    if (this->masterPrivilege == 2 )
+    if (this->masterPrivilege == 2)
         return true;
-    if (this->masterPrivilege == 3 )
+    if (this->masterPrivilege == 3)
         return true;
-    if (this->masterPrivilege == 6 )
+    if (this->masterPrivilege == 6)
         return true;
-    if (this->masterPrivilege == 7 )
+    if (this->masterPrivilege == 7)
         return true;
 }
 // 判断所有者是否执行入权
 bool directory::hasMasterPrivilege_execute(char masterPrivilege) {
-    if (this->masterPrivilege == 4 )
+    if (this->masterPrivilege == 4)
         return true;
-    if (this->masterPrivilege == 5 )
+    if (this->masterPrivilege == 5)
         return true;
-    if (this->masterPrivilege == 6 )
+    if (this->masterPrivilege == 6)
         return true;
-    if (this->masterPrivilege == 7 )
+    if (this->masterPrivilege == 7)
         return true;
 }
 //判断所有者是否具有读取权
 bool directory::hasOtherPrivilege_read(char masterPrivilege) {
-    if (this->masterPrivilege == 1 )
+    if (this->masterPrivilege == 1)
         return true;
-    if (this->masterPrivilege == 3 )
+    if (this->masterPrivilege == 3)
         return true;
-    if (this->masterPrivilege == 5 )
+    if (this->masterPrivilege == 5)
         return true;
-    if (this->masterPrivilege == 7 )
+    if (this->masterPrivilege == 7)
         return true;
 }// 判断其他用户是否有写入权限
 bool directory::hasOtherPrivilege_write(char masterPrivilege) {
-    if (this->masterPrivilege == 2 )
+    if (this->masterPrivilege == 2)
         return true;
-    if (this->masterPrivilege == 3 )
+    if (this->masterPrivilege == 3)
         return true;
-    if (this->masterPrivilege == 6 )
+    if (this->masterPrivilege == 6)
         return true;
-    if (this->masterPrivilege == 7 )
+    if (this->masterPrivilege == 7)
         return true;
 }
 //判断其他用户是否具有执行权
 bool directory::hasOtherPrivilege_execute(char masterPrivilege) {
-    if (this->masterPrivilege == 4 )
+    if (this->masterPrivilege == 4)
         return true;
-    if (this->masterPrivilege == 5 )
+    if (this->masterPrivilege == 5)
         return true;
-    if (this->masterPrivilege == 6 )
+    if (this->masterPrivilege == 6)
         return true;
     if (this->masterPrivilege == 7)
         return true;
@@ -128,7 +128,7 @@ int directory::getUser() {
 }
 // 设置所属用户
 bool directory::setUser(int uid) {
-    this->master=uid;
+    this->master = uid;
     return true;
 }
 // 获取所有者权限
@@ -141,20 +141,20 @@ char directory::getOtherPrivilege() {
     return this->otherPrivilege;
 }
 // 获取所有子目录
-vector<directory> directory::getDirectories() {
-    return directories;
+vector<directory> *directory::getDirectories() {
+    return &directories;
 }
 // 获取目录下的文件
-vector<file> directory::getFiles() {
-    return files;
+vector<file> *directory::getFiles() {
+    return &files;
 }
 //获取父目录名
 string directory::getFather() {
     return this->father;
 }
 // 设置父目录名
-bool directory::setFather(string father){
-    this->father=father;
+bool directory::setFather(string father) {
+    this->father = father;
     return true;
 }
 // 删除文件
@@ -167,11 +167,11 @@ bool directory::removeFile(string name) {
                 // 如果没有写入权限，则不能删除文件
                 return false;
             }
-            files.erase(it); // 删除文件
+            files.erase(it);// 删除文件
             return true;
         }
     }
-    return false; // 文件不存在
+    return false;// 文件不存在
 }
 // 删除目录
 bool directory::removeDirectory(string name) {
@@ -183,14 +183,14 @@ bool directory::removeDirectory(string name) {
                 // 如果没有写入权限，则不能删除目录
                 return false;
             }
-            directories.erase(it); // 删除目录
+            directories.erase(it);// 删除目录
             return true;
         }
     }
-    return false; // 目录不存在
+    return false;// 目录不存在
 }
 bool directory::hasFile(string name) {
-    for ( auto& file : files) {
+    for (auto &file: files) {
         if (file.getName() == name) {
             return true;
         }
@@ -200,7 +200,7 @@ bool directory::hasFile(string name) {
 
 // 检查目录中是否有名为 name 的子目录
 bool directory::hasDirectory(string name) {
-    for (auto &dir : directories) {
+    for (auto &dir: directories) {
         if (dir.getName() == name) {
             return true;
         }
@@ -209,7 +209,7 @@ bool directory::hasDirectory(string name) {
 }
 // 根据名字获取文件，没有则返回nullptr
 file *directory::getFile(string name) {
-    for (auto &file : files) {
+    for (auto &file: files) {
         if (file.getName() == name) {
             return &file;
         }
@@ -218,8 +218,8 @@ file *directory::getFile(string name) {
 }
 
 // 根据名字获取目录，没有则返回nullptr
-directory* directory::getDirectory(string name) {
-    for (auto &dir : directories) {
+directory *directory::getDirectory(string name) {
+    for (auto &dir: directories) {
         if (dir.getName() == name) {
             return &dir;
         }
@@ -227,10 +227,10 @@ directory* directory::getDirectory(string name) {
     return nullptr;
 }
 // 目录中有这个文件(目录或者文件)
-bool directory:: has(string name) {
-    for (auto &file : files) {
+bool directory::has(string name) {
+    for (auto &file: files) {
         if (file.getName() == name) {
-        return true;
+            return true;
         }
     }
     return false;

@@ -6,6 +6,8 @@
 
 #include "mainwindow.h"
 #include "../form/ui_mainwindow.h"
+#include <QDir>
+#include <QFileSystemModel>
 
 // 修改相应的模块名
 mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwindow) {
@@ -149,45 +151,6 @@ void mainwindow::reformatButtonClicked() {
 void mainwindow::onFileSelected(const QModelIndex &index) {
 }
 
-vector<fs::path> mainwindow::searchFileSystem() {
-    // 搜索当前目录下的数据文件
-    fs::path current_path = fs::current_path();
-    // 用于存储找到的.fs文件的路径
-    vector<fs::path> fs_files;
-    // 遍历当前目录
-    for (const auto &entry: fs::directory_iterator(current_path)) {
-        // 检查是否为常规文件且后缀匹配
-        if (entry.is_regular_file()) {
-            // 获取文件名
-            string filename = entry.path().filename().string();
-            if (filename.size() >= sizeof(DATA_SUFFIX) - 1 && filename.substr(filename.size() - (sizeof(DATA_SUFFIX) - 1)) == DATA_SUFFIX) {
-                fs_files.push_back(entry.path());
-            }
-        }
-    }
-    return fs_files;
-}
-
-// 打开文件系统
-void mainwindow::openFileSystem(QString name) {
-    openFileSystem(new filesystem(name.replace(DATA_SUFFIX, "").toStdString()));
-}
-void mainwindow::openFileSystem(filesystem *fs) {
-    fsx = fs;
-    ui->openButton->setDisabled(true);
-    ui->closeButton->setDisabled(false);
-}
-
-// 关闭文件系统
-void mainwindow::closeFileSystem() {
-    if (fsx != nullptr) {
-        delete fsx;
-        fsx = nullptr;
-    }
-    ui->openButton->setDisabled(false);
-    ui->closeButton->setDisabled(true);
-}
-
 // 新建用户
 void mainwindow::newUser() {
 
@@ -238,6 +201,62 @@ void mainwindow::newSystem() {
 void mainwindow::deleteSystem() {
 }
 
-//退出系统
+// 退出系统
 void mainwindow::exitSystem() {
+}
+
+
+/* 工具类 */
+vector<fs::path> mainwindow::searchFileSystem() {
+    // 搜索当前目录下的数据文件
+    fs::path current_path = fs::current_path();
+    // 用于存储找到的.fs文件的路径
+    vector<fs::path> fs_files;
+    // 遍历当前目录
+    for (const auto &entry: fs::directory_iterator(current_path)) {
+        // 检查是否为常规文件且后缀匹配
+        if (entry.is_regular_file()) {
+            // 获取文件名
+            string filename = entry.path().filename().string();
+            if (filename.size() >= sizeof(DATA_SUFFIX) - 1 && filename.substr(filename.size() - (sizeof(DATA_SUFFIX) - 1)) == DATA_SUFFIX) {
+                fs_files.push_back(entry.path());
+            }
+        }
+    }
+    return fs_files;
+}
+
+// 打开文件系统
+void mainwindow::openFileSystem(QString name) {
+    openFileSystem(new filesystem(name.replace(DATA_SUFFIX, "").toStdString()));
+}
+void mainwindow::openFileSystem(filesystem *fs) {
+    fsX = fs;
+    ui->openButton->setDisabled(true);
+    ui->closeButton->setDisabled(false);
+    displayFileSystem();
+}
+
+// 关闭文件系统
+void mainwindow::closeFileSystem() {
+    if (fsX != nullptr) {
+        delete fsX;
+        fsX = nullptr;
+    }
+    if (fsModel != nullptr) {
+        delete fsModel;
+        fsModel = nullptr;
+    }
+    ui->openButton->setDisabled(false);
+    ui->closeButton->setDisabled(true);
+}
+
+void mainwindow::displayFileSystem() {
+    if (fsX != nullptr) {
+        // 创建文件系统模型
+        if (fsModel == nullptr) {
+            fsModel = new FileSystemModel(fsX->getTree(), this);
+        }
+        ui->treeView->setModel(fsModel);
+    }
 }

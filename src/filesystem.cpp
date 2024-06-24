@@ -116,6 +116,10 @@ string filesystem::getCurrentPath() {
     return concat(this->current);
 }
 
+directory *filesystem::getTree() {
+    return &this->tree;
+}
+
 bool filesystem::ls(vector<List> &v) {
     return ls(getCurrentPath(), v);
 }
@@ -135,12 +139,12 @@ bool filesystem::ls(string path, vector<List> &v) {
         }
     }
     // 找到所有文件和子目录
-    for (auto dir: tmp->getDirectories()) {
-        List l = {dir.getName()};
+    for (auto dir: *tmp->getDirectories()) {
+        List l = {dir.getName(), 0, "目录", "time"};
         v.push_back(l);
     }
-    for (auto file: tmp->getFiles()) {
-        List l = {file.getName()};
+    for (auto file: *tmp->getFiles()) {
+        List l = {file.getName(), file.getSize(), "文件", "time"};
         v.push_back(l);
     }
     return true;

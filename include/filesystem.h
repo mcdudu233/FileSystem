@@ -14,7 +14,12 @@
 // 返回的目录和文件列表
 typedef struct {
     string name;
+    int size;
+    string type;
+    string modifiedTime;
 } List;
+// 列表的表项
+#define ListSize 4
 
 class filesystem {
 private:
@@ -43,6 +48,7 @@ public:
 public:
     /* 基本 */
     string getCurrentPath();// 获取当前所在的路径
+    directory *getTree();   // 获取树形目录
     /* 命令 */
     bool ls(vector<List> &v);                                                    // 列出当前文件夹下的文件
     bool ls(string path, vector<List> &v);                                       // 列出某个文件夹下的文件
