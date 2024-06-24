@@ -114,7 +114,7 @@ public:
                 case 2:
                     return "文件";
                 case 3:
-                    return QString::fromStdString("time");
+                    return QString::fromStdString(timePointToString(f->getModifyTime()));
                 default:
                     return {};
             }
@@ -167,6 +167,28 @@ public:
         }
         return {};
     };
+
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override {
+        if (role != Qt::DisplayRole) {
+            return {};
+        }
+
+        if (orientation == Qt::Horizontal) {
+            switch (section) {
+                case 0:
+                    return QString("文件名");
+                case 1:
+                    return QString("大小");
+                case 2:
+                    return QString("类型");
+                case 3:
+                    return QString("修改时间");
+                default:
+                    return {};
+            }
+        }
+        return {};
+    }
 
 public:
     /* 工具 */

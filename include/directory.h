@@ -54,8 +54,6 @@ public:
     bool has(string name);               // 目录中有这个文件(目录或者文件)
     bool hasFile(string name);           // 目录中有这个文件
     bool hasDirectory(string name);      // 目录中有这个目录
-    chrono::system_clock::time_point getCreateTime(); // 获取创建时间
-    chrono::system_clock::time_point getModifyTime(); // 获取修改时间
 
 
     /* 存取控制 */
@@ -71,6 +69,8 @@ public:
     bool hasOtherPrivilege_execute(char masterPrivilege); //判断其他用户是否有执行权限
 
     /* 使用信息 */
+    chrono::system_clock::time_point getCreateTime();// 获取创建时间
+    chrono::system_clock::time_point getModifyTime();// 获取修改时间
 
     /* 序列化 */
     void serialize(fstream &out) const;// 序列化

@@ -35,8 +35,6 @@ private:
     int size;                                   // 大小
     chrono::system_clock::time_point createTime;// 创建时间
     chrono::system_clock::time_point modifyTime;// 修改时间
-    chrono::system_clock::time_point getCreateTime(); // 获取创建时间
-    chrono::system_clock::time_point getModifyTime(); // 获取修改时间
 
 private:
     bool updateTime();// 更新文件修改时间
@@ -70,6 +68,8 @@ public:
     bool hasOtherPrivilege_execute(char otherPrivilege);  // 判断其他用户是否有执行权限
 
     /* 使用信息 */
+    chrono::system_clock::time_point getCreateTime();// 获取创建时间
+    chrono::system_clock::time_point getModifyTime();// 获取修改时间
 
     /* 序列化 */
     void serialize(fstream &out) const;// 序列化
