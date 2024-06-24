@@ -235,6 +235,14 @@ bool directory::has(string name) {
     }
     return false;
 }
+// 获取创建时间
+chrono::system_clock::time_point directory::getCreateTime() {
+    return this->createTime;
+}
+// 获取修改时间
+chrono::system_clock::time_point directory::getModifyTime() {
+    return this->modifyTime;
+}
 //序列化
 void directory::serialize(fstream &out) const {
     size_t nameLength = name.size();

@@ -169,7 +169,14 @@ char *file::readFile() {
     }
     return buff;
 }
-
+// 获取创建时间
+chrono::system_clock::time_point file::getCreateTime() {
+    return this->createTime;
+}
+// 获取修改时间
+chrono::system_clock::time_point file::getModifyTime() {
+    return this->modifyTime;
+}
 // 写入文件
 bool file::writeFile(char *data, int size) {
     int block = size / getBlockSize() + 1;// 要保存在多少块里

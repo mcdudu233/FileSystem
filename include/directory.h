@@ -29,6 +29,7 @@ private:
     chrono::system_clock::time_point createTime;// 创建时间
     chrono::system_clock::time_point modifyTime;// 修改时间
 
+
 public:
     directory();
     directory(string name, string father, int master);
@@ -53,6 +54,9 @@ public:
     bool has(string name);               // 目录中有这个文件(目录或者文件)
     bool hasFile(string name);           // 目录中有这个文件
     bool hasDirectory(string name);      // 目录中有这个目录
+    chrono::system_clock::time_point getCreateTime(); // 获取创建时间
+    chrono::system_clock::time_point getModifyTime(); // 获取修改时间
+
 
     /* 存取控制 */
     int getUser();                                        // 获取所属用户
