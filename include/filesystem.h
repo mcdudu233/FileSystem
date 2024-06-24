@@ -56,6 +56,7 @@ public:
     /* 命令 */
     bool ls(vector<List> &v);                                                    // 列出当前文件夹下的文件
     bool ls(string path, vector<List> &v);                                       // 列出某个文件夹下的文件
+    int disk(bool left);                                                         // 获取磁盘容量(left为true时返回剩余容量)
     bool cd(string path);                                                        // 跳转到某个文件夹
     int useradd(string name, string password = "", bool super = false);          // 新增用户
     bool usercrg(int uid, string name, string password = "", bool super = false);// 修改用户信息

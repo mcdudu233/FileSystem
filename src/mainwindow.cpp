@@ -21,10 +21,11 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatButtonClicked()));
     connect(ui->actionNewUser, SIGNAL(triggered(bool)), this, SLOT(newUser()));
     connect(ui->actionNewFile, SIGNAL(triggered(bool)), this, SLOT(newFile()));
-    connect(ui->actionNewsystem, SIGNAL(triggered(bool)), this, SLOT(newSystem()));
+    connect(ui->actionNewsystem, SIGNAL(triggered(bool)), this, SLOT(reformatButtonClicked()));
     connect(ui->actionDeleteUser, SIGNAL(triggered(bool)), this, SLOT(deleteUser()));
     connect(ui->actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(deleteFile()));
-    connect(ui->actionDeleteSystem, SIGNAL(triggered(bool)), this, SLOT(deleteSystem()));
+    connect(ui->actionOpenSystem, SIGNAL(triggered(bool)), this, SLOT(openButtonCliked()));
+    connect(ui->actionCloseSystem, SIGNAL(triggered(bool)), this, SLOT(closeButtonClicked()));
     connect(ui->actionExitSystem, SIGNAL(triggered(bool)), this, SLOT(exitSystem()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
 
@@ -88,6 +89,34 @@ void mainwindow::showLoginFailedMessage() {
 void mainwindow::updateDiskCapacity() {
     // 获取磁盘的总容量和剩余容量
     // 更新界面上的标签
+    float all = (float) fsX->disk(false);
+    float left = (float) fsX->disk(true);
+    ui->diskCapacityLabel->setText(QString::fromStdString(getSizeString(left) + "/" + getSizeString(all)));
+}
+
+string mainwindow::getSizeString(float f) {
+    string tmp;
+    if (f > 1024.0 * 1024.0 * 1024.0) {
+        f /= 1024.0 * 1024.0 * 1024.0;
+        tmp = std::to_string(f);
+        tmp = tmp.substr(0, tmp.find('.') + 2);
+        tmp += "GB";
+    } else if (f > 1024.0 * 1024.0) {
+        f /= 1024.0 * 1024.0;
+        tmp = std::to_string(f);
+        tmp = tmp.substr(0, tmp.find('.') + 2);
+        tmp += "MB";
+    } else if (f > 1024.0) {
+        f /= 1024.0;
+        tmp = std::to_string(f);
+        tmp = tmp.substr(0, tmp.find('.') + 2);
+        tmp += "KB";
+    } else {
+        tmp = std::to_string(f);
+        tmp = tmp.substr(0, tmp.find('.') + 2);
+        tmp += "B";
+    }
+    return tmp;
 }
 
 // 当前项改变时的槽函数
@@ -193,18 +222,11 @@ void mainwindow::about() {
     msgBox.exec();
 };
 
-// 新建系统
-void mainwindow::newSystem() {
-}
-
-// 删除系统
-void mainwindow::deleteSystem() {
-}
-
 // 退出系统
 void mainwindow::exitSystem() {
+    closeFileSystem();
+    QApplication::quit();
 }
-
 
 /* 工具类 */
 vector<fs::path> mainwindow::searchFileSystem() {
@@ -235,6 +257,7 @@ void mainwindow::openFileSystem(filesystem *fs) {
     ui->openButton->setDisabled(true);
     ui->closeButton->setDisabled(false);
     displayFileSystem();
+    updateDiskCapacity();
 }
 
 // 关闭文件系统
@@ -249,6 +272,7 @@ void mainwindow::closeFileSystem() {
     }
     ui->openButton->setDisabled(false);
     ui->closeButton->setDisabled(true);
+    ui->diskCapacityLabel->setText("");
 }
 
 void mainwindow::displayFileSystem() {

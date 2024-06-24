@@ -193,6 +193,20 @@ bool filesystem::ls(string path, vector<List> &v) {
     return true;
 }
 
+int filesystem::disk(bool left) {
+    if (left) {
+        int sum = 0;
+        for (int i = block_data; i < available.size(); i++) {
+            if (available[i]) {
+                sum++;
+            }
+        }
+        return sum * block_size;
+    } else {
+        return (available.size() - block_data) * block_size;
+    }
+}
+
 bool filesystem::cd(string path) {
     vector<string> names;
     if (!getAbsolutePath(std::move(path), names)) {

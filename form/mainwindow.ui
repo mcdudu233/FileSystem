@@ -27,9 +27,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>80</x>
       <y>530</y>
-      <width>231</width>
+      <width>381</width>
       <height>41</height>
      </rect>
     </property>
@@ -234,6 +234,7 @@
     <addaction name="separator"/>
     <addaction name="actionDeleteFile"/>
     <addaction name="separator"/>
+    <addaction name="actionExitSystem"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -241,9 +242,9 @@
     </property>
     <addaction name="actionNewsystem"/>
     <addaction name="separator"/>
-    <addaction name="actionDeleteSystem"/>
+    <addaction name="actionOpenSystem"/>
+    <addaction name="actionCloseSystem"/>
     <addaction name="separator"/>
-    <addaction name="actionExitSystem"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -263,12 +264,12 @@
   </action>
   <action name="actionNewsystem">
    <property name="text">
-    <string>新建</string>
+    <string>格式化</string>
    </property>
   </action>
-  <action name="actionDeleteSystem">
+  <action name="actionCloseSystem">
    <property name="text">
-    <string>删除</string>
+    <string>关闭系统</string>
    </property>
   </action>
   <action name="actionNewFile">
@@ -299,6 +300,11 @@
   <action name="actionExitSystem">
    <property name="text">
     <string>退出</string>
+   </property>
+  </action>
+  <action name="actionOpenSystem">
+   <property name="text">
+    <string>打开系统</string>
    </property>
   </action>
  </widget>

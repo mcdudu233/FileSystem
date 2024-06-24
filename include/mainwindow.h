@@ -265,16 +265,15 @@ public slots:
     void deleteUser();                                    // 删除用户
     void newFile();                                       // 新开文件
     void deleteFile();                                    // 删除文件
-    void about();                                         //关于
-    void newSystem();                                     // 新建系统
-    void deleteSystem();                                  // 删除系统
+    void about();                                         // 关于
     void exitSystem();                                    // 退出系统
 
 public:
+    static string getSizeString(float f);      // 格式化文件大小
     static vector<fs::path> searchFileSystem();// 搜索当前文件夹下的所有文件系统
     void openFileSystem(QString name);         // 打开文件系统
     void openFileSystem(filesystem *fs);       // 打开文件系统
-    void closeFileSystem();                    //关闭文件系统
+    void closeFileSystem();                    // 关闭文件系统
     void displayFileSystem();                  // 显示文件系统的所有文件
 };
 
