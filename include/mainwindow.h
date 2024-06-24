@@ -28,6 +28,7 @@ class FileSystemModel : public QAbstractItemModel {
     Q_OBJECT
 
 private:
+    filesystem *fsX = nullptr;
     directory *root = nullptr;
     enum class ItemType { Directory,
                           File };
@@ -37,8 +38,8 @@ private:
     } ItemInfo;
 
 public:
-    FileSystemModel(directory *root, QObject *parent = nullptr)
-        : root(root), QAbstractItemModel(parent) {
+    FileSystemModel(filesystem *fsX, directory *root, QObject *parent = nullptr)
+        : fsX(fsX), root(root), QAbstractItemModel(parent) {
     }
 
     ~FileSystemModel() {
@@ -136,12 +137,10 @@ public:
             directory *childDir = &parentDir->getDirectories()->at(row);
             auto *info = new ItemInfo{static_cast<void *>(childDir), ItemType::Directory};
             return createIndex(row, column, info);
-        } else if (row < parentDir->getDirectories()->size() + parentDir->getFiles()->size()) {
+        } else {
             file *childFile = &parentDir->getFiles()->at(row - parentDir->getDirectories()->size());
             auto *info = new ItemInfo{static_cast<void *>(childFile), ItemType::File};
             return createIndex(row, column, info);
-        } else {
-            return {};
         }
     };
 
@@ -152,18 +151,26 @@ public:
 
         if (isDirectory(index)) {
             directory *childDir = getDirectoryFromIndex(index);
-            if (!childDir) {
+            if (!childDir || childDir->getFather().empty()) {
                 return {};
             }
 
-            directory *parentDir = root;// TODO 假设只有一层目录结构
-            if (childDir->getFather() == parentDir->getName()) {
-                {
-                    return createIndex(0, 0, parentDir);
-                }
+            directory *parentDir = fsX->getFatherByName(*childDir);
+            if (parentDir) {
+                auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
+                return createIndex(0, 0, parentInfo);// 注意：这里需要根据实际情况计算父目录的行号
             }
         } else {
-            return {};
+            file *childFile = getFileFromIndex(index);
+            if (!childFile) {
+                return {};
+            }
+
+            directory *parentDir = fsX->getFatherByName(*childFile);
+            if (parentDir) {
+                auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
+                return createIndex(0, 0, parentInfo);// 注意：这里需要根据实际情况计算父目录的行号
+            }
         }
         return {};
     };
@@ -188,7 +195,7 @@ public:
             }
         }
         return {};
-    }
+    };
 
 public:
     /* 工具 */

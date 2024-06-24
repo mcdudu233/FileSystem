@@ -120,6 +120,49 @@ directory *filesystem::getTree() {
     return &this->tree;
 }
 
+directory *filesystem::getFatherByName(directory dir) {
+    return findParentDirectory(&tree, dir);
+}
+
+// 递归查找目录的父目录
+directory *filesystem::findParentDirectory(directory *current, directory &target) {
+    // 检查当前目录的子目录中是否有目标目录
+    for (directory &child: *current->getDirectories()) {
+        if (child == target) {
+            return current;
+        }
+        // 递归检查子目录
+        directory *found = findParentDirectory(&child, target);
+        if (found != nullptr) {
+            return found;
+        }
+    }
+    return nullptr;
+}
+
+directory *filesystem::getFatherByName(file f) {
+    return findParentDirectory(&tree, f);
+}
+
+// 递归查找包含指定文件的父目录
+directory *filesystem::findParentDirectory(directory *current, file &target) {
+    // 检查当前目录是否包含目标文件
+    for (file &childFile: *current->getFiles()) {
+        if (childFile == target) {
+            return current;
+        }
+    }
+
+    // 递归检查子目录
+    for (directory &childDir: *current->getDirectories()) {
+        directory *found = findParentDirectory(&childDir, target);
+        if (found != nullptr) {
+            return found;
+        }
+    }
+    return nullptr;
+}
+
 bool filesystem::ls(vector<List> &v) {
     return ls(getCurrentPath(), v);
 }

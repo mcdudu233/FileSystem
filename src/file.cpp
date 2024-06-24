@@ -32,6 +32,14 @@ file::file(const file &f)
 file::~file() {
 }
 
+bool file::operator==(const file &other) {
+    if (std::equal(this->name.begin(), this->name.end(), other.name.begin(), other.name.end()) && this->size == other.size && this->createTime == other.createTime && this->modifyTime == other.modifyTime) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // 获取用户名
 string file::getName() {
     return this->name;

@@ -35,6 +35,7 @@ public:
     directory(string name, string father, int master);
     directory(const directory &dir);
     ~directory();
+    bool operator==(const directory &other);
 
 public:
     string getName();             // 获取目录名

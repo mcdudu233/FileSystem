@@ -44,6 +44,7 @@ public:
     file(const string &fileName);
     file(const file &file);
     ~file();
+    bool operator==(const file &other);
 
 public:
     string getName();         // 获取用户名

@@ -5,7 +5,7 @@
 #include "directory.h"
 
 // 根目录
-directory dir_root(".", "..", 0);
+directory dir_root(".", "", 0);
 
 
 directory::directory() {
@@ -35,6 +35,15 @@ directory::directory(const directory &dir) : name(dir.name),
 directory::~directory() {
     // 释放资源
 }
+
+// 重载等于运算符
+bool directory::operator==(const directory &other) {
+    if (std::equal(this->name.begin(), this->name.end(), other.name.begin(), other.name.end()) && std::equal(this->father.begin(), this->father.end(), other.father.begin(), other.father.end()) && this->createTime == other.createTime && this->modifyTime == other.modifyTime) {
+        return true;
+    }
+    return false;
+}
+
 //判断所有者是否有读取权限
 bool directory::hasMasterPrivilege_read(char masterPrivilege) {
     if (this->masterPrivilege == 1)
@@ -140,23 +149,28 @@ char directory::getMasterPrivilege() {
 char directory::getOtherPrivilege() {
     return this->otherPrivilege;
 }
+
 // 获取所有子目录
 vector<directory> *directory::getDirectories() {
     return &directories;
 }
+
 // 获取目录下的文件
 vector<file> *directory::getFiles() {
     return &files;
 }
+
 //获取父目录名
 string directory::getFather() {
     return this->father;
 }
+
 // 设置父目录名
 bool directory::setFather(string father) {
     this->father = father;
     return true;
 }
+
 // 删除文件
 bool directory::removeFile(string name) {
     // 遍历文件向量
@@ -173,6 +187,7 @@ bool directory::removeFile(string name) {
     }
     return false;// 文件不存在
 }
+
 // 删除目录
 bool directory::removeDirectory(string name) {
     // 遍历目录向量
@@ -189,6 +204,7 @@ bool directory::removeDirectory(string name) {
     }
     return false;// 目录不存在
 }
+
 bool directory::hasFile(string name) {
     for (auto &file: files) {
         if (file.getName() == name) {
@@ -207,6 +223,7 @@ bool directory::hasDirectory(string name) {
     }
     return false;
 }
+
 // 根据名字获取文件，没有则返回nullptr
 file *directory::getFile(string name) {
     for (auto &file: files) {
@@ -235,14 +252,17 @@ bool directory::has(string name) {
     }
     return false;
 }
+
 // 获取创建时间
 chrono::system_clock::time_point directory::getCreateTime() {
     return this->createTime;
 }
+
 // 获取修改时间
 chrono::system_clock::time_point directory::getModifyTime() {
     return this->modifyTime;
 }
+
 //序列化
 void directory::serialize(fstream &out) const {
     size_t nameLength = name.size();

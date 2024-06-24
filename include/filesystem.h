@@ -47,8 +47,12 @@ public:
 
 public:
     /* 基本 */
-    string getCurrentPath();// 获取当前所在的路径
-    directory *getTree();   // 获取树形目录
+    string getCurrentPath();                  // 获取当前所在的路径
+    directory *getTree();                     // 获取树形目录
+    directory *getFatherByName(directory dir);// 根据目录找到父目录
+    directory *getFatherByName(file f);       // 根据文件找到父目录
+    directory *findParentDirectory(directory *current, directory &target);
+    directory *findParentDirectory(directory *current, file &target);
     /* 命令 */
     bool ls(vector<List> &v);                                                    // 列出当前文件夹下的文件
     bool ls(string path, vector<List> &v);                                       // 列出某个文件夹下的文件
