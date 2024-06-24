@@ -35,8 +35,8 @@ private:
     int size;                                   // 大小
     chrono::system_clock::time_point createTime;// 创建时间
     chrono::system_clock::time_point modifyTime;// 修改时间
-    chrono::system_clock::time_point getCreateTime(); // 获取创建时间
-    chrono::system_clock::time_point getModifyTime(); // 获取修改时间
+    chrono::system_clock::time_point getCreateTime();  // 获取创建时间
+    chrono::system_clock::time_point getModifyTime();  // 获取修改时间
 
 private:
     bool updateTime();// 更新文件修改时间
