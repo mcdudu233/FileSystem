@@ -256,6 +256,10 @@ void mainwindow::displayFileSystem() {
         // 创建文件系统模型
         if (fsModel == nullptr) {
             fsModel = new FileSystemModel(fsX->getTree(), this);
+            fsModel->setHeaderData(0, Qt::Horizontal, "名称");
+            fsModel->setHeaderData(1, Qt::Horizontal, "大小");
+            fsModel->setHeaderData(2, Qt::Horizontal, "类型");
+            fsModel->setHeaderData(3, Qt::Horizontal, "最后修改时间");
         }
         ui->treeView->setModel(fsModel);
     }

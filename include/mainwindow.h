@@ -97,7 +97,7 @@ public:
                 case 2:
                     return "目录";
                 case 3:
-                    return QString::fromStdString("time");
+                    return QString::fromStdString(timePointToString(dir->getModifyTime()));
                 default:
                     return {};
             }
@@ -192,6 +192,18 @@ public:
         }
         auto *info = static_cast<ItemInfo *>(index.internalPointer());
         return static_cast<file *>(info->ptr);
+    }
+
+    string timePointToString(const std::chrono::system_clock::time_point &tp) const {
+        // 将 time_point 转换为 time_t
+        std::time_t time = std::chrono::system_clock::to_time_t(tp);
+        // 创建一个 tm 结构
+        std::tm tm = *std::localtime(&time);
+
+        // 使用 stringstream 格式化时间
+        std::ostringstream oss;
+        oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+        return oss.str();
     }
 };
 
