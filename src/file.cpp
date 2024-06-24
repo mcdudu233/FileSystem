@@ -169,11 +169,11 @@ char *file::readFile() {
     }
     return buff;
 }
-// 获取创建时间
+//  获取创建时间
 chrono::system_clock::time_point file::getCreateTime() {
     return this->createTime;
 }
-// 获取修改时间
+//  获取修改时间
 chrono::system_clock::time_point file::getModifyTime() {
     return this->modifyTime;
 }
