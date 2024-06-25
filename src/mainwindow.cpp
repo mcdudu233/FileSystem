@@ -282,5 +282,7 @@ void mainwindow::displayFileSystem() {
             fsModel = new FileSystemModel(fsX, fsX->getTree(), this);
         }
         ui->treeView->setModel(fsModel);
+        ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
+        ui->treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
 }

@@ -76,7 +76,7 @@ public:
         if (!index.isValid()) {
             return Qt::NoItemFlags;
         }
-        return QAbstractItemModel::flags(index);
+        return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
     };
 
     // 获取每一行的表项数据
@@ -158,7 +158,18 @@ public:
             directory *parentDir = fsX->getFatherByName(*childDir);
             if (parentDir) {
                 auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
-                return createIndex(0, 0, parentInfo);// 注意：这里需要根据实际情况计算父目录的行号
+                int row = 0;
+                // 计算行号
+                directory *grandDir = fsX->getFatherByName(*parentDir);
+                if (grandDir) {
+                    vector<directory> dirs = *grandDir->getDirectories();
+                    for (; row < dirs.size(); row++) {
+                        if (*parentDir == dirs[row]) {
+                            break;
+                        }
+                    }
+                }
+                return createIndex(row, 0, parentInfo);
             }
         } else {
             file *childFile = getFileFromIndex(index);
@@ -169,7 +180,18 @@ public:
             directory *parentDir = fsX->getFatherByName(*childFile);
             if (parentDir) {
                 auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
-                return createIndex(0, 0, parentInfo);// 注意：这里需要根据实际情况计算父目录的行号
+                int row = 0;
+                // 计算行号
+                directory *grandDir = fsX->getFatherByName(*parentDir);
+                if (grandDir) {
+                    vector<directory> dirs = *grandDir->getDirectories();
+                    for (; row < dirs.size(); row++) {
+                        if (*parentDir == dirs[row]) {
+                            break;
+                        }
+                    }
+                }
+                return createIndex(row, 0, parentInfo);
             }
         }
         return {};
