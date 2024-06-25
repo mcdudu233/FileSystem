@@ -29,6 +29,11 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     connect(ui->actionExitSystem, SIGNAL(triggered(bool)), this, SLOT(exitSystem()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
 
+    ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    // 连接右键菜单信号
+    connect(ui->treeView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenuRequested(const QPoint &)));
 
     //    const vector<fs::path> &fss = searchFileSystem();
     //    if (!fss.empty()) {
@@ -228,6 +233,28 @@ void mainwindow::exitSystem() {
     QApplication::quit();
 }
 
+// TODO 右键菜单处理
+void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
+    if (this->fsModel != nullptr) {
+        // 获取当前元素
+        QModelIndex index = ui->treeView->indexAt(pos);
+        if (!index.isValid()) {
+            return;
+        }
+
+        // 添加菜单
+        QMenu contextMenu(this);
+        if (this->fsModel->isDirectory(index)) {
+            contextMenu.addAction("打开目录", this, SLOT(exitSystem()));
+            contextMenu.addAction("删除目录", this, SLOT(exitSystem()));
+        } else {
+            contextMenu.addAction("打开文件", this, SLOT(exitSystem()));
+            contextMenu.addAction("删除文件", this, SLOT(deleteFile()));
+        }
+        contextMenu.exec(ui->treeView->viewport()->mapToGlobal(pos));
+    }
+}
+
 /* 工具类 */
 vector<fs::path> mainwindow::searchFileSystem() {
     // 搜索当前目录下的数据文件
@@ -282,7 +309,5 @@ void mainwindow::displayFileSystem() {
             fsModel = new FileSystemModel(fsX, fsX->getTree(), this);
         }
         ui->treeView->setModel(fsModel);
-        ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
-        ui->treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
 }

@@ -272,6 +272,7 @@ private:
     FileListView *fileListView;
 
 public slots:
+    void onCustomContextMenuRequested(const QPoint &pos); // treeView的右键菜单
     void onCurrentItemChanged(const QModelIndex &current);// 处理当前项变化
     void onFileSelected(const QModelIndex &index);        // 文件选择
     void onFileDoubleClicked(const QModelIndex &index);   // 双击文件
