@@ -28,6 +28,7 @@ public:
     user();
     user(int uid, string name, string password = "", bool superuser = false);
     ~user();
+    bool operator==(const user &other);
 
 public:
     int getUid();                       // 获取UID

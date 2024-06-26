@@ -38,7 +38,7 @@ directory::~directory() {
 
 // 重载等于运算符
 bool directory::operator==(const directory &other) {
-    if (std::equal(this->name.begin(), this->name.end(), other.name.begin(), other.name.end()) && std::equal(this->father.begin(), this->father.end(), other.father.begin(), other.father.end()) && this->createTime == other.createTime && this->modifyTime == other.modifyTime) {
+    if (std::equal(this->name.begin(), this->name.end(), other.name.begin(), other.name.end()) && std::equal(this->father.begin(), this->father.end(), other.father.begin(), other.father.end()) && this->createTime == other.createTime && this->modifyTime == other.modifyTime && this->master == other.master) {
         return true;
     }
     return false;

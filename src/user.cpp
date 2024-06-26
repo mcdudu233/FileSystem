@@ -4,10 +4,11 @@
 
 #include "user.h"
 
-user user_root(0, "root", "root", true);
+user user_root(0, "root", "", true);
 
 user::user() {
 }
+
 // 构造函数
 user::user(int uid, string name, string password, bool superuser) : uid(uid), name(name), superuser(superuser) {
     setPassword(std::move(password));
@@ -15,6 +16,12 @@ user::user(int uid, string name, string password, bool superuser) : uid(uid), na
 // 析构函数
 user::~user() {}
 
+bool user::operator==(const user &other) {
+    if (this->uid == other.uid) {
+        return true;
+    }
+    return false;
+}
 
 string MD5(const char *mStr);
 
@@ -91,7 +98,6 @@ void user::deserialize(fstream &in) {
     in.read(reinterpret_cast<char *>(&superuser), sizeof(superuser));
     in.read(reinterpret_cast<char *>(&uid), sizeof(uid));
 }
-
 
 /* MD5加密函数实现 */
 #include <Windows.h>
