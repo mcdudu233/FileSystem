@@ -5,7 +5,6 @@
 #ifndef FILESYSTEM_MAINWINDOW_H
 #define FILESYSTEM_MAINWINDOW_H
 
-#include "filelistview.h"
 #include "filesystem.h"
 #include "reformat.h"
 #include <QAction>
@@ -269,7 +268,6 @@ private:
     Ui::mainwindow *ui;
     filesystem *fsX = nullptr;
     FileSystemModel *fsModel = nullptr;
-    FileListView *fileListView;
 
 public slots:
     void onCustomContextMenuRequested(const QPoint &pos); // treeView的右键菜单

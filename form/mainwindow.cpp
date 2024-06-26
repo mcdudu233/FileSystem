@@ -5,9 +5,7 @@
 // You may need to build the project (run Qt uic code generator) to get "ui_mainwindow.h" resolved
 
 #include "mainwindow.h"
-#include "../form/ui_mainwindow.h"
-#include <QDir>
-#include <QFileSystemModel>
+#include "ui_mainwindow.h"
 
 // 修改相应的模块名
 mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwindow) {
@@ -67,8 +65,6 @@ void mainwindow::onFileDoubleClicked(const QModelIndex &index) {
 void mainwindow::onFileRightClicked(const QModelIndex &index) {
     // 文件被右键点击，可以在这里处理
     // 创建并设置文件列表视图
-    fileListView = new FileListView(this);
-    setCentralWidget(fileListView);
 }
 
 void mainwindow::onSearchTextChanged(const QString &text) {

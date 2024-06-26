@@ -5,12 +5,12 @@
 // You may need to build the project (run Qt uic code generator) to get "ui_login.h" resolved
 
 #include "login.h"
-#include "../form/ui_login.h"
+#include "ui_login.h"
 
 login::login(QWidget *parent) : QDialog(parent), ui(new Ui::login) {
     ui->setupUi(this);
     setWindowTitle("登录");
-    
+
     // 连接信号和槽
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
 }
