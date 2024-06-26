@@ -279,15 +279,20 @@ public slots:
     void showLoginFailedMessage();                        // 显示登录信息
     void showFileManager();                               // 显示文件管理系统的信号
     void updateDiskCapacity();                            // 更新磁盘容量
-    void openButtonCliked();                              // 打开文件按钮按下
-    void closeButtonClicked();                            // 关闭文件按钮按下
-    void reformatButtonClicked();                         // 格式化按钮按下
-    void newUser();                                       // 新建用户
-    void deleteUser();                                    // 删除用户
-    void newFile();                                       // 新开文件
-    void deleteFile();                                    // 删除文件
-    void about();                                         // 关于
-    void exitSystem();                                    // 退出系统
+    /* 系统操作 */
+    void openSystem();    // 打开系统按钮按下
+    void closeSystem();   // 关闭系统按钮按下
+    void reformatSystem();// 格式化按钮按下
+    void exitSystem();    // 退出系统
+    /* 用户操作 */
+    void newUser();   // 新建用户
+    void deleteUser();// 删除用户
+    /* 文件操作 */
+    void newFile();     // 新文件
+    void newDirectory();// 新文件夹
+    void deleteFile();  // 删除文件
+    /* 其他操作 */
+    void about();// 关于
 
 public:
     static string getSizeString(float f);      // 格式化文件大小

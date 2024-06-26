@@ -14,16 +14,16 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
 
     connect(ui->treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCurrentItemChanged(const QModelIndex &)));
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
-    connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openButtonCliked()));
-    connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(closeButtonClicked()));
-    connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatButtonClicked()));
+    connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openSystem()));
+    connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(closeSystem()));
+    connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatSystem()));
     connect(ui->actionNewUser, SIGNAL(triggered(bool)), this, SLOT(newUser()));
     connect(ui->actionNewFile, SIGNAL(triggered(bool)), this, SLOT(newFile()));
-    connect(ui->actionNewsystem, SIGNAL(triggered(bool)), this, SLOT(reformatButtonClicked()));
+    connect(ui->actionNewsystem, SIGNAL(triggered(bool)), this, SLOT(reformatSystem()));
     connect(ui->actionDeleteUser, SIGNAL(triggered(bool)), this, SLOT(deleteUser()));
     connect(ui->actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(deleteFile()));
-    connect(ui->actionOpenSystem, SIGNAL(triggered(bool)), this, SLOT(openButtonCliked()));
-    connect(ui->actionCloseSystem, SIGNAL(triggered(bool)), this, SLOT(closeButtonClicked()));
+    connect(ui->actionOpenSystem, SIGNAL(triggered(bool)), this, SLOT(openSystem()));
+    connect(ui->actionCloseSystem, SIGNAL(triggered(bool)), this, SLOT(closeSystem()));
     connect(ui->actionExitSystem, SIGNAL(triggered(bool)), this, SLOT(exitSystem()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
 
@@ -33,24 +33,6 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     // 连接右键菜单信号
     connect(ui->treeView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenuRequested(const QPoint &)));
 
-    //    const vector<fs::path> &fss = searchFileSystem();
-    //    if (!fss.empty()) {
-    //        // 如果当前文件下有文件系统 则询问是否打开第一个
-    //        string fs_name = fss[0].filename().string();
-    //        QMessageBox::StandardButton reply =
-    //                QMessageBox::question(this,
-    //                                      "检测到文件系统",
-    //                                      QString::fromStdString("当前文件夹下存在文件系统：" + fs_name + "，是否要打开？"),
-    //                                      QMessageBox::Yes | QMessageBox::No,
-    //                                      QMessageBox::No);
-    //        if (reply == QMessageBox::Yes) {
-    //            openFileSystem(QString::fromStdString(fs_name).replace(DATA_SUFFIX, ""));
-    //        } else {
-    //            closeFileSystem();
-    //        }
-    //    } else {
-    //        closeFileSystem();
-    //    }
     closeFileSystem();
 }
 
@@ -58,66 +40,8 @@ mainwindow::~mainwindow() {
     delete ui;
 }
 
-void mainwindow::onFileDoubleClicked(const QModelIndex &index) {
-    // 文件被双击，可以在这里处理
-}
-
-void mainwindow::onFileRightClicked(const QModelIndex &index) {
-    // 文件被右键点击，可以在这里处理
-    // 创建并设置文件列表视图
-}
-
 void mainwindow::onSearchTextChanged(const QString &text) {
     // 搜索文本发生变化，可以在这里处理搜索逻辑
-}
-
-
-// 显示文件管理系统窗口的槽函数
-void mainwindow::showFileManager() {
-    // 如果MainWindow是隐藏的，显示它
-    if (!isVisible()) {
-        showNormal();// 显示窗口
-        raise();     // 使窗口在所有窗口中位于最顶层
-    }
-}
-
-//显示登录失败消息的槽函数
-void mainwindow::showLoginFailedMessage() {
-    QMessageBox::critical(this, "登录失败", "用户名或密码错误。");
-}
-
-// 磁盘容量更新函数
-void mainwindow::updateDiskCapacity() {
-    // 获取磁盘的总容量和剩余容量
-    // 更新界面上的标签
-    float all = (float) fsX->disk(false);
-    float left = (float) fsX->disk(true);
-    ui->diskCapacityLabel->setText(QString::fromStdString(getSizeString(left) + "/" + getSizeString(all)));
-}
-
-string mainwindow::getSizeString(float f) {
-    string tmp;
-    if (f > 1024.0 * 1024.0 * 1024.0) {
-        f /= 1024.0 * 1024.0 * 1024.0;
-        tmp = std::to_string(f);
-        tmp = tmp.substr(0, tmp.find('.') + 2);
-        tmp += "GB";
-    } else if (f > 1024.0 * 1024.0) {
-        f /= 1024.0 * 1024.0;
-        tmp = std::to_string(f);
-        tmp = tmp.substr(0, tmp.find('.') + 2);
-        tmp += "MB";
-    } else if (f > 1024.0) {
-        f /= 1024.0;
-        tmp = std::to_string(f);
-        tmp = tmp.substr(0, tmp.find('.') + 2);
-        tmp += "KB";
-    } else {
-        tmp = std::to_string(f);
-        tmp = tmp.substr(0, tmp.find('.') + 2);
-        tmp += "B";
-    }
-    return tmp;
 }
 
 // 当前项改变时的槽函数
@@ -128,7 +52,7 @@ void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
     }
 }
 // 打开文件系统
-void mainwindow::openButtonCliked() {
+void mainwindow::openSystem() {
     const vector<fs::path> &fss = searchFileSystem();
     if (fss.empty()) {
         QMessageBox::StandardButton reply = QMessageBox::critical(this,
@@ -166,12 +90,12 @@ void mainwindow::openButtonCliked() {
 }
 
 // 关闭文件系统
-void mainwindow::closeButtonClicked() {
+void mainwindow::closeSystem() {
     closeFileSystem();
 }
 
 // 格式化
-void mainwindow::reformatButtonClicked() {
+void mainwindow::reformatSystem() {
     reformat rf;
     if (rf.exec() == QDialog::Accepted) {
         delete rf.getFileSystem();
@@ -193,8 +117,11 @@ void mainwindow::deleteUser() {
 
 // 新开文件
 void mainwindow::newFile() {
+}
 
-};
+// 新文件夹
+void mainwindow::newDirectory() {
+}
 
 // 删除文件
 void mainwindow::deleteFile() {
@@ -241,11 +168,17 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
         // 添加菜单
         QMenu contextMenu(this);
         if (this->fsModel->isDirectory(index)) {
-            contextMenu.addAction("打开目录", this, SLOT(exitSystem()));
-            contextMenu.addAction("删除目录", this, SLOT(exitSystem()));
+            contextMenu.addAction("打开", this, SLOT(exitSystem()));
+            contextMenu.addAction("删除", this, SLOT(exitSystem()));
+            contextMenu.addAction("重命名", this, SLOT(exitSystem()));
+            contextMenu.addAction("新建文件", this, SLOT(newFile()));
+            contextMenu.addAction("新建文件夹", this, SLOT(newDirectory()));
+            contextMenu.addAction("属性", this, SLOT(exitSystem()));
         } else {
-            contextMenu.addAction("打开文件", this, SLOT(exitSystem()));
-            contextMenu.addAction("删除文件", this, SLOT(deleteFile()));
+            contextMenu.addAction("打开", this, SLOT(exitSystem()));
+            contextMenu.addAction("删除", this, SLOT(deleteFile()));
+            contextMenu.addAction("重命名", this, SLOT(exitSystem()));
+            contextMenu.addAction("属性", this, SLOT(exitSystem()));
         }
         contextMenu.exec(ui->treeView->viewport()->mapToGlobal(pos));
     }
@@ -306,4 +239,39 @@ void mainwindow::displayFileSystem() {
         }
         ui->treeView->setModel(fsModel);
     }
+}
+
+// 磁盘容量更新函数
+void mainwindow::updateDiskCapacity() {
+    // 获取磁盘的总容量和剩余容量
+    // 更新界面上的标签
+    float all = (float) fsX->disk(false);
+    float left = (float) fsX->disk(true);
+    ui->diskCapacityLabel->setText(QString::fromStdString(getSizeString(left) + "/" + getSizeString(all)));
+}
+
+// 根据字节大小获取字符串
+string mainwindow::getSizeString(float f) {
+    string tmp;
+    if (f > 1024.0 * 1024.0 * 1024.0) {
+        f /= 1024.0 * 1024.0 * 1024.0;
+        tmp = std::to_string(f);
+        tmp = tmp.substr(0, tmp.find('.') + 2);
+        tmp += "GB";
+    } else if (f > 1024.0 * 1024.0) {
+        f /= 1024.0 * 1024.0;
+        tmp = std::to_string(f);
+        tmp = tmp.substr(0, tmp.find('.') + 2);
+        tmp += "MB";
+    } else if (f > 1024.0) {
+        f /= 1024.0;
+        tmp = std::to_string(f);
+        tmp = tmp.substr(0, tmp.find('.') + 2);
+        tmp += "KB";
+    } else {
+        tmp = std::to_string(f);
+        tmp = tmp.substr(0, tmp.find('.') + 2);
+        tmp += "B";
+    }
+    return tmp;
 }
