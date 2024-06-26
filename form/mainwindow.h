@@ -272,13 +272,7 @@ private:
 public slots:
     void onCustomContextMenuRequested(const QPoint &pos); // treeView的右键菜单
     void onCurrentItemChanged(const QModelIndex &current);// 处理当前项变化
-    void onFileSelected(const QModelIndex &index);        // 文件选择
-    void onFileDoubleClicked(const QModelIndex &index);   // 双击文件
-    void onFileRightClicked(const QModelIndex &index);    // 右击文件
     void onSearchTextChanged(const QString &text);        // 处理搜索文本
-    void showLoginFailedMessage();                        // 显示登录信息
-    void showFileManager();                               // 显示文件管理系统的信号
-    void updateDiskCapacity();                            // 更新磁盘容量
     /* 系统操作 */
     void openSystem();    // 打开系统按钮按下
     void closeSystem();   // 关闭系统按钮按下
@@ -301,6 +295,8 @@ public:
     void openFileSystem(filesystem *fs);       // 打开文件系统
     void closeFileSystem();                    // 关闭文件系统
     void displayFileSystem();                  // 显示文件系统的所有文件
+    void updateDiskCapacity();                 // 更新磁盘容量
+    bool isOpened();                           // 检测文件系统是否已经打开
 };
 
 

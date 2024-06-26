@@ -105,8 +105,10 @@ void filesystem::deserialize(fstream &in) {
     size_t availableSize;
     in.read(reinterpret_cast<char *>(&availableSize), sizeof(availableSize));
     available.resize(availableSize);
-    for (auto a: available) {
-        in.read(reinterpret_cast<char *>(&a), sizeof(a));
+    for (int i = 0; i < availableSize; i++) {
+        bool value;
+        in.read(reinterpret_cast<char *>(&value), sizeof(value));
+        available[i] = value;
     }
 
     in.close();

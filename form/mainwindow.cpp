@@ -102,18 +102,16 @@ void mainwindow::reformatSystem() {
     }
 }
 
-void mainwindow::onFileSelected(const QModelIndex &index) {
-}
-
 // 新建用户
 void mainwindow::newUser() {
-
-};
+    if (isOpened()) {
+        // TODO fsX->useradd();
+    }
+}
 
 // 删除用户
 void mainwindow::deleteUser() {
-
-};
+}
 
 // 新开文件
 void mainwindow::newFile() {
@@ -125,8 +123,7 @@ void mainwindow::newDirectory() {
 
 // 删除文件
 void mainwindow::deleteFile() {
-
-};
+}
 
 //关于
 void mainwindow::about() {
@@ -148,7 +145,7 @@ void mainwindow::about() {
     msgBox.setIcon(QMessageBox::Information);
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.exec();
-};
+}
 
 // 退出系统
 void mainwindow::exitSystem() {
@@ -274,4 +271,12 @@ string mainwindow::getSizeString(float f) {
         tmp += "B";
     }
     return tmp;
+}
+
+bool mainwindow::isOpened() {
+    if (fsX == nullptr) {
+        QMessageBox::critical(this, "错误", "请先打开一个文件系统，才能执行该操作！");
+        return false;
+    }
+    return true;
 }
