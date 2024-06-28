@@ -285,17 +285,16 @@ public slots:
     void newFile();     // 新文件
     void newDirectory();// 新文件夹
     void deleteFile();  // 删除文件
-    void openFile(); // 打开文件
-    void renameFile(); //文件重命名
-    void fileNature(); // 文件属性
+    void openFile();    // 打开文件
+    void renameFile();  //文件重命名
+    void fileNature();  // 文件属性
     /* 目录操作 */
-    void openDirectory(); // 打开目录
-    void deleteDirectory(); // 删除目录
-    void renameDirectory(); // 重命名目录
-    void directoryNature(); // 目录属性
+    void openDirectory();                // 打开目录
+    void deleteDirectory(directory *dir);// 删除目录
+    void renameDirectory();              // 重命名目录
+    void directoryNature();              // 目录属性
     /*其他操作*/
     void about();// 关于
-
 
 
 public:

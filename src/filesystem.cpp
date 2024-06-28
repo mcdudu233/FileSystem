@@ -218,6 +218,22 @@ bool filesystem::cd(string path) {
     return true;
 }
 
+bool filesystem::rm(file f) {
+    directory *father = getFatherByName(f);
+    if (father->removeFile(f.getName())) {
+        return true;
+    }
+    return false;
+}
+
+bool filesystem::rm(directory d) {
+    directory *father = getFatherByName(d);
+    if (father->removeDirectory(d.getName())) {
+        return true;
+    }
+    return false;
+}
+
 int filesystem::useradd(string name, string password, bool super) {
     user usr(users.size(), name, password, super);
     users.push_back(usr);
