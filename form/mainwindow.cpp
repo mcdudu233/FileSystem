@@ -5,7 +5,7 @@
 // You may need to build the project (run Qt uic code generator) to get "ui_mainwindow.h" resolved
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "../form/ui_mainwindow.h"
 
 // 修改相应的模块名
 mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwindow) {
@@ -109,21 +109,7 @@ void mainwindow::newUser() {
     }
 }
 
-// 删除用户
-void mainwindow::deleteUser() {
-}
 
-// 新开文件
-void mainwindow::newFile() {
-}
-
-// 新文件夹
-void mainwindow::newDirectory() {
-}
-
-// 删除文件
-void mainwindow::deleteFile() {
-}
 
 //关于
 void mainwindow::about() {
@@ -165,17 +151,17 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
         // 添加菜单
         QMenu contextMenu(this);
         if (this->fsModel->isDirectory(index)) {
-            contextMenu.addAction("打开", this, SLOT(exitSystem()));
-            contextMenu.addAction("删除", this, SLOT(exitSystem()));
-            contextMenu.addAction("重命名", this, SLOT(exitSystem()));
+            contextMenu.addAction("打开", this, SLOT(openDirectory()));
+            contextMenu.addAction("删除", this, SLOT(deleteDirectory()));
+            contextMenu.addAction("重命名", this, SLOT(renameDirectory()));
             contextMenu.addAction("新建文件", this, SLOT(newFile()));
             contextMenu.addAction("新建文件夹", this, SLOT(newDirectory()));
-            contextMenu.addAction("属性", this, SLOT(exitSystem()));
+            contextMenu.addAction("属性", this, SLOT(directoryNature()));
         } else {
             contextMenu.addAction("打开", this, SLOT(exitSystem()));
             contextMenu.addAction("删除", this, SLOT(deleteFile()));
-            contextMenu.addAction("重命名", this, SLOT(exitSystem()));
-            contextMenu.addAction("属性", this, SLOT(exitSystem()));
+            contextMenu.addAction("重命名", this, SLOT(renameFile()));
+            contextMenu.addAction("属性", this, SLOT(fileNature()));
         }
         contextMenu.exec(ui->treeView->viewport()->mapToGlobal(pos));
     }
@@ -279,4 +265,47 @@ bool mainwindow::isOpened() {
         return false;
     }
     return true;
+}
+// 打开目录
+void mainwindow::openDirectory() {
+
+}
+// 删除目录
+void mainwindow::deleteDirectory() {
+
+}
+// 目录重命名
+void mainwindow::renameDirectory() {
+
+}
+// 目录属性
+void mainwindow::directoryNature() {
+
+}
+// 文件属性
+void mainwindow::fileNature(){
+
+}
+// 文件重命名
+void mainwindow::renameFile() {
+
+}
+// 打开文件
+void mainwindow::openFile(){
+
+}
+// 删除用户
+void mainwindow::deleteUser() {
+}
+
+// 新开文件
+void mainwindow::newFile() {
+}
+
+// 新文件夹
+void mainwindow::newDirectory() {
+}
+
+// 删除文件
+void mainwindow::deleteFile() {
 }
