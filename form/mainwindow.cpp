@@ -177,6 +177,7 @@ void FileSystemModel::clearSearchResults() {
 void FileSystemModel::addSearchResult(const QModelIndex &index) {
     searchResults.append(QPersistentModelIndex(index));
 }
+
 // 打开目录
 void mainwindow::openDirectory() {
 }

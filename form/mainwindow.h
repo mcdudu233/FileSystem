@@ -8,19 +8,18 @@
 #include "filesystem.h"
 #include "reformat.h"
 #include <QAction>
+#include <QBrush>
+#include <QColor>
 #include <QComboBox>
+#include <QHash>
 #include <QInputDialog>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QModelIndex>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QVBoxLayout>
-#include <utility>
-#include <QBrush>
-#include <QColor>
 #include <QVector>
-#include <QModelIndex>
-#include <set>
 
 
 QT_BEGIN_NAMESPACE
@@ -43,6 +42,7 @@ private:
         void *ptr;
         ItemType type;
     } ItemInfo;
+    mutable QHash<void *, ItemInfo *> itemInfoMap = {};// 使用 QHash 存储 ItemInfo 对象
 
 public:
     FileSystemModel(filesystem *fsX, directory *root, QObject *parent = nullptr)
@@ -143,10 +143,12 @@ public:
         if (row < parentDir->getDirectories()->size()) {
             directory *childDir = &parentDir->getDirectories()->at(row);
             auto *info = new ItemInfo{static_cast<void *>(childDir), ItemType::Directory};
+            itemInfoMap.insert(childDir, info);
             return createIndex(row, column, info);
         } else {
             file *childFile = &parentDir->getFiles()->at(row - parentDir->getDirectories()->size());
             auto *info = new ItemInfo{static_cast<void *>(childFile), ItemType::File};
+            itemInfoMap.insert(childFile, info);
             return createIndex(row, column, info);
         }
     }
@@ -164,10 +166,9 @@ public:
 
             directory *parentDir = fsX->getFatherByName(*childDir);
             if (parentDir) {
-                if(*parentDir==*root){
+                if (*parentDir == *root) {
                     return {};
                 }
-                auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
                 int row = 0;
                 // 计算行号
                 directory *grandDir = fsX->getFatherByName(*parentDir);
@@ -179,7 +180,7 @@ public:
                         }
                     }
                 }
-                return createIndex(row, 0, parentInfo);
+                return createIndex(row, 0, itemInfoMap[parentDir]);
             }
         } else {
             file *childFile = getFileFromIndex(index);
@@ -189,10 +190,9 @@ public:
 
             directory *parentDir = fsX->getFatherByName(*childFile);
             if (parentDir) {
-                if(*parentDir==*root){
+                if (*parentDir == *root) {
                     return {};
                 }
-                auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
                 int row = 0;
                 // 计算行号
                 directory *grandDir = fsX->getFatherByName(*parentDir);
@@ -204,7 +204,7 @@ public:
                         }
                     }
                 }
-                return createIndex(row, 0, parentInfo);
+                return createIndex(row, 0, itemInfoMap[parentDir]);
             }
         }
         return {};
@@ -272,8 +272,6 @@ public:
     }
     void addSearchResult(const QModelIndex &index);
     void clearSearchResults();
-
-
 };
 
 class mainwindow : public QMainWindow {
@@ -316,18 +314,16 @@ public slots:
     void about();// 关于
 
 
-
-
 public:
-    static string getSizeString(float f);      // 格式化文件大小
-    static vector<fs::path> searchFileSystem();// 搜索当前文件夹下的所有文件系统
-    void openFileSystem(QString name);         // 打开文件系统
-    void openFileSystem(filesystem *fs);       // 打开文件系统
-    void closeFileSystem();                    // 关闭文件系统
-    void displayFileSystem();                  // 显示文件系统的所有文件
-    void updateDiskCapacity();                 // 更新磁盘容量
-    bool isOpened();                           // 检测文件系统是否已经打开
-    bool filterTreeView(const QModelIndex &index, const QRegularExpression &regExp);  // 显示查找结果
+    static string getSizeString(float f);                                           // 格式化文件大小
+    static vector<fs::path> searchFileSystem();                                     // 搜索当前文件夹下的所有文件系统
+    void openFileSystem(QString name);                                              // 打开文件系统
+    void openFileSystem(filesystem *fs);                                            // 打开文件系统
+    void closeFileSystem();                                                         // 关闭文件系统
+    void displayFileSystem();                                                       // 显示文件系统的所有文件
+    void updateDiskCapacity();                                                      // 更新磁盘容量
+    bool isOpened();                                                                // 检测文件系统是否已经打开
+    bool filterTreeView(const QModelIndex &index, const QRegularExpression &regExp);// 显示查找结果
 };
 
 
