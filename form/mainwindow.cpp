@@ -16,15 +16,18 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
     connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openSystem()));
     connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(closeSystem()));
-    connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatSystem()));
+
+    connect(ui->actionNewFileSystem, SIGNAL(triggered(bool)), this, SLOT(reformatSystem()));
+    connect(ui->actionDeleteFileSystem, SIGNAL(triggered(bool)), this, SLOT(deleteSystem()));
+    connect(ui->actionExitSystem, SIGNAL(triggered(bool)), this, SLOT(exitSystem()));
+
     connect(ui->actionNewUser, SIGNAL(triggered(bool)), this, SLOT(newUser()));
-    connect(ui->actionNewFile, SIGNAL(triggered(bool)), this, SLOT(newFile()));
-    connect(ui->actionNewsystem, SIGNAL(triggered(bool)), this, SLOT(reformatSystem()));
     connect(ui->actionDeleteUser, SIGNAL(triggered(bool)), this, SLOT(deleteUser()));
-    connect(ui->actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(deleteFile()));
+
+    connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatSystem()));
+    connect(ui->actionNewsystem, SIGNAL(triggered(bool)), this, SLOT(reformatSystem()));
     connect(ui->actionOpenSystem, SIGNAL(triggered(bool)), this, SLOT(openSystem()));
     connect(ui->actionCloseSystem, SIGNAL(triggered(bool)), this, SLOT(closeSystem()));
-    connect(ui->actionExitSystem, SIGNAL(triggered(bool)), this, SLOT(exitSystem()));
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
 
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -43,6 +46,7 @@ mainwindow::~mainwindow() {
 void mainwindow::onSearchTextChanged(const QString &text) {
     if (text.contains("请输入文件名") || text == "请输入文件") {
         ui->searchEdit->selectAll();
+        return;
     }
 
     if (!fsModel) {
@@ -150,6 +154,29 @@ void mainwindow::reformatSystem() {
     }
 }
 
+void mainwindow::deleteSystem() {
+    if (fsX != nullptr) {
+        closeFileSystem();
+    }
+
+    const vector<fs::path> &fileSystem = searchFileSystem();
+    if (fileSystem.empty()) {
+        QMessageBox::critical(this, "错误", "您还没有创建系统，怎么能删除呢？");
+        return;
+    }
+    QStringList ls;
+    for (auto f: fileSystem) {
+        ls.push_back(QString::fromStdString(f.filename().string()).split(".")[0].toUpper());
+    }
+    bool ok;
+    int index = ls.indexOf(QInputDialog::getItem(this, "删除文件系统", "请选择要删除的盘符：", ls, 0, true, &ok));
+    if (ok) {
+        if (std::remove(fileSystem[index].string().c_str())) {
+            QMessageBox::critical(this, "错误", "无法删除该文件系统！");
+        }
+    }
+}
+
 // 新建用户
 void mainwindow::newUser() {
     if (isOpened()) {
@@ -165,6 +192,24 @@ void mainwindow::newUser() {
                         QMessageBox::critical(this, "错误", "添加用户失败！换一个名字吧！");
                     }
                 }
+            }
+        }
+    }
+}
+
+// 删除用户
+void mainwindow::deleteUser() {
+    if (isOpened()) {
+        QStringList ls;
+        for (auto u: fsX->usrs()) {
+            ls.push_back("ID：" + QString::fromStdString(std::to_string(u.getUid())) + "\t用户名：" + QString::fromStdString(u.getName()));
+        }
+
+        bool ok;
+        int index = ls.indexOf(QInputDialog::getItem(this, "删除用户", "请选择要删除的用户：", ls, 0, true, &ok));
+        if (ok) {
+            if (!fsX->userdel(index)) {
+                QMessageBox::critical(this, "错误", "删除用户失败！未知错误！");
             }
         }
     }
@@ -219,24 +264,6 @@ void mainwindow::renameFile() {
 // 打开文件
 void mainwindow::openFile() {
     if (isOpened()) {
-    }
-}
-
-// 删除用户
-void mainwindow::deleteUser() {
-    if (isOpened()) {
-        QStringList ls;
-        for (auto u: fsX->usrs()) {
-            ls.push_back("ID：" + QString::fromStdString(std::to_string(u.getUid())) + "\t用户名：" + QString::fromStdString(u.getName()));
-        }
-
-        bool ok;
-        int index = ls.indexOf(QInputDialog::getItem(this, "删除用户", "请选择要删除的用户：", ls, 0, true, &ok));
-        if (ok) {
-            if (!fsX->userdel(index)) {
-                QMessageBox::critical(this, "错误", "删除用户失败！未知错误！");
-            }
-        }
     }
 }
 

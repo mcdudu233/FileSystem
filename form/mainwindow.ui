@@ -230,9 +230,9 @@
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="actionNewFile"/>
+    <addaction name="actionNewFileSystem"/>
     <addaction name="separator"/>
-    <addaction name="actionDeleteFile"/>
+    <addaction name="actionDeleteFileSystem"/>
     <addaction name="separator"/>
     <addaction name="actionExitSystem"/>
    </widget>
@@ -272,14 +272,14 @@
     <string>关闭系统</string>
    </property>
   </action>
-  <action name="actionNewFile">
+  <action name="actionNewFileSystem">
    <property name="text">
-    <string>新建</string>
+    <string>新建文件系统</string>
    </property>
   </action>
-  <action name="actionDeleteFile">
+  <action name="actionDeleteFileSystem">
    <property name="text">
-    <string>删除</string>
+    <string>删除文件系统</string>
    </property>
   </action>
   <action name="actionExit">

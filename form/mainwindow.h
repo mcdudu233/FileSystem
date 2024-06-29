@@ -294,6 +294,7 @@ public slots:
     void openSystem();    // 打开系统按钮按下
     void closeSystem();   // 关闭系统按钮按下
     void reformatSystem();// 格式化按钮按下
+    void deleteSystem();  // 删除文件系统
     void exitSystem();    // 退出系统
     /* 用户操作 */
     void newUser();   // 新建用户
