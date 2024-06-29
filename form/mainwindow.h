@@ -58,7 +58,7 @@ public:
     // 列数量
     int columnCount(const QModelIndex &parent = QModelIndex()) const override {
         return 4;
-    };
+    }
 
     // 行数量
     int rowCount(const QModelIndex &parent = QModelIndex()) const override {
@@ -77,14 +77,14 @@ public:
             parentDir = root;
         }
         return parentDir->getDirectories()->size() + parentDir->getFiles()->size();
-    };
+    }
 
     Qt::ItemFlags flags(const QModelIndex &index) const override {
         if (!index.isValid()) {
             return Qt::NoItemFlags;
         }
-        return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
-    };
+        return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    }
 
     // 获取每一行的表项数据
     QVariant data(const QModelIndex &index, int role) const override {
@@ -127,10 +127,7 @@ public:
                     return {};
             }
         }
-    };
-
-
-
+    }
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override {
         if (!hasIndex(row, column, parent)) {
@@ -152,7 +149,7 @@ public:
             auto *info = new ItemInfo{static_cast<void *>(childFile), ItemType::File};
             return createIndex(row, column, info);
         }
-    };
+    }
 
     QModelIndex parent(const QModelIndex &index) const override {
         if (!index.isValid()) {
@@ -205,7 +202,7 @@ public:
             }
         }
         return {};
-    };
+    }
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override {
         if (role != Qt::DisplayRole) {
@@ -227,7 +224,7 @@ public:
             }
         }
         return {};
-    };
+    }
 
 public:
     /* 工具 */

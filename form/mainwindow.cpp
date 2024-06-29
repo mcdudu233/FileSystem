@@ -89,10 +89,12 @@ bool mainwindow::filterTreeView(const QModelIndex &index, const QRegularExpressi
 // 当前项改变时的槽函数
 void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
     if (current.isValid()) {
-        // 更新磁盘容量信息
+        ui->treeView->selectionModel()->setCurrentIndex(current, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+        // 更新磁盘容量信息或其他操作
         updateDiskCapacity();
     }
 }
+
 // 打开文件系统
 void mainwindow::openSystem() {
     const vector<fs::path> &fss = searchFileSystem();
