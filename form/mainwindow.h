@@ -164,6 +164,9 @@ public:
 
             directory *parentDir = fsX->getFatherByName(*childDir);
             if (parentDir) {
+                if(*parentDir==*root){
+                    return {};
+                }
                 auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
                 int row = 0;
                 // 计算行号
@@ -186,6 +189,9 @@ public:
 
             directory *parentDir = fsX->getFatherByName(*childFile);
             if (parentDir) {
+                if(*parentDir==*root){
+                    return {};
+                }
                 auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
                 int row = 0;
                 // 计算行号
