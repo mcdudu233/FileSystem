@@ -62,7 +62,7 @@ void mainwindow::onSearchTextChanged(const QString &text) {
         return;
     }
 
-    fsModel->clearSearchResults(); // 清除之前的搜索结果
+    fsModel->clearSearchResults();// 清除之前的搜索结果
 
     QRegularExpression regExp(text, QRegularExpression::CaseInsensitiveOption);
     bool hasMatch = false;
@@ -70,8 +70,8 @@ void mainwindow::onSearchTextChanged(const QString &text) {
     // 遍历模型的根项
     for (int i = 0; i < fsModel->rowCount(); ++i) {
         if (filterAndExpandTreeView(fsModel->index(i, 0), regExp)) {
-            ui->treeView->reset(); // 重置视图以反映新的搜索结果
-            emit fsModel->layoutChanged(); // 通知视图模型数据已经改变
+            ui->treeView->reset();        // 重置视图以反映新的搜索结果
+            emit fsModel->layoutChanged();// 通知视图模型数据已经改变
             ui->treeView->selectionModel()->setCurrentIndex(fsModel->index(i, 0), QItemSelectionModel::Select | QItemSelectionModel::Rows);
             hasMatch = true;
             break;
@@ -89,7 +89,7 @@ bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegula
     }
 
     if (fsModel != ui->treeView->model()) {
-        return false; // 如果 fsModel 不是 treeView 的模型，则返回 false
+        return false;// 如果 fsModel 不是 treeView 的模型，则返回 false
     }
 
     bool match = false;
@@ -106,7 +106,7 @@ bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegula
     if (match) {
         expandParents(index);
         ui->treeView->setRowHidden(index.row(), index.parent(), false);
-        ui->treeView->selectionModel()->clearSelection(); // 清除之前的选择
+        ui->treeView->selectionModel()->clearSelection();// 清除之前的选择
         ui->treeView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         ui->treeView->scrollTo(index);
     } else {
@@ -116,8 +116,6 @@ bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegula
     return match;
 }
 
-
-
 void mainwindow::expandParents(const QModelIndex &index) {
     QModelIndex parentIndex = index.parent();
     if (parentIndex.isValid()) {
@@ -125,8 +123,6 @@ void mainwindow::expandParents(const QModelIndex &index) {
         ui->treeView->expand(parentIndex);
     }
 }
-
-
 
 // 当前项改变时的槽函数
 void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
@@ -315,7 +311,12 @@ void mainwindow::newDirectory() {
             if (text.isEmpty()) {
                 QMessageBox::critical(this, "错误", "文件夹名不允许为空！");
             } else {
-                directory *dir = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
+                directory *dir;
+                if (ui->treeView->currentIndex() == ui->treeView->rootIndex()) {
+                    dir = fsX->getTree();
+                } else {
+                    dir = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
+                }
                 if (!fsX->mkdir(*dir, text.toStdString())) {
                     QMessageBox::critical(this, "错误", "当前文件夹已经存在！换一个名字吧！");
                 }
@@ -367,24 +368,28 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
     if (this->fsModel != nullptr) {
         // 获取当前元素
         QModelIndex index = ui->treeView->indexAt(pos);
-        if (!index.isValid()) {
-            return;
-        }
 
         // 添加菜单
         QMenu contextMenu(this);
-        if (this->fsModel->isDirectory(index)) {
-            contextMenu.addAction("打开", this, SLOT(openDirectory()));
-            contextMenu.addAction("删除", this, SLOT(deleteDirectory()));
-            contextMenu.addAction("重命名", this, SLOT(renameDirectory()));
+        if (index.isValid()) {
+            if (this->fsModel->isDirectory(index)) {
+                contextMenu.addAction("打开", this, SLOT(openDirectory()));
+                contextMenu.addAction("删除", this, SLOT(deleteDirectory()));
+                contextMenu.addAction("重命名", this, SLOT(renameDirectory()));
+                contextMenu.addAction("新建文件", this, SLOT(newFile()));
+                contextMenu.addAction("新建文件夹", this, SLOT(newDirectory()));
+                contextMenu.addAction("属性", this, SLOT(directoryNature()));
+            } else {
+                contextMenu.addAction("打开", this, SLOT(exitSystem()));
+                contextMenu.addAction("删除", this, SLOT(deleteFile()));
+                contextMenu.addAction("重命名", this, SLOT(renameFile()));
+                contextMenu.addAction("属性", this, SLOT(fileNature()));
+            }
+        } else {
+            // 当右键空白区域的时候
             contextMenu.addAction("新建文件", this, SLOT(newFile()));
             contextMenu.addAction("新建文件夹", this, SLOT(newDirectory()));
-            contextMenu.addAction("属性", this, SLOT(directoryNature()));
-        } else {
-            contextMenu.addAction("打开", this, SLOT(exitSystem()));
-            contextMenu.addAction("删除", this, SLOT(deleteFile()));
-            contextMenu.addAction("重命名", this, SLOT(renameFile()));
-            contextMenu.addAction("属性", this, SLOT(fileNature()));
+            ui->treeView->setCurrentIndex(ui->treeView->rootIndex());
         }
         contextMenu.exec(ui->treeView->viewport()->mapToGlobal(pos));
     }

@@ -356,6 +356,7 @@ directory *filesystem::findDirectory(directory *current, const directory &target
     }
     return nullptr;
 }
+
 bool filesystem::hasSameName(directory dir, string name) {
     for (auto d: *dir.getDirectories()) {
         if (d.getName() == name) {
