@@ -58,9 +58,9 @@ void mainwindow::onSearchTextChanged(const QString &text) {
     bool hasMatch = false;
 
     // 收起所有目录
-    for (int i = 0; i < fsModel->rowCount(); ++i) {
-        ui->treeView->collapse(fsModel->index(i, 0));
-    }
+    //    for (int i = 0; i < fsModel->rowCount(); ++i) {
+    //        ui->treeView->collapse(fsModel->index(i, 0));
+    //    }
 
     // 遍历模型的根项
     for (int i = 0; i < fsModel->rowCount(); ++i) {
@@ -83,16 +83,17 @@ bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegula
         return false;
     }
 
-    bool match = false;
+    bool match;
     QString itemText = fsModel->data(index, Qt::DisplayRole).toString();
     match = regExp.match(itemText).hasMatch();
 
     // 只展开包含匹配文件的目录
     if (match) {
-        expandParents(index);
-        ui->treeView->setRowHidden(index.row(), index.parent(), false);
+        ui->treeView->expandAll();
+        // expandParents(index);
+        // ui->treeView->setRowHidden(index.row(), index.parent(), false);
     } else {
-        ui->treeView->setRowHidden(index.row(), index.parent(), true);
+        // ui->treeView->setRowHidden(index.row(), index.parent(), true);
     }
 
     for (int i = 0; i < fsModel->rowCount(index); ++i) {
