@@ -57,9 +57,9 @@ void mainwindow::onSearchTextChanged(const QString &text) {
     QRegularExpression regExp(text, QRegularExpression::CaseInsensitiveOption);
     bool hasMatch = false;
 
-    // 展开所有目录
+    // 收起所有目录
     for (int i = 0; i < fsModel->rowCount(); ++i) {
-        ui->treeView->expand(fsModel->index(i, 0));
+        ui->treeView->collapse(fsModel->index(i, 0));
     }
 
     // 遍历模型的根项
@@ -70,7 +70,6 @@ void mainwindow::onSearchTextChanged(const QString &text) {
             ui->treeView->selectionModel()->clearSelection();
             ui->treeView->selectionModel()->setCurrentIndex(fsModel->index(i, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
             hasMatch = true;
-            break;
         }
     }
 
@@ -78,7 +77,6 @@ void mainwindow::onSearchTextChanged(const QString &text) {
         QMessageBox::critical(this, "未找到", "请输入正确的文件名！");
     }
 }
-
 
 bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegularExpression &regExp) {
     if (!index.isValid()) {
@@ -89,6 +87,14 @@ bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegula
     QString itemText = fsModel->data(index, Qt::DisplayRole).toString();
     match = regExp.match(itemText).hasMatch();
 
+    // 只展开包含匹配文件的目录
+    if (match) {
+        expandParents(index);
+        ui->treeView->setRowHidden(index.row(), index.parent(), false);
+    } else {
+        ui->treeView->setRowHidden(index.row(), index.parent(), true);
+    }
+
     for (int i = 0; i < fsModel->rowCount(index); ++i) {
         QModelIndex childIndex = fsModel->index(i, 0, index);
         if (filterAndExpandTreeView(childIndex, regExp)) {
@@ -96,21 +102,8 @@ bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegula
         }
     }
 
-    if (match) {
-        ui->treeView->setRowHidden(index.row(), index.parent(), false);
-        ui->treeView->expand(index);
-        QModelIndex parentIndex = index.parent();
-        while (parentIndex.isValid()) {
-            ui->treeView->expand(parentIndex);
-            parentIndex = parentIndex.parent();
-        }
-    } else {
-        ui->treeView->setRowHidden(index.row(), index.parent(), true);
-    }
-
     return match;
 }
-
 
 void mainwindow::expandParents(const QModelIndex &index) {
     QModelIndex parentIndex = index.parent();
@@ -119,6 +112,7 @@ void mainwindow::expandParents(const QModelIndex &index) {
         ui->treeView->expand(parentIndex);
     }
 }
+
 
 // 当前项改变时的槽函数
 void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
