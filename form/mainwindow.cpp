@@ -392,6 +392,7 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
             ui->treeView->setCurrentIndex(ui->treeView->rootIndex());
         }
         contextMenu.exec(ui->treeView->viewport()->mapToGlobal(pos));
+        displayFileSystem();
     }
 }
 
@@ -455,8 +456,11 @@ void mainwindow::displayFileSystem() {
         // 创建文件系统模型
         if (fsModel == nullptr) {
             fsModel = new FileSystemModel(fsX, fsX->getTree(), this);
+        } else {
+            delete fsModel;
+            fsModel = new FileSystemModel(fsX, fsX->getTree(), this);
+            ui->treeView->setModel(fsModel);
         }
-        ui->treeView->setModel(fsModel);
     }
 }
 
