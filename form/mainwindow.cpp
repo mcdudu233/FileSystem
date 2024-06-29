@@ -41,8 +41,37 @@ mainwindow::~mainwindow() {
 }
 
 void mainwindow::onSearchTextChanged(const QString &text) {
-    // 搜索文本发生变化，可以在这里处理搜索逻辑
+    if (!fsModel) {
+        return; // 如果没有加载文件系统模型，则什么也不做
+    }
+
+    QRegularExpression regExp(text, QRegularExpression::CaseInsensitiveOption);
+    for (int i = 0; i < fsModel->rowCount(); ++i) {
+        filterTreeView(fsModel->index(i, 0), regExp);
+    }
 }
+
+bool mainwindow::filterTreeView(const QModelIndex &index, const QRegularExpression &regExp) {
+    bool match = false;
+    if (!index.isValid()) {
+        return match;
+    }
+
+    QString itemText = fsModel->data(index, Qt::DisplayRole).toString();
+    match = regExp.match(itemText).hasMatch();
+
+    for (int i = 0; i < fsModel->rowCount(index); ++i) {
+        QModelIndex childIndex = fsModel->index(i, 0, index);
+        if (filterTreeView(childIndex, regExp)) {
+            match = true;
+        }
+    }
+
+    ui->treeView->setRowHidden(index.row(), index.parent(), !match);
+    return match;
+}
+
+
 
 // 当前项改变时的槽函数
 void mainwindow::onCurrentItemChanged(const QModelIndex &current) {

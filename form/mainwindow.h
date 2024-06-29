@@ -14,6 +14,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <utility>
+#include <QRegularExpression>
+#include <vector>
 
 
 QT_BEGIN_NAMESPACE
@@ -306,6 +308,7 @@ public:
     void displayFileSystem();                  // 显示文件系统的所有文件
     void updateDiskCapacity();                 // 更新磁盘容量
     bool isOpened();                           // 检测文件系统是否已经打开
+    bool filterTreeView(const QModelIndex &index, const QRegularExpression &regExp);
 };
 
 
