@@ -42,12 +42,26 @@ mainwindow::~mainwindow() {
 
 void mainwindow::onSearchTextChanged(const QString &text) {
     if (!fsModel) {
-        return;// 如果没有加载文件系统模型，则什么也不做
+        return; // 如果没有加载文件系统模型，则什么也不做
     }
 
+    fsModel->clearSearchResults(); // 清除之前的搜索结果
+
     QRegularExpression regExp(text, QRegularExpression::CaseInsensitiveOption);
+    bool hasMatch = false;
+
+    // 遍历模型的根项
     for (int i = 0; i < fsModel->rowCount(); ++i) {
-        filterTreeView(fsModel->index(i, 0), regExp);
+        if (filterTreeView(fsModel->index(i, 0), regExp)) {
+            hasMatch = true;
+        }
+    }
+
+    ui->treeView->reset(); // 重置视图以反映新的搜索结果
+    emit fsModel->layoutChanged(); // 通知视图模型数据已经改变
+
+    if (!hasMatch) {
+        QMessageBox::information(this, "未找到", "请输入正确的文件名");
     }
 }
 
@@ -150,6 +164,13 @@ void mainwindow::newUser() {
     }
 }
 
+void FileSystemModel::clearSearchResults() {
+    searchResults.clear();
+}
+
+void FileSystemModel::addSearchResult(const QModelIndex &index) {
+    searchResults.append(QPersistentModelIndex(index));
+}
 // 打开目录
 void mainwindow::openDirectory() {
 }
@@ -329,6 +350,10 @@ void mainwindow::openFileSystem(QString name) {
 }
 void mainwindow::openFileSystem(filesystem *fs) {
     fsX = fs;
+    if (fsModel == nullptr) {
+        fsModel = new FileSystemModel(fsX, fsX->getTree(), this);
+    }
+    ui->treeView->setModel(fsModel);
     ui->openButton->setDisabled(true);
     ui->closeButton->setDisabled(false);
     ui->actionOpenSystem->setDisabled(true);

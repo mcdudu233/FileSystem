@@ -16,7 +16,11 @@
 #include <QRegularExpression>
 #include <QVBoxLayout>
 #include <utility>
-#include <vector>
+#include <QBrush>
+#include <QColor>
+#include <QVector>
+#include <QModelIndex>
+#include <set>
 
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +36,7 @@ class FileSystemModel : public QAbstractItemModel {
 private:
     filesystem *fsX = nullptr;
     directory *root = nullptr;
+    QVector<QPersistentModelIndex> searchResults;// 使用 QVector 存储匹配结果的索引集合
     enum class ItemType { Directory,
                           File };
     typedef struct {
@@ -52,7 +57,7 @@ public:
 
     // 列数量
     int columnCount(const QModelIndex &parent = QModelIndex()) const override {
-        return ListSize;
+        return 4;
     };
 
     // 行数量
@@ -123,6 +128,9 @@ public:
             }
         }
     };
+
+
+
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override {
         if (!hasIndex(row, column, parent)) {
@@ -223,6 +231,7 @@ public:
 
 public:
     /* 工具 */
+
     bool isDirectory(const QModelIndex &index) const {
         if (!index.isValid()) {
             return false;
@@ -258,6 +267,10 @@ public:
         oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
         return oss.str();
     }
+    void addSearchResult(const QModelIndex &index);
+    void clearSearchResults();
+
+
 };
 
 class mainwindow : public QMainWindow {
@@ -300,6 +313,8 @@ public slots:
     void about();// 关于
 
 
+
+
 public:
     static string getSizeString(float f);      // 格式化文件大小
     static vector<fs::path> searchFileSystem();// 搜索当前文件夹下的所有文件系统
@@ -309,7 +324,7 @@ public:
     void displayFileSystem();                  // 显示文件系统的所有文件
     void updateDiskCapacity();                 // 更新磁盘容量
     bool isOpened();                           // 检测文件系统是否已经打开
-    bool filterTreeView(const QModelIndex &index, const QRegularExpression &regExp);
+    bool filterTreeView(const QModelIndex &index, const QRegularExpression &regExp);  // 显示查找结果
 };
 
 
