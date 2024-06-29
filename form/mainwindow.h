@@ -143,12 +143,10 @@ public:
         if (row < parentDir->getDirectories()->size()) {
             directory *childDir = &parentDir->getDirectories()->at(row);
             auto *info = new ItemInfo{static_cast<void *>(childDir), ItemType::Directory};
-            itemInfoMap.insert(childDir, info);
             return createIndex(row, column, info);
         } else {
             file *childFile = &parentDir->getFiles()->at(row - parentDir->getDirectories()->size());
             auto *info = new ItemInfo{static_cast<void *>(childFile), ItemType::File};
-            itemInfoMap.insert(childFile, info);
             return createIndex(row, column, info);
         }
     }
@@ -169,6 +167,7 @@ public:
                 if (*parentDir == *root) {
                     return {};
                 }
+                auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
                 int row = 0;
                 // 计算行号
                 directory *grandDir = fsX->getFatherByName(*parentDir);
@@ -193,6 +192,7 @@ public:
                 if (*parentDir == *root) {
                     return {};
                 }
+                auto *parentInfo = new ItemInfo{static_cast<void *>(parentDir), ItemType::Directory};
                 int row = 0;
                 // 计算行号
                 directory *grandDir = fsX->getFatherByName(*parentDir);
@@ -272,6 +272,9 @@ public:
     }
     void addSearchResult(const QModelIndex &index);
     void clearSearchResults();
+    // 获取搜索结果
+
+
 };
 
 class mainwindow : public QMainWindow {
@@ -289,7 +292,7 @@ private:
 public slots:
     void onCustomContextMenuRequested(const QPoint &pos); // treeView的右键菜单
     void onCurrentItemChanged(const QModelIndex &current);// 处理当前项变化
-    void onSearchTextChanged(const QString &text);        // 处理搜索文本
+    // 处理搜索文本
     /* 系统操作 */
     void openSystem();    // 打开系统按钮按下
     void closeSystem();   // 关闭系统按钮按下
@@ -313,18 +316,24 @@ public slots:
     void directoryNature();// 目录属性
     /*其他操作*/
     void about();// 关于
+    void onSearchTextChanged(const QString &text);
+    void expandParents(const QModelIndex &index);
+    bool filterAndExpandTreeView(const QModelIndex &index, const QRegularExpression &regExp);
+
+
 
 
 public:
-    static string getSizeString(float f);                                           // 格式化文件大小
-    static vector<fs::path> searchFileSystem();                                     // 搜索当前文件夹下的所有文件系统
-    void openFileSystem(QString name);                                              // 打开文件系统
-    void openFileSystem(filesystem *fs);                                            // 打开文件系统
-    void closeFileSystem();                                                         // 关闭文件系统
-    void displayFileSystem();                                                       // 显示文件系统的所有文件
-    void updateDiskCapacity();                                                      // 更新磁盘容量
-    bool isOpened();                                                                // 检测文件系统是否已经打开
-    bool filterTreeView(const QModelIndex &index, const QRegularExpression &regExp);// 显示查找结果
+    static string getSizeString(float f);      // 格式化文件大小
+    static vector<fs::path> searchFileSystem();// 搜索当前文件夹下的所有文件系统
+    void openFileSystem(QString name);         // 打开文件系统
+    void openFileSystem(filesystem *fs);       // 打开文件系统
+    void closeFileSystem();                    // 关闭文件系统
+    void displayFileSystem();                  // 显示文件系统的所有文件
+    void updateDiskCapacity();                 // 更新磁盘容量
+    bool isOpened();                           // 检测文件系统是否已经打开
+    bool filterTreeView(const QModelIndex &index, const QRegularExpression &regExp);  // 显示查找结果
+
 };
 
 

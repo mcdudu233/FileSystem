@@ -43,26 +43,35 @@ mainwindow::~mainwindow() {
     delete ui;
 }
 
+
 void mainwindow::onSearchTextChanged(const QString &text) {
+    qDebug() << "Search text changed: " << text;
+
     if (text.contains("请输入文件名") || text == "请输入文件") {
         ui->searchEdit->selectAll();
         return;
     }
 
     if (!fsModel) {
-        return;// 如果没有加载文件系统模型，则什么也不做
+        qDebug() << "File system model not loaded.";
+        return;
     }
 
-    fsModel->clearSearchResults();// 清除之前的搜索结果
+    if (fsModel != ui->treeView->model()) {
+        qDebug() << "File system model does not match tree view model.";
+        return;
+    }
+
+    fsModel->clearSearchResults(); // 清除之前的搜索结果
 
     QRegularExpression regExp(text, QRegularExpression::CaseInsensitiveOption);
     bool hasMatch = false;
 
     // 遍历模型的根项
     for (int i = 0; i < fsModel->rowCount(); ++i) {
-        if (filterTreeView(fsModel->index(i, 0), regExp)) {
-            //            ui->treeView->reset(); // 重置视图以反映新的搜索结果
-            //            emit fsModel->layoutChanged(); // 通知视图模型数据已经改变
+        if (filterAndExpandTreeView(fsModel->index(i, 0), regExp)) {
+            ui->treeView->reset(); // 重置视图以反映新的搜索结果
+            emit fsModel->layoutChanged(); // 通知视图模型数据已经改变
             ui->treeView->selectionModel()->setCurrentIndex(fsModel->index(i, 0), QItemSelectionModel::Select | QItemSelectionModel::Rows);
             hasMatch = true;
             break;
@@ -74,25 +83,49 @@ void mainwindow::onSearchTextChanged(const QString &text) {
     }
 }
 
-bool mainwindow::filterTreeView(const QModelIndex &index, const QRegularExpression &regExp) {
-    bool match = false;
+bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegularExpression &regExp) {
     if (!index.isValid()) {
-        return match;
+        return false;
     }
 
+    if (fsModel != ui->treeView->model()) {
+        return false; // 如果 fsModel 不是 treeView 的模型，则返回 false
+    }
+
+    bool match = false;
     QString itemText = fsModel->data(index, Qt::DisplayRole).toString();
     match = regExp.match(itemText).hasMatch();
 
     for (int i = 0; i < fsModel->rowCount(index); ++i) {
         QModelIndex childIndex = fsModel->index(i, 0, index);
-        if (filterTreeView(childIndex, regExp)) {
+        if (filterAndExpandTreeView(childIndex, regExp)) {
             match = true;
         }
     }
 
-    ui->treeView->setRowHidden(index.row(), index.parent(), !match);
+    if (match) {
+        expandParents(index);
+        ui->treeView->setRowHidden(index.row(), index.parent(), false);
+        ui->treeView->selectionModel()->clearSelection(); // 清除之前的选择
+        ui->treeView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+        ui->treeView->scrollTo(index);
+    } else {
+        ui->treeView->setRowHidden(index.row(), index.parent(), true);
+    }
+
     return match;
 }
+
+
+
+void mainwindow::expandParents(const QModelIndex &index) {
+    QModelIndex parentIndex = index.parent();
+    if (parentIndex.isValid()) {
+        expandParents(parentIndex);
+        ui->treeView->expand(parentIndex);
+    }
+}
+
 
 
 // 当前项改变时的槽函数
