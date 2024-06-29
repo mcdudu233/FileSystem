@@ -41,11 +41,15 @@ mainwindow::~mainwindow() {
 }
 
 void mainwindow::onSearchTextChanged(const QString &text) {
-    if (!fsModel) {
-        return; // 如果没有加载文件系统模型，则什么也不做
+    if (text.contains("请输入文件名") || text == "请输入文件") {
+        ui->searchEdit->selectAll();
     }
 
-    fsModel->clearSearchResults(); // 清除之前的搜索结果
+    if (!fsModel) {
+        return;// 如果没有加载文件系统模型，则什么也不做
+    }
+
+    fsModel->clearSearchResults();// 清除之前的搜索结果
 
     QRegularExpression regExp(text, QRegularExpression::CaseInsensitiveOption);
     bool hasMatch = false;
@@ -53,8 +57,8 @@ void mainwindow::onSearchTextChanged(const QString &text) {
     // 遍历模型的根项
     for (int i = 0; i < fsModel->rowCount(); ++i) {
         if (filterTreeView(fsModel->index(i, 0), regExp)) {
-//            ui->treeView->reset(); // 重置视图以反映新的搜索结果
-//            emit fsModel->layoutChanged(); // 通知视图模型数据已经改变
+            //            ui->treeView->reset(); // 重置视图以反映新的搜索结果
+            //            emit fsModel->layoutChanged(); // 通知视图模型数据已经改变
             ui->treeView->selectionModel()->setCurrentIndex(fsModel->index(i, 0), QItemSelectionModel::Select | QItemSelectionModel::Rows);
             hasMatch = true;
             break;
