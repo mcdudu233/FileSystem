@@ -9,6 +9,7 @@
 #include "reformat.h"
 #include <QAction>
 #include <QComboBox>
+#include <QInputDialog>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QPushButton>

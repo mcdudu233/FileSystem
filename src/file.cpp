@@ -33,7 +33,7 @@ file::~file() {
 }
 
 bool file::operator==(const file &other) {
-    if (std::equal(this->name.begin(), this->name.end(), other.name.begin(), other.name.end()) && this->size == other.size && this->createTime == other.createTime && this->modifyTime == other.modifyTime && this->master == other.master) {
+    if (this->name == other.name && this->size == other.size && this->createTime == other.createTime && this->modifyTime == other.modifyTime && this->master == other.master) {
         return true;
     } else {
         return false;

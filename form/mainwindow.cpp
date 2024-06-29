@@ -146,7 +146,6 @@ void mainwindow::deleteDirectory() {
     if (isOpened()) {
         directory *dir = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
         if (!fsX->rm(*dir)) {
-            ui->treeView->currentIndex();
             QMessageBox::critical(this, "错误", "删除文件夹失败！");
         }
     }
@@ -182,10 +181,30 @@ void mainwindow::newFile() {
 
 // 新文件夹
 void mainwindow::newDirectory() {
+    if (isOpened()) {
+        bool ok;
+        QString text = QInputDialog::getText(this, "新建文件夹", "文件夹名称：", QLineEdit::Normal, "新目录", &ok);
+        if (ok) {
+            if (text.isEmpty()) {
+                QMessageBox::critical(this, "错误", "文件夹名不允许为空！");
+            } else {
+                directory *dir = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
+                if (!fsX->mkdir(*dir, text.toStdString())) {
+                    QMessageBox::critical(this, "错误", "当前文件夹已经存在！换一个名字吧！");
+                }
+            }
+        }
+    }
 }
 
 // 删除文件
 void mainwindow::deleteFile() {
+    if (isOpened()) {
+        file *file = fsModel->getFileFromIndex(ui->treeView->currentIndex());
+        if (!fsX->rm(*file)) {
+            QMessageBox::critical(this, "错误", "删除文件失败！");
+        }
+    }
 }
 
 //关于

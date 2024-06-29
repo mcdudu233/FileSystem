@@ -38,6 +38,9 @@ private:
     static string concat(vector<string> v);                                       // 拼接路径
     static void split(const string &str, vector<string> &v, const string &spacer);// 用于分割路径
     bool getAbsolutePath(string path, vector<string> &v);                         // 根据路径获得绝对路径
+    directory *getDirectoryByDirectory(const directory &dir);                     // 找到目录的指针
+    directory *findDirectory(directory *current, const directory &target);        // 递归找目录
+    bool hasSameName(directory dir, string name);                                 // 判断文件夹下是否有重名
 
 public:
     filesystem(const string &name, int space = 0, int block = 0);
@@ -59,6 +62,7 @@ public:
     bool ls(string path, vector<List> &v);                                       // 列出某个文件夹下的文件
     int disk(bool left);                                                         // 获取磁盘容量(left为true时返回剩余容量)
     bool cd(string path);                                                        // 跳转到某个文件夹
+    bool mkdir(directory d, const string &dname);                                // 新建文件夹
     bool rm(file f);                                                             // 删除文件
     bool rm(directory d);                                                        // 删除目录
     int useradd(string name, string password = "", bool super = false);          // 新增用户

@@ -4,6 +4,8 @@
 
 #include "filesystem.h"
 
+#include <utility>
+
 filesystem::filesystem(const string &name, int size, int block) {
     this->current.emplace_back(".");
     this->name = name;
@@ -220,6 +222,15 @@ bool filesystem::cd(string path) {
     return true;
 }
 
+bool filesystem::mkdir(directory d, const string &dname) {
+    if (hasSameName(d, dname)) {
+        return false;
+    }
+    directory dir(dname, d.getName(), d.getUser());
+    getDirectoryByDirectory(d)->addDirectory(dir);
+    return true;
+}
+
 bool filesystem::rm(file f) {
     directory *father = getFatherByName(f);
     if (father->removeFile(f.getName())) {
@@ -309,4 +320,34 @@ bool filesystem::getAbsolutePath(string path, vector<string> &v) {
         v = names;
     }
     return true;
+}
+
+directory *filesystem::getDirectoryByDirectory(const directory &dir) {
+    return findDirectory(&tree, dir);
+}
+
+directory *filesystem::findDirectory(directory *current, const directory &target) {
+    if (*current == target) {
+        return current;
+    }
+    for (auto &subDir: *current->getDirectories()) {
+        directory *result = findDirectory(&subDir, target);
+        if (result) {
+            return result;
+        }
+    }
+    return nullptr;
+}
+bool filesystem::hasSameName(directory dir, string name) {
+    for (auto d: *dir.getDirectories()) {
+        if (d.getName() == name) {
+            return true;
+        }
+    }
+    for (auto f: *dir.getFiles()) {
+        if (f.getName() == name) {
+            return true;
+        }
+    }
+    return false;
 }
