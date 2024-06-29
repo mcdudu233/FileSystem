@@ -28,7 +28,7 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     connect(ui->actionAbout, SIGNAL(triggered(bool)), this, SLOT(about()));
 
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->treeView->setSelectionMode(QAbstractItemView::MultiSelection);
     ui->treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
     // 连接右键菜单信号
     connect(ui->treeView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenuRequested(const QPoint &)));
@@ -53,15 +53,16 @@ void mainwindow::onSearchTextChanged(const QString &text) {
     // 遍历模型的根项
     for (int i = 0; i < fsModel->rowCount(); ++i) {
         if (filterTreeView(fsModel->index(i, 0), regExp)) {
+//            ui->treeView->reset(); // 重置视图以反映新的搜索结果
+//            emit fsModel->layoutChanged(); // 通知视图模型数据已经改变
+            ui->treeView->selectionModel()->setCurrentIndex(fsModel->index(i, 0), QItemSelectionModel::Select | QItemSelectionModel::Rows);
             hasMatch = true;
+            break;
         }
     }
 
-    ui->treeView->reset(); // 重置视图以反映新的搜索结果
-    emit fsModel->layoutChanged(); // 通知视图模型数据已经改变
-
     if (!hasMatch) {
-        QMessageBox::information(this, "未找到", "请输入正确的文件名");
+        QMessageBox::critical(this, "未找到", "请输入正确的文件名！");
     }
 }
 
@@ -89,7 +90,6 @@ bool mainwindow::filterTreeView(const QModelIndex &index, const QRegularExpressi
 // 当前项改变时的槽函数
 void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
     if (current.isValid()) {
-        ui->treeView->selectionModel()->setCurrentIndex(current, QItemSelectionModel::Select | QItemSelectionModel::Rows);
         // 更新磁盘容量信息或其他操作
         updateDiskCapacity();
     }
@@ -309,7 +309,6 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
         // 添加菜单
         QMenu contextMenu(this);
         if (this->fsModel->isDirectory(index)) {
-            directory *dir = fsModel->getDirectoryFromIndex(index);
             contextMenu.addAction("打开", this, SLOT(openDirectory()));
             contextMenu.addAction("删除", this, SLOT(deleteDirectory()));
             contextMenu.addAction("重命名", this, SLOT(renameDirectory()));
