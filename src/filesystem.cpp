@@ -247,7 +247,27 @@ bool filesystem::rm(directory d) {
     return false;
 }
 
+vector<user> filesystem::usrs() {
+    return this->users;
+}
+
+bool filesystem::userdel(int uid) {
+    for (int i = 0; i < users.size(); i++) {
+        if (users[i].getUid() == uid) {
+            users.erase(users.begin() + i);
+            return true;
+        }
+    }
+    return false;
+}
+
 int filesystem::useradd(string name, string password, bool super) {
+    // 判断是否已经有该用户了
+    for (auto u: this->users) {
+        if (u.getName() == name) {
+            return -1;
+        }
+    }
     user usr(users.size(), name, password, super);
     users.push_back(usr);
     return usr.getUid();

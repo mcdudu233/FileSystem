@@ -65,7 +65,9 @@ public:
     bool mkdir(directory d, const string &dname);                                // 新建文件夹
     bool rm(file f);                                                             // 删除文件
     bool rm(directory d);                                                        // 删除目录
+    vector<user> usrs();                                                         // 获取所有用户
     int useradd(string name, string password = "", bool super = false);          // 新增用户
+    bool userdel(int uid);                                                       // 删除用户
     bool usercrg(int uid, string name, string password = "", bool super = false);// 修改用户信息
 };
 

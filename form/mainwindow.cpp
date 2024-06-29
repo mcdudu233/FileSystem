@@ -133,7 +133,20 @@ void mainwindow::reformatSystem() {
 // 新建用户
 void mainwindow::newUser() {
     if (isOpened()) {
-        // TODO fsX->useradd();
+        bool ok1, ok2;
+        QString name = QInputDialog::getText(this, "新建用户", "用户名：", QLineEdit::Normal, "用户名", &ok1);
+        if (ok1) {
+            QString password = QInputDialog::getText(this, "新建用户", "密码：", QLineEdit::Normal, "", &ok2);
+            if (ok2) {
+                if (name.isEmpty()) {
+                    QMessageBox::critical(this, "错误", "用户名不允许为空！");
+                } else {
+                    if (fsX->useradd(name.toStdString(), password.toStdString(), false) == -1) {
+                        QMessageBox::critical(this, "错误", "添加用户失败！换一个名字吧！");
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -153,30 +166,56 @@ void mainwindow::deleteDirectory() {
 
 // 目录重命名
 void mainwindow::renameDirectory() {
+    if (isOpened()) {
+    }
 }
 
 // 目录属性
 void mainwindow::directoryNature() {
+    if (isOpened()) {
+    }
 }
 
 // 文件属性
 void mainwindow::fileNature() {
+    if (isOpened()) {
+    }
 }
 
 // 文件重命名
 void mainwindow::renameFile() {
+    if (isOpened()) {
+    }
 }
 
 // 打开文件
 void mainwindow::openFile() {
+    if (isOpened()) {
+    }
 }
 
 // 删除用户
 void mainwindow::deleteUser() {
+    if (isOpened()) {
+        QStringList ls;
+        for (auto u: fsX->usrs()) {
+            ls.push_back("ID：" + QString::fromStdString(std::to_string(u.getUid())) + "\t用户名：" + QString::fromStdString(u.getName()));
+        }
+
+        bool ok;
+        int index = ls.indexOf(QInputDialog::getItem(this, "删除用户", "请选择要删除的用户：", ls, 0, true, &ok));
+        if (ok) {
+            if (!fsX->userdel(index)) {
+                QMessageBox::critical(this, "错误", "删除用户失败！未知错误！");
+            }
+        }
+    }
 }
 
 // 新开文件
 void mainwindow::newFile() {
+    if (isOpened()) {
+    }
 }
 
 // 新文件夹
@@ -292,6 +331,8 @@ void mainwindow::openFileSystem(filesystem *fs) {
     fsX = fs;
     ui->openButton->setDisabled(true);
     ui->closeButton->setDisabled(false);
+    ui->actionOpenSystem->setDisabled(true);
+    ui->actionCloseSystem->setDisabled(false);
     displayFileSystem();
     updateDiskCapacity();
 }
@@ -308,6 +349,8 @@ void mainwindow::closeFileSystem() {
     }
     ui->openButton->setDisabled(false);
     ui->closeButton->setDisabled(true);
+    ui->actionOpenSystem->setDisabled(false);
+    ui->actionCloseSystem->setDisabled(true);
     ui->diskCapacityLabel->setText("");
 }
 
