@@ -45,34 +45,30 @@ mainwindow::~mainwindow() {
 
 
 void mainwindow::onSearchTextChanged(const QString &text) {
-    qDebug() << "Search text changed: " << text;
-
     if (text.contains("请输入文件名") || text == "请输入文件") {
         ui->searchEdit->selectAll();
         return;
     }
+    if (!fsModel) return;
+    if (fsModel != ui->treeView->model()) return;
 
-    if (!fsModel) {
-        qDebug() << "File system model not loaded.";
-        return;
-    }
-
-    if (fsModel != ui->treeView->model()) {
-        qDebug() << "File system model does not match tree view model.";
-        return;
-    }
-
-    fsModel->clearSearchResults();// 清除之前的搜索结果
+    fsModel->clearSearchResults();
 
     QRegularExpression regExp(text, QRegularExpression::CaseInsensitiveOption);
     bool hasMatch = false;
 
+    // 展开所有目录
+    for (int i = 0; i < fsModel->rowCount(); ++i) {
+        ui->treeView->expand(fsModel->index(i, 0));
+    }
+
     // 遍历模型的根项
     for (int i = 0; i < fsModel->rowCount(); ++i) {
-        if (filterAndExpandTreeView(fsModel->index(i, 0), regExp)) {
-            ui->treeView->reset();        // 重置视图以反映新的搜索结果
-            emit fsModel->layoutChanged();// 通知视图模型数据已经改变
-            ui->treeView->selectionModel()->setCurrentIndex(fsModel->index(i, 0), QItemSelectionModel::Select | QItemSelectionModel::Rows);
+        QModelIndex rootIndex = fsModel->index(i, 0);
+        if (filterAndExpandTreeView(rootIndex, regExp)) {
+            ui->treeView->setModel(fsModel);
+            ui->treeView->selectionModel()->clearSelection();
+            ui->treeView->selectionModel()->setCurrentIndex(fsModel->index(i, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
             hasMatch = true;
             break;
         }
@@ -83,13 +79,10 @@ void mainwindow::onSearchTextChanged(const QString &text) {
     }
 }
 
+
 bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegularExpression &regExp) {
     if (!index.isValid()) {
         return false;
-    }
-
-    if (fsModel != ui->treeView->model()) {
-        return false;// 如果 fsModel 不是 treeView 的模型，则返回 false
     }
 
     bool match = false;
@@ -104,17 +97,20 @@ bool mainwindow::filterAndExpandTreeView(const QModelIndex &index, const QRegula
     }
 
     if (match) {
-        expandParents(index);
         ui->treeView->setRowHidden(index.row(), index.parent(), false);
-        ui->treeView->selectionModel()->clearSelection();// 清除之前的选择
-        ui->treeView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-        ui->treeView->scrollTo(index);
+        ui->treeView->expand(index);
+        QModelIndex parentIndex = index.parent();
+        while (parentIndex.isValid()) {
+            ui->treeView->expand(parentIndex);
+            parentIndex = parentIndex.parent();
+        }
     } else {
         ui->treeView->setRowHidden(index.row(), index.parent(), true);
     }
 
     return match;
 }
+
 
 void mainwindow::expandParents(const QModelIndex &index) {
     QModelIndex parentIndex = index.parent();
