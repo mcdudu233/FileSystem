@@ -4,8 +4,6 @@
 
 #include "data.h"
 
-#include <utility>
-
 fstream file;// 数据文件
 
 vector<bool> *available;           // 空闲盘块 位视图法
@@ -86,8 +84,9 @@ bool setPosition(int block) {
     return true;
 }
 
-fstream *getData() {
-    return &file;
+fstream &getData() {
+    setPosition(0);
+    return file;
 }
 
 

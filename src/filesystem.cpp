@@ -17,11 +17,10 @@ filesystem::filesystem(const string &name, int size, int block) {
             cerr << "Fail to init data." << endl;
         }
         // 然后加载文件系统数据
-        setPosition(0);
-        deserialize(*getData());
-        setSpaceSize(size);
-        setBlockSize(block);
-        setAvailable(&available, block_data);
+        deserialize(getData());
+        setSpaceSize(this->space_size);
+        setBlockSize(this->block_size);
+        setAvailable(&available, this->block_data);
     } else {
         // 默认10倍空闲分区表的空间储存结构
         this->block_data = 10 * (size / block) / block;
@@ -52,9 +51,16 @@ filesystem::filesystem(const string &name, int size, int block) {
 
 filesystem::~filesystem() {
     // 保存文件系统数据
-    setPosition(0);
-    serialize(*getData());
+    serializeRewrite();
+    serialize(getData());
     closeData();
+}
+
+void filesystem::serializeRewrite() const {
+    for (int i = 0; i < block_data; i++) {
+        char *tmp = new char[block_size]{0};
+        writeBlock(i, tmp, block_size);
+    }
 }
 
 void filesystem::serialize(fstream &out) const {
@@ -79,8 +85,6 @@ void filesystem::serialize(fstream &out) const {
     for (const auto a: available) {
         out.write(reinterpret_cast<const char *>(&a), sizeof(a));
     }
-
-    out.close();
 }
 
 void filesystem::deserialize(fstream &in) {
@@ -110,8 +114,6 @@ void filesystem::deserialize(fstream &in) {
         in.read(reinterpret_cast<char *>(&value), sizeof(value));
         available[i] = value;
     }
-
-    in.close();
 }
 
 string filesystem::getCurrentPath() {

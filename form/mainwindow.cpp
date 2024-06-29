@@ -42,7 +42,7 @@ mainwindow::~mainwindow() {
 
 void mainwindow::onSearchTextChanged(const QString &text) {
     if (!fsModel) {
-        return; // 如果没有加载文件系统模型，则什么也不做
+        return;// 如果没有加载文件系统模型，则什么也不做
     }
 
     QRegularExpression regExp(text, QRegularExpression::CaseInsensitiveOption);
@@ -70,7 +70,6 @@ bool mainwindow::filterTreeView(const QModelIndex &index, const QRegularExpressi
     ui->treeView->setRowHidden(index.row(), index.parent(), !match);
     return match;
 }
-
 
 
 // 当前项改变时的槽函数
@@ -143,9 +142,11 @@ void mainwindow::openDirectory() {
 }
 
 // 删除目录
-void mainwindow::deleteDirectory(directory *dir) {
+void mainwindow::deleteDirectory() {
     if (isOpened()) {
+        directory *dir = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
         if (!fsX->rm(*dir)) {
+            ui->treeView->currentIndex();
             QMessageBox::critical(this, "错误", "删除文件夹失败！");
         }
     }
@@ -229,7 +230,7 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
         if (this->fsModel->isDirectory(index)) {
             directory *dir = fsModel->getDirectoryFromIndex(index);
             contextMenu.addAction("打开", this, SLOT(openDirectory()));
-            connect(contextMenu.addAction("删除"), &QAction::triggered, [this, dir]() { deleteDirectory(dir); });
+            contextMenu.addAction("删除", this, SLOT(deleteDirectory()));
             contextMenu.addAction("重命名", this, SLOT(renameDirectory()));
             contextMenu.addAction("新建文件", this, SLOT(newFile()));
             contextMenu.addAction("新建文件夹", this, SLOT(newDirectory()));

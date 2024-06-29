@@ -12,9 +12,9 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QRegularExpression>
 #include <QVBoxLayout>
 #include <utility>
-#include <QRegularExpression>
 #include <vector>
 
 
@@ -291,10 +291,10 @@ public slots:
     void renameFile();  //文件重命名
     void fileNature();  // 文件属性
     /* 目录操作 */
-    void openDirectory();                // 打开目录
-    void deleteDirectory(directory *dir);// 删除目录
-    void renameDirectory();              // 重命名目录
-    void directoryNature();              // 目录属性
+    void openDirectory();  // 打开目录
+    void deleteDirectory();// 删除目录
+    void renameDirectory();// 重命名目录
+    void directoryNature();// 目录属性
     /*其他操作*/
     void about();// 关于
 

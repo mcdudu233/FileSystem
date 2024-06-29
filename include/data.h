@@ -35,7 +35,7 @@ bool setSpaceSize(int size);
 int getBlockSize();
 bool setBlockSize(int size);
 bool setPosition(int block);// 设置读写指针位置
-fstream *getData();         // 获取file
+fstream &getData();         // 获取file
 
 /* 文件数据读写方法 */
 bool hasBlock(int block);                        // 判断块是否已经有数据了

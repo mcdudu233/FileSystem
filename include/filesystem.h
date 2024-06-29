@@ -42,8 +42,9 @@ private:
 public:
     filesystem(const string &name, int space = 0, int block = 0);
     ~filesystem();
-    void serialize(fstream &out) const;
-    void deserialize(fstream &in);
+    void serialize(fstream &out) const;// 序列化
+    void deserialize(fstream &in);     // 反序列化
+    void serializeRewrite() const;     // 重新写入文件结构
 
 public:
     /* 基本 */
