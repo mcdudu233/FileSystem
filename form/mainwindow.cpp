@@ -93,7 +93,7 @@ void mainwindow::onCurrentItemChanged(const QModelIndex &current) {
         updateDiskCapacity();
     }
 }
-// 打开文件系统
+//  打开文件系统
 void mainwindow::openSystem() {
     const vector<fs::path> &fss = searchFileSystem();
     if (fss.empty()) {
