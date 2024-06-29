@@ -29,7 +29,7 @@ namespace Ui {
 }
 QT_END_NAMESPACE
 
-//  自定义的文件系统模型类
+// 自定义的文件系统模型类
 class FileSystemModel : public QAbstractItemModel {
     Q_OBJECT
 
