@@ -11,7 +11,12 @@
 mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwindow) {
     ui->setupUi(this);
     setWindowTitle("文件系统管理器");
-
+    // 设置窗口图标
+    QIcon icon("./res/main.png");
+    if (icon.isNull()) {
+        icon.addFile("../res/main.png");
+    }
+    setWindowIcon(icon);
     // 禁用最大化按钮
     setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
 
@@ -460,17 +465,19 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
 
 // 重写关闭事件
 void mainwindow::closeEvent(QCloseEvent *event) {
-    // 弹出确认对话框
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "警告", "您确定要退出系统吗？",
-                                  QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::Yes) {
-        // 如果确认关闭，则接受关闭事件
-        closeFileSystem();
-        event->accept();
-    } else {
-        //忽略关闭信号，阻止窗体关闭
-        event->ignore();
+    if (fsX != nullptr) {
+        // 弹出确认对话框
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "警告", "您确定要退出系统吗？",
+                                      QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            // 如果确认关闭，则接受关闭事件
+            closeFileSystem();
+            event->accept();
+        } else {
+            //忽略关闭信号，阻止窗体关闭
+            event->ignore();
+        }
     }
 }
 
