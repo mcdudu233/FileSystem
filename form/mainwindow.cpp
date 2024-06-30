@@ -464,6 +464,30 @@ void mainwindow::openFile() {
                 }
                 // 使用系统默认程序打开文件
                 QDesktopServices::openUrl(QUrl::fromLocalFile(tempFilePath));
+                // 添加文件到监视器 如果文件内容改变 写回本系统
+                QThread *monitorThread = QThread::create([=]() {
+                    QDateTime lastModified = (new QFileInfo(tempFilePath))->lastModified();
+                    while (true) {
+                        QThread::sleep(1);// 每秒检查一次
+                        QDateTime newLastModified = QFileInfo(tempFilePath).lastModified();
+                        if (newLastModified != lastModified) {
+                            lastModified = newLastModified;
+
+                            // 文件发生变化，读取新内容并更新系统中的数据
+                            QFile file(tempFilePath);
+                            if (file.open(QIODevice::ReadOnly)) {
+                                QByteArray newData = file.readAll();
+                                file.close();
+                                // 将新数据写回系统中的文件对象
+                                f->writeFile(newData.data(), newData.size());
+                                // 更新磁盘容量显示
+                                updateDiskCapacity();
+                            }
+                        }
+                    }
+                });
+                // 启动监控线程
+                monitorThread->start();
             }
         }
     }

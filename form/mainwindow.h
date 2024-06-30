@@ -16,14 +16,18 @@
 #include <QComboBox>
 #include <QDesktopServices>
 #include <QDir>
+#include <QFileSystemWatcher>
 #include <QFormLayout>
 #include <QHash>
 #include <QInputDialog>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QMetaObject>
 #include <QModelIndex>
 #include <QPushButton>
 #include <QRegularExpression>
+#include <QThread>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QVector>
 
