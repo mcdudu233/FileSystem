@@ -646,6 +646,7 @@ void mainwindow::displayFileSystem() {
             fsModel = new FileSystemModel(fsX, fsX->getTree(), this);
             ui->treeView->setModel(fsModel);
         }
+        updateDiskCapacity();
     }
 }
 

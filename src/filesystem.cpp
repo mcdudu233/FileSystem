@@ -240,8 +240,10 @@ bool filesystem::touch(directory d, const string &fname) {
 }
 
 bool filesystem::rm(file f) {
+    // 释放所有空间
     directory *father = getFatherByName(f);
     if (father->removeFile(f.getName())) {
+        f.clearFile();
         return true;
     }
     return false;
