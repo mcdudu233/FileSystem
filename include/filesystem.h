@@ -70,6 +70,7 @@ public:
     int useradd(string name, string password = "", bool super = false);          // 新增用户
     bool userdel(int uid);                                                       // 删除用户
     bool usercrg(int uid, string name, string password = "", bool super = false);// 修改用户信息
+    user userbyid(int uid);                                                      // 根据uid查找用户
 };
 
 #endif//FILESYSTEM_FILESYSTEM_H

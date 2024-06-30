@@ -263,7 +263,9 @@ void mainwindow::openDirectory() {
 void mainwindow::deleteDirectory() {
     if (isOpened()) {
         directory *dir = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
-        if (!fsX->rm(*dir)) {
+        if (fsX->rm(*dir)) {
+            displayFileSystem();
+        } else {
             QMessageBox::critical(this, "错误", "删除文件夹失败！");
         }
     }
@@ -278,12 +280,44 @@ void mainwindow::renameDirectory() {
 // 目录属性
 void mainwindow::directoryNature() {
     if (isOpened()) {
+        directory *d = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
+        // 创建一个对话框
+        QDialog propertiesDialog(this);
+        propertiesDialog.setWindowTitle("文件夹属性");
+        // 使用QFormLayout布局来对齐标签和值
+        QFormLayout formLayout;
+        // 添加属性到布局
+        formLayout.addRow(new QLabel("文件夹名:"), new QLabel(d->getName().c_str()));
+        formLayout.addRow(new QLabel("所属用户:"), new QLabel(fsX->userbyid(d->getUser()).getName().c_str()));
+        formLayout.addRow(new QLabel("包含文件数量:"), new QLabel(QString::number(d->getFiles()->size() + d->getDirectories()->size())));
+        formLayout.addRow(new QLabel("创建日期:"), new QLabel(getTimeString(d->getCreateTime()).c_str()));
+        formLayout.addRow(new QLabel("修改日期:"), new QLabel(getTimeString(d->getModifyTime()).c_str()));
+        // 将布局设置到对话框
+        propertiesDialog.setLayout(&formLayout);
+        // 显示对话框
+        propertiesDialog.exec();
     }
 }
 
 // 文件属性
 void mainwindow::fileNature() {
     if (isOpened()) {
+        file *f = fsModel->getFileFromIndex(ui->treeView->currentIndex());
+        // 创建一个对话框
+        QDialog propertiesDialog(this);
+        propertiesDialog.setWindowTitle("文件属性");
+        // 使用QFormLayout布局来对齐标签和值
+        QFormLayout formLayout;
+        // 添加属性到布局
+        formLayout.addRow(new QLabel("文件名:"), new QLabel(f->getName().c_str()));
+        formLayout.addRow(new QLabel("所属用户:"), new QLabel(fsX->userbyid(f->getUser()).getName().c_str()));
+        formLayout.addRow(new QLabel("文件大小:"), new QLabel(getSizeString(f->getSize()).c_str()));
+        formLayout.addRow(new QLabel("创建日期:"), new QLabel(getTimeString(f->getCreateTime()).c_str()));
+        formLayout.addRow(new QLabel("修改日期:"), new QLabel(getTimeString(f->getModifyTime()).c_str()));
+        // 将布局设置到对话框
+        propertiesDialog.setLayout(&formLayout);
+        // 显示对话框
+        propertiesDialog.exec();
     }
 }
 
@@ -302,6 +336,7 @@ void mainwindow::openFile() {
 // 新开文件
 void mainwindow::newFile() {
     if (isOpened()) {
+        QMessageBox::critical(this, "错误", "当前文件夹已经存在！换一个名字吧！");
     }
 }
 
@@ -320,7 +355,9 @@ void mainwindow::newDirectory() {
                 } else {
                     dir = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
                 }
-                if (!fsX->mkdir(*dir, text.toStdString())) {
+                if (fsX->mkdir(*dir, text.toStdString())) {
+                    displayFileSystem();
+                } else {
                     QMessageBox::critical(this, "错误", "当前文件夹已经存在！换一个名字吧！");
                 }
             }
@@ -332,7 +369,9 @@ void mainwindow::newDirectory() {
 void mainwindow::deleteFile() {
     if (isOpened()) {
         file *file = fsModel->getFileFromIndex(ui->treeView->currentIndex());
-        if (!fsX->rm(*file)) {
+        if (fsX->rm(*file)) {
+            displayFileSystem();
+        } else {
             QMessageBox::critical(this, "错误", "删除文件失败！");
         }
     }
@@ -395,7 +434,6 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
             ui->treeView->setCurrentIndex(ui->treeView->rootIndex());
         }
         contextMenu.exec(ui->treeView->viewport()->mapToGlobal(pos));
-        displayFileSystem();
     }
 }
 
@@ -500,6 +538,18 @@ string mainwindow::getSizeString(float f) {
         tmp += "B";
     }
     return tmp;
+}
+
+// 根据时间获得字符串
+string mainwindow::getTimeString(const std::chrono::system_clock::time_point &tp) {
+    // 获取 time_point 的时间点
+    std::time_t time = std::chrono::system_clock::to_time_t(tp);
+    // 将 time 转换为 tm 结构
+    std::tm tm = *std::localtime(&time);
+    // 使用 stringstream 格式化时间字符串
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+    return oss.str();
 }
 
 bool mainwindow::isOpened() {

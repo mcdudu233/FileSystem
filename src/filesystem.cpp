@@ -284,6 +284,15 @@ bool filesystem::usercrg(int uid, string name, string password, bool super) {
     return false;
 }
 
+user filesystem::userbyid(int uid) {
+    for (auto u: users) {
+        if (u.getUid() == uid) {
+            return u;
+        }
+    }
+    return {};
+}
+
 /* 静态方法 工具类 */
 void filesystem::split(const string &str, vector<string> &v, const string &spacer) {
     int pos1, pos2;

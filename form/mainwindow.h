@@ -11,6 +11,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QComboBox>
+#include <QFormLayout>
 #include <QHash>
 #include <QInputDialog>
 #include <QMainWindow>
@@ -234,7 +235,7 @@ public:
 
 public:
     /* 工具 */
-    bool isDirectory(const QModelIndex &index) const {
+    static bool isDirectory(const QModelIndex &index) {
         if (!index.isValid()) {
             return false;
         }
@@ -242,7 +243,7 @@ public:
         return info->type == ItemType::Directory;
     }
 
-    directory *getDirectoryFromIndex(const QModelIndex &index) const {
+    static directory *getDirectoryFromIndex(const QModelIndex &index) {
         if (!index.isValid()) {
             return nullptr;
         }
@@ -250,7 +251,7 @@ public:
         return static_cast<directory *>(info->ptr);
     }
 
-    file *getFileFromIndex(const QModelIndex &index) const {
+    static file *getFileFromIndex(const QModelIndex &index) {
         if (!index.isValid()) {
             return nullptr;
         }
@@ -258,7 +259,7 @@ public:
         return static_cast<file *>(info->ptr);
     }
 
-    string timePointToString(const std::chrono::system_clock::time_point &tp) const {
+    static string timePointToString(const std::chrono::system_clock::time_point &tp) {
         // 将 time_point 转换为 time_t
         std::time_t time = std::chrono::system_clock::to_time_t(tp);
         // 创建一个 tm 结构
@@ -322,6 +323,7 @@ public slots:
 
 public:
     static string getSizeString(float f);                                           // 格式化文件大小
+    static string getTimeString(const std::chrono::system_clock::time_point &tp);   // 格式化时间
     static vector<fs::path> searchFileSystem();                                     // 搜索当前文件夹下的所有文件系统
     void openFileSystem(QString name);                                              // 打开文件系统
     void openFileSystem(filesystem *fs);                                            // 打开文件系统
