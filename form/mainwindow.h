@@ -292,8 +292,9 @@ private:
     FileSystemModel *fsModel = nullptr;
 
 public slots:
-    void onCustomContextMenuRequested(const QPoint &pos); // treeView的右键菜单
-    void onCurrentItemChanged(const QModelIndex &current);// 处理当前项变化
+    void onCustomContextMenuRequested(const QPoint &pos);  // treeView的右键菜单
+    void onTreeViewDoubleClicked(const QModelIndex &index);// 双击事件
+    void onCurrentItemChanged(const QModelIndex &current); // 处理当前项变化
     // 处理搜索文本
     /* 系统操作 */
     void openSystem();    // 打开系统按钮按下

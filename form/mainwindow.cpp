@@ -21,6 +21,8 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
 
     connect(ui->treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCurrentItemChanged(const QModelIndex &)));
+    connect(ui->treeView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onTreeViewDoubleClicked(const QModelIndex &)));
+
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
     connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openSystem()));
     connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(closeSystem()));
@@ -564,6 +566,21 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
             ui->treeView->setCurrentIndex(ui->treeView->rootIndex());
         }
         contextMenu.exec(ui->treeView->viewport()->mapToGlobal(pos));
+    }
+}
+
+// 双击事件
+void mainwindow::onTreeViewDoubleClicked(const QModelIndex &index) {
+    if (!index.isValid()) {
+        return;
+    }
+
+    if (fsModel->isDirectory(index)) {
+        // 如果双击的是目录，展开该目录
+        openDirectory();
+    } else {
+        // 如果双击的是文件，打开该文件
+        openFile();
     }
 }
 
