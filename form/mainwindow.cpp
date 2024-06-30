@@ -259,8 +259,46 @@ void mainwindow::changeUser() {
 }
 
 void mainwindow::passwordUser() {
-    if (isOpened()) {
+    if (fsX == nullptr) {
+        QMessageBox::warning(this, "错误", "请先打开文件系统");
+        return;
     }
+    bool ok;
+    QStringList userNames;
+    for (user usr : fsX->getUsers()) {
+        userNames << QString::fromStdString(usr.getName());
+    }
+    QString selectedUser = QInputDialog::getItem(this, "修改用户密码", "请选择要修改密码的用户：", userNames, 0, false, &ok);
+    if (!ok || selectedUser.isEmpty()) {
+        return;
+    }
+    user *usr = fsX->getUserByName(selectedUser.toStdString());
+    if (!usr) {
+        QMessageBox::warning(this, "错误", "未找到该用户");
+        return;
+    }
+    QString oldPassword = QInputDialog::getText(this, "修改用户密码", "请输入旧密码：", QLineEdit::Password, "", &ok);
+    if (!ok || oldPassword.isEmpty()) {
+        return;
+    }
+    if (!usr->checkPassword(oldPassword.toStdString())) {
+        QMessageBox::warning(this, "错误", "旧密码错误");
+        return;
+    }
+    QString newPassword = QInputDialog::getText(this, "修改用户密码", "请输入新密码：", QLineEdit::Password, "", &ok);
+    if (!ok || newPassword.isEmpty()) {
+        return;
+    }
+    QString confirmPassword = QInputDialog::getText(this, "修改用户密码", "请确认新密码：", QLineEdit::Password, "", &ok);
+    if (!ok || confirmPassword.isEmpty()) {
+        return;
+    }
+    if (newPassword != confirmPassword) {
+        QMessageBox::warning(this, "错误", "两次输入的密码不一致");
+        return;
+    }
+    usr->setPassword(newPassword.toStdString());
+    QMessageBox::information(this, "成功", "密码修改成功");
 }
 
 void FileSystemModel::clearSearchResults() {
@@ -469,15 +507,15 @@ void mainwindow::deleteFile() {
 void mainwindow::about() {
     QMessageBox msgBox;
     msgBox.setWindowTitle("关于");
-    msgBox.setText("尊敬的老师：\n"
+    msgBox.setText("尊敬的叶老师：\n"
                    "\n"
                    "在这个学期的学习过程中，我深知自己的不足之处，但我也在不断努力，力求在各个方面取得更好的成绩。我明白，期末考试不仅是对我们一个学期学习成果的检验，更是对我们综合素质的一次考核。\n"
                    "\n"
-                   "在此，我想向您表达我的诚意和决心。我将以严谨的态度对待每一门考试，认真复习，确保自己在考试中发挥出最佳水平。同时，我也将秉持诚信的原则，严格遵守考试纪律，坚决杜绝任何作弊行为。\n"
+                   "在此，我想向您表达我的诚意和决心。我将以严谨的态度对待期末考试，认真复习，确保自己在考试中发挥出最佳水平。同时，我也将秉持诚信的原则，严格遵守考试纪律，坚决杜绝任何作弊行为。\n"
                    "\n"
                    "我深知，成绩的取得离不开老师的辛勤付出。因此，在接下来的时间里，我将更加珍惜老师的教诲，努力学习，不断提高自己的综合素质。我相信，在老师的悉心教导下，我一定能够在期末考试中取得优异的成绩。\n"
                    "\n"
-                   "最后，我衷心感谢老师一个学期以来的关心和教诲。我将以优异的期末成绩回报老师的辛勤付出，并为班级的荣誉贡献自己的一份力量。\n"
+                   "最后，我衷心感谢老师一个学期以来的关心和教诲。祝老师阖家欢乐、万事如意。\n"
                    "\n"
                    "谢谢老师！\n"
                    "\n"

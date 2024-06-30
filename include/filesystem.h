@@ -72,6 +72,21 @@ public:
     bool userdel(int uid);                                                       // 删除用户
     bool usercrg(int uid, string name, string password = "", bool super = false);// 修改用户信息
     user userbyid(int uid);                                                      // 根据uid查找用户
+
+
+public:
+    const std::vector<user> &getUsers() const {
+        return users;
+    }
+
+    user *getUserByName(const std::string &name) {
+        for (auto &usr: users) {
+            if (usr.getName() == name) {
+                return &usr;
+            }
+        }
+        return nullptr;
+    }
 };
 
 #endif//FILESYSTEM_FILESYSTEM_H
