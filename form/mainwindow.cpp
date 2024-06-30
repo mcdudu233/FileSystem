@@ -278,7 +278,7 @@ void mainwindow::openDirectory() {
         if (index.isValid() && ui->treeView->model()->hasChildren(index)) {
             ui->treeView->expandAll();
         } else {
-            QMessageBox::critical(this, "错误", "请选择一个目录！");
+            QMessageBox::critical(this, "错误", "该目录下没有文件！");
         }
     }
 }
@@ -313,8 +313,8 @@ void mainwindow::renameDirectory() {
                     }
                 }
                 directory *dir = fsModel->getDirectoryFromIndex(index);
-                dir->setName(newName.toStdString()); // 直接设置新名称
-                displayFileSystem(); // 更新显示
+                dir->setName(newName.toStdString());// 直接设置新名称
+                displayFileSystem();                // 更新显示
             } else {
                 QMessageBox::critical(this, "错误", "文件夹名不允许为空！");
             }
@@ -386,8 +386,8 @@ void mainwindow::renameFile() {
                     }
                 }
                 file *file = fsModel->getFileFromIndex(index);
-                file->setName(newName.toStdString()); // 直接设置新名称
-                displayFileSystem(); // 更新显示
+                file->setName(newName.toStdString());// 直接设置新名称
+                displayFileSystem();                 // 更新显示
             } else {
                 QMessageBox::critical(this, "错误", "文件名不允许为空！");
             }
