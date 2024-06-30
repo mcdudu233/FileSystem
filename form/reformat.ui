@@ -85,7 +85,22 @@
       </item>
       <item>
        <property name="text">
+        <string>32MB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>64MB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>128MB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>256MB</string>
        </property>
       </item>
       <item>
@@ -96,16 +111,6 @@
       <item>
        <property name="text">
         <string>1GB</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>4GB</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>8GB</string>
        </property>
       </item>
      </widget>

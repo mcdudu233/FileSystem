@@ -265,7 +265,7 @@ void mainwindow::passwordUser() {
     }
     bool ok;
     QStringList userNames;
-    for (user usr : fsX->getUsers()) {
+    for (user usr: fsX->getUsers()) {
         userNames << QString::fromStdString(usr.getName());
     }
     QString selectedUser = QInputDialog::getItem(this, "修改用户密码", "请选择要修改密码的用户：", userNames, 0, false, &ok);
@@ -278,7 +278,7 @@ void mainwindow::passwordUser() {
         return;
     }
     QString oldPassword = QInputDialog::getText(this, "修改用户密码", "请输入旧密码：", QLineEdit::Password, "", &ok);
-    if (!ok || oldPassword.isEmpty()) {
+    if (!ok) {
         return;
     }
     if (!usr->checkPassword(oldPassword.toStdString())) {
@@ -286,11 +286,11 @@ void mainwindow::passwordUser() {
         return;
     }
     QString newPassword = QInputDialog::getText(this, "修改用户密码", "请输入新密码：", QLineEdit::Password, "", &ok);
-    if (!ok || newPassword.isEmpty()) {
+    if (!ok) {
         return;
     }
     QString confirmPassword = QInputDialog::getText(this, "修改用户密码", "请确认新密码：", QLineEdit::Password, "", &ok);
-    if (!ok || confirmPassword.isEmpty()) {
+    if (!ok) {
         return;
     }
     if (newPassword != confirmPassword) {
@@ -314,7 +314,7 @@ void mainwindow::openDirectory() {
     if (isOpened()) {
         QModelIndex index = ui->treeView->currentIndex();
         if (index.isValid() && ui->treeView->model()->hasChildren(index)) {
-            ui->treeView->expandAll();
+            ui->treeView->expand(index);
         } else {
             QMessageBox::critical(this, "错误", "该目录下没有文件！");
         }
