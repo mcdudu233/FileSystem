@@ -10,6 +10,12 @@
 reformat::reformat(QWidget *parent) : QDialog(parent), ui(new Ui::reformat) {
     ui->setupUi(this);
     setWindowTitle("格式化");
+    // 设置窗口图标
+    QIcon icon("./res/main.png");
+    if (icon.isNull()) {
+        icon.addFile("../res/main.png");
+    }
+    setWindowIcon(icon);
 
     // 事件连接
     connect(ui->fileSystemComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onFileSystemSelected(int)));

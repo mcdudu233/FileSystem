@@ -247,12 +247,20 @@ void mainwindow::deleteUser() {
 }
 
 void mainwindow::loginUser() {
+    if (isOpened()) {
+        login l;
+        l.exec();
+    }
 }
 
 void mainwindow::changeUser() {
+    if (isOpened()) {
+    }
 }
 
 void mainwindow::passwordUser() {
+    if (isOpened()) {
+    }
 }
 
 void FileSystemModel::clearSearchResults() {

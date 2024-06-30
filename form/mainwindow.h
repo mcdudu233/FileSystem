@@ -6,6 +6,7 @@
 #define FILESYSTEM_MAINWINDOW_H
 
 #include "filesystem.h"
+#include "login.h"
 #include "reformat.h"
 #include <QAction>
 #include <QBrush>
@@ -358,6 +359,14 @@ public:
 
 public:
     DriveSelectionDialog(QWidget *parent = nullptr) : QDialog(parent) {
+        setWindowTitle("文件系统管理器");
+        // 设置窗口图标
+        QIcon icon("./res/main.png");
+        if (icon.isNull()) {
+            icon.addFile("../res/main.png");
+        }
+        setWindowIcon(icon);
+        
         // 设置布局和字体
         QVBoxLayout *layout = new QVBoxLayout(this);
         QFont font;

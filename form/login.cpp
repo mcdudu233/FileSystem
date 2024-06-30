@@ -10,6 +10,12 @@
 login::login(QWidget *parent) : QDialog(parent), ui(new Ui::login) {
     ui->setupUi(this);
     setWindowTitle("登录");
+    // 设置窗口图标
+    QIcon icon("./res/main.png");
+    if (icon.isNull()) {
+        icon.addFile("../res/main.png");
+    }
+    setWindowIcon(icon);
 
     // 连接信号和槽
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
