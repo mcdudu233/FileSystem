@@ -42,9 +42,14 @@ filesystem::filesystem(const string &name, int size, int block) {
         }
         setAvailable(&available, block_data);
         // 建立初始的目录和文件
-        tree.addDirectory(directory("root", ".", 0));
+        directory root("root", ".", 0);
+        file home("root.txt", ".", 0);
+        string tmp = "This is root home!";
+        home.writeFile(tmp.data(), tmp.length());
+        root.addFile(home);
+        tree.addDirectory(root);
         file welcome("welcome.txt", ".", 0);// 欢迎文件
-        string tmp = "welcome to use file system made by xb and hwh!";
+        tmp = "Welcome to use file system made by xb and hwh!";
         welcome.writeFile(tmp.data(), tmp.length());
         file doc("doc.docx", ".", 0);
         file ppt("ppt.pptx", ".", 0);
