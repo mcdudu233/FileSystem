@@ -296,17 +296,20 @@ public slots:
     void deleteSystem();  // 删除文件系统
     void exitSystem();    // 退出系统
     /* 用户操作 */
-    void newUser();   // 新建用户
-    void deleteUser();// 删除用户
+    void newUser();     // 新建用户
+    void deleteUser();  // 删除用户
+    void loginUser();   // 登录用户
+    void changeUser();  // 切换用户
+    void passwordUser();// 修改用户密码
     /* 文件操作 */
-    void newFile();     // 新文件
-    void newDirectory();// 新文件夹
-    void deleteFile();  // 删除文件
-    void openFile();    // 打开文件
-    void renameFile();  //文件重命名
-    void fileNature();  // 文件属性
+    void newFile();   // 新文件
+    void deleteFile();// 删除文件
+    void openFile();  // 打开文件
+    void renameFile();//文件重命名
+    void fileNature();// 文件属性
     /* 目录操作 */
     void openDirectory();  // 打开目录
+    void newDirectory();   // 新文件夹
     void deleteDirectory();// 删除目录
     void renameDirectory();// 重命名目录
     void directoryNature();// 目录属性

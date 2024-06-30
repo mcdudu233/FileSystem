@@ -29,6 +29,7 @@ private:
     int block_size;        // 块大小
     int block_data;        // 开始存数据部分的块地址
 
+    user *user_current;// 当前操作系统的用户
     vector<user> users;// 所有用户
     directory tree;    // 根目录
 

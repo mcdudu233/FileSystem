@@ -11,6 +11,7 @@ filesystem::filesystem(const string &name, int size, int block) {
     this->block_size = block;
     this->users.push_back(user_root);
     this->tree = dir_root;
+    this->user_current = nullptr;
 
     if (existData(name)) {
         if (!initData(name)) {

@@ -104,7 +104,7 @@
     <property name="geometry">
      <rect>
       <x>539</x>
-      <y>160</y>
+      <y>170</y>
       <width>151</width>
       <height>271</height>
      </rect>
@@ -222,13 +222,17 @@
     <property name="title">
      <string>用户</string>
     </property>
+    <addaction name="actionLoginUser"/>
+    <addaction name="actionPasswordUser"/>
+    <addaction name="actionChangeUser"/>
+    <addaction name="separator"/>
     <addaction name="actionNewUser"/>
     <addaction name="actionDeleteUser"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>文件</string>
+     <string>文件系统</string>
     </property>
     <addaction name="actionNewFileSystem"/>
     <addaction name="separator"/>
@@ -274,12 +278,12 @@
   </action>
   <action name="actionNewFileSystem">
    <property name="text">
-    <string>新建文件系统</string>
+    <string>新建</string>
    </property>
   </action>
   <action name="actionDeleteFileSystem">
    <property name="text">
-    <string>删除文件系统</string>
+    <string>删除</string>
    </property>
   </action>
   <action name="actionExit">
@@ -305,6 +309,21 @@
   <action name="actionOpenSystem">
    <property name="text">
     <string>打开系统</string>
+   </property>
+  </action>
+  <action name="actionLoginUser">
+   <property name="text">
+    <string>登录</string>
+   </property>
+  </action>
+  <action name="actionChangeUser">
+   <property name="text">
+    <string>切换用户</string>
+   </property>
+  </action>
+  <action name="actionPasswordUser">
+   <property name="text">
+    <string>修改密码</string>
    </property>
   </action>
  </widget>

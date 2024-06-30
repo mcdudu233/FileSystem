@@ -23,6 +23,9 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
 
     connect(ui->actionNewUser, SIGNAL(triggered(bool)), this, SLOT(newUser()));
     connect(ui->actionDeleteUser, SIGNAL(triggered(bool)), this, SLOT(deleteUser()));
+    connect(ui->actionLoginUser, SIGNAL(triggered(bool)), this, SLOT(loginUser()));
+    connect(ui->actionChangeUser, SIGNAL(triggered(bool)), this, SLOT(changeUser()));
+    connect(ui->actionPasswordUser, SIGNAL(triggered(bool)), this, SLOT(passwordUser()));
 
     connect(ui->reformatButton, SIGNAL(clicked()), this, SLOT(reformatSystem()));
     connect(ui->actionNewsystem, SIGNAL(triggered(bool)), this, SLOT(reformatSystem()));
@@ -235,6 +238,15 @@ void mainwindow::deleteUser() {
     }
 }
 
+void mainwindow::loginUser() {
+}
+
+void mainwindow::changeUser() {
+}
+
+void mainwindow::passwordUser() {
+}
+
 void FileSystemModel::clearSearchResults() {
     searchResults.clear();
 }
@@ -371,7 +383,7 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
                 contextMenu.addAction("新建文件夹", this, SLOT(newDirectory()));
                 contextMenu.addAction("属性", this, SLOT(directoryNature()));
             } else {
-                contextMenu.addAction("打开", this, SLOT(exitSystem()));
+                contextMenu.addAction("打开", this, SLOT(openFile()));
                 contextMenu.addAction("删除", this, SLOT(deleteFile()));
                 contextMenu.addAction("重命名", this, SLOT(renameFile()));
                 contextMenu.addAction("属性", this, SLOT(fileNature()));
