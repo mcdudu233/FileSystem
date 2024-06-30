@@ -26,11 +26,12 @@ class file {
 private:
     /* 基本信息 */
     string name;      // *关键字：文件名
+    string father;    // 所属的目录名
     vector<int> point;// 所有数据块的指针
     /* 存取控制 */
-    int master = user_root.getUid();// 所属用户
-    char masterPrivilege;           // 主用户权限
-    char otherPrivilege;            // 其他用户权限
+    int master;          // 所属用户
+    char masterPrivilege;// 主用户权限
+    char otherPrivilege; // 其他用户权限
     /* 使用信息 */
     int size;                                   // 大小
     chrono::system_clock::time_point createTime;// 创建时间
@@ -42,7 +43,7 @@ private:
 
 public:
     file();
-    file(const string &fileName);
+    file(const string &fileName, string father, int master);
     file(const file &file);
     ~file();
     bool operator==(const file &other);

@@ -43,7 +43,7 @@ filesystem::filesystem(const string &name, int size, int block) {
         setAvailable(&available, block_data);
         // 建立初始的目录和文件
         tree.addDirectory(directory("root", ".", 0));
-        file welcome("welcome.txt");// 欢迎文件
+        file welcome("welcome.txt", ".", 0);// 欢迎文件
         string tmp = "welcome to use file system made by xb and hwh!";
         welcome.writeFile(tmp.data(), tmp.length());
         tree.addFile(welcome);
@@ -225,8 +225,17 @@ bool filesystem::mkdir(directory d, const string &dname) {
     if (hasSameName(d, dname)) {
         return false;
     }
-    directory dir(dname, d.getName(), d.getUser());
+    directory dir(dname, d.getName(), d.getUser());// TODO 所属用户
     getDirectoryByDirectory(d)->addDirectory(dir);
+    return true;
+}
+
+bool filesystem::touch(directory d, const string &fname) {
+    if (hasSameName(d, fname)) {
+        return false;
+    }
+    file fi(fname, d.getName(), d.getUser());// TODO 所属用户
+    getDirectoryByDirectory(d)->addFile(fi);
     return true;
 }
 

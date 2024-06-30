@@ -64,6 +64,7 @@ public:
     int disk(bool left);                                                         // 获取磁盘容量(left为true时返回剩余容量)
     bool cd(string path);                                                        // 跳转到某个文件夹
     bool mkdir(directory d, const string &dname);                                // 新建文件夹
+    bool touch(directory d, const string &fname);                                // 新建文件
     bool rm(file f);                                                             // 删除文件
     bool rm(directory d);                                                        // 删除目录
     vector<user> usrs();                                                         // 获取所有用户

@@ -9,6 +9,7 @@
 #include "reformat.h"
 #include <QAction>
 #include <QBrush>
+#include <QCloseEvent>
 #include <QColor>
 #include <QComboBox>
 #include <QFormLayout>
@@ -274,12 +275,14 @@ public:
     void clearSearchResults();
 };
 
+// 主窗口类
 class mainwindow : public QMainWindow {
     Q_OBJECT
 
 public:
     explicit mainwindow(QWidget *parent = nullptr);
     ~mainwindow() override;
+    void closeEvent(QCloseEvent *event) override;// 关闭事件重写
 
 private:
     Ui::mainwindow *ui;

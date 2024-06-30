@@ -3,20 +3,24 @@
 //
 
 #include "file.h"
+
 #include "data.h"
+#include <utility>
 
 
 file::file() {
 }
 
 // 文件类构造函数
-file::file(const string &fileName) {
+file::file(const string &fileName, string father, int master) {
     this->name = fileName;
     this->createTime = chrono::system_clock::now();
     updateTime();
     this->masterPrivilege = 7;// 给予文件所有者所有权限
     this->otherPrivilege = 1; // 其他用户无权限
     this->size = 0;           // 初始文件大小为0
+    this->father = std::move(father);
+    this->master = master;
 }
 
 file::file(const file &f)
@@ -27,7 +31,8 @@ file::file(const file &f)
       otherPrivilege(f.otherPrivilege),
       createTime(f.createTime),
       modifyTime(f.modifyTime),
-      point(f.point) {}
+      point(f.point),
+      father(f.father) {}
 
 file::~file() {
 }

@@ -12,6 +12,9 @@ mainwindow::mainwindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::mainwi
     ui->setupUi(this);
     setWindowTitle("文件系统管理器");
 
+    // 禁用最大化按钮
+    setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
+
     connect(ui->treeView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCurrentItemChanged(const QModelIndex &)));
     connect(ui->searchEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchTextChanged(const QString &)));
     connect(ui->openButton, SIGNAL(clicked()), this, SLOT(openSystem()));
@@ -336,7 +339,25 @@ void mainwindow::openFile() {
 // 新开文件
 void mainwindow::newFile() {
     if (isOpened()) {
-        QMessageBox::critical(this, "错误", "当前文件夹已经存在！换一个名字吧！");
+        bool ok;
+        QString text = QInputDialog::getText(this, "新建文件", "文件名：", QLineEdit::Normal, "新文件.txt", &ok);
+        if (ok) {
+            if (text.isEmpty()) {
+                QMessageBox::critical(this, "错误", "文件名不允许为空！");
+            } else {
+                directory *dir;
+                if (ui->treeView->currentIndex() == ui->treeView->rootIndex()) {
+                    dir = fsX->getTree();
+                } else {
+                    dir = fsModel->getDirectoryFromIndex(ui->treeView->currentIndex());
+                }
+                if (fsX->touch(*dir, text.toStdString())) {
+                    displayFileSystem();
+                } else {
+                    QMessageBox::critical(this, "错误", "当前文件已经存在！换一个名字吧！");
+                }
+            }
+        }
     }
 }
 
@@ -434,6 +455,22 @@ void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
             ui->treeView->setCurrentIndex(ui->treeView->rootIndex());
         }
         contextMenu.exec(ui->treeView->viewport()->mapToGlobal(pos));
+    }
+}
+
+// 重写关闭事件
+void mainwindow::closeEvent(QCloseEvent *event) {
+    // 弹出确认对话框
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "警告", "您确定要退出系统吗？",
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+        // 如果确认关闭，则接受关闭事件
+        closeFileSystem();
+        event->accept();
+    } else {
+        //忽略关闭信号，阻止窗体关闭
+        event->ignore();
     }
 }
 
