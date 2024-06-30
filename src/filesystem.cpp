@@ -46,7 +46,11 @@ filesystem::filesystem(const string &name, int size, int block) {
         file welcome("welcome.txt", ".", 0);// 欢迎文件
         string tmp = "welcome to use file system made by xb and hwh!";
         welcome.writeFile(tmp.data(), tmp.length());
+        file doc("doc.docx", ".", 0);
+        file ppt("ppt.pptx", ".", 0);
         tree.addFile(welcome);
+        tree.addFile(doc);
+        tree.addFile(ppt);
     }
 }
 

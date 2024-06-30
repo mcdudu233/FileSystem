@@ -127,8 +127,31 @@ public:
             switch (index.column()) {
                 case 0:
                     return QString::fromStdString(f->getName());
-                case 1:
-                    return f->getSize();
+                case 1: {
+                    int x = f->getSize();
+                    string tmp;
+                    if (x > 1024.0 * 1024.0 * 1024.0) {
+                        x /= 1024.0 * 1024.0 * 1024.0;
+                        tmp = std::to_string(x);
+                        tmp = tmp.substr(0, tmp.find('.') + 2);
+                        tmp += "GB";
+                    } else if (x > 1024.0 * 1024.0) {
+                        x /= 1024.0 * 1024.0;
+                        tmp = std::to_string(x);
+                        tmp = tmp.substr(0, tmp.find('.') + 2);
+                        tmp += "MB";
+                    } else if (x > 1024.0) {
+                        x /= 1024.0;
+                        tmp = std::to_string(x);
+                        tmp = tmp.substr(0, tmp.find('.') + 2);
+                        tmp += "KB";
+                    } else {
+                        tmp = std::to_string(x);
+                        tmp = tmp.substr(0, tmp.find('.') + 2);
+                        tmp += "B";
+                    }
+                    return tmp.c_str();
+                }
                 case 2:
                     return "文件";
                 case 3:
