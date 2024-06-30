@@ -340,7 +340,7 @@ void mainwindow::renameDirectory() {
         QModelIndex index = ui->treeView->currentIndex();
         if (fsModel->isDirectory(index)) {
             bool ok;
-            QString newName = QInputDialog::getText(this, "重命名文件夹", "新的文件夹名称：", QLineEdit::Normal, "", &ok);
+            QString newName = QInputDialog::getText(this, "重命名文件夹", "新的文件夹名称：", QLineEdit::Normal, fsModel->getDirectoryFromIndex(index)->getName().c_str(), &ok);
             if (ok && !newName.isEmpty()) {
                 QModelIndex parentIndex = index.parent();
                 // 检查同一目录下是否有同名的文件夹
@@ -413,7 +413,7 @@ void mainwindow::renameFile() {
         QModelIndex index = ui->treeView->currentIndex();
         if (!fsModel->isDirectory(index)) {
             bool ok;
-            QString newName = QInputDialog::getText(this, "重命名文件", "新的文件名称：", QLineEdit::Normal, "", &ok);
+            QString newName = QInputDialog::getText(this, "重命名文件", "新的文件名称：", QLineEdit::Normal, fsModel->getFileFromIndex(index)->getName().c_str(), &ok);
             if (ok && !newName.isEmpty()) {
                 QModelIndex parentIndex = index.parent();
                 // 检查同一目录下是否有同名的文件
@@ -440,9 +440,31 @@ void mainwindow::renameFile() {
 void mainwindow::openFile() {
     if (isOpened()) {
         file *f = fsModel->getFileFromIndex(ui->treeView->currentIndex());
-        textedit te(f, this);
-        if (te.exec() == QDialog::Accepted) {
-            updateDiskCapacity();
+        QList<QString> sp = QString::fromStdString(f->getName()).split(".");
+        if (sp.size() == 1) {
+            // 文件没有后缀
+            QMessageBox::critical(this, "警告", "文件没有后缀！无法解析！");
+        } else {
+            // 得到后缀
+            QString suffix = sp[sp.size() - 1];
+            if (suffix == "txt") {
+                textedit te(f, this);
+                if (te.exec() == QDialog::Accepted) {
+                    updateDiskCapacity();
+                }
+            } else {
+                QMessageBox::information(this, "提示", "无法使用内置的txt查看器打开！请选择系统程序打开！");
+                // 保存文件到本地
+                QString tempFilePath = QDir::tempPath() + "/" + f->getName().c_str();
+                QFile file(tempFilePath);
+                if (file.open(QIODevice::WriteOnly)) {
+                    const char *data = f->readFile();
+                    file.write(data);
+                    file.close();
+                }
+                // 使用系统默认程序打开文件
+                QDesktopServices::openUrl(QUrl::fromLocalFile(tempFilePath));
+            }
         }
     }
 }

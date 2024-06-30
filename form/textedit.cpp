@@ -23,7 +23,13 @@ textedit::textedit(file *f, QWidget *parent) : QDialog(parent), ui(new Ui::texte
     // 读取文件内容并显示
     this->fi = f;
     ui->filename->setText(f->getName().c_str());
-    ui->text->setText(f->readFile());
+    if (f->getSize() == 0) {
+        this->last = "";
+    } else {
+        this->last = f->readFile();
+        this->last = last.substr(0, f->getSize());
+    }
+    ui->text->setText(this->last.c_str());
 }
 
 textedit::~textedit() {
@@ -39,14 +45,16 @@ void textedit::save() {
 }
 
 void textedit::closeEvent(QCloseEvent *event) {
-    // 弹出确认对话框
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "警告", "是否保存文件？",
-                                  QMessageBox::Yes | QMessageBox::No);
-    if (reply == QMessageBox::Yes) {
-        save();
-    } else {
-        // 取消保存文件 直接关闭
-        event->accept();
+    if (this->last != ui->text->toPlainText().toStdString()) {
+        // 弹出确认对话框
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "警告", "是否保存文件？",
+                                      QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            save();
+        } else {
+            // 取消保存文件 直接关闭
+            event->accept();
+        }
     }
 }

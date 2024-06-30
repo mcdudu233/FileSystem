@@ -14,6 +14,8 @@
 #include <QCloseEvent>
 #include <QColor>
 #include <QComboBox>
+#include <QDesktopServices>
+#include <QDir>
 #include <QFormLayout>
 #include <QHash>
 #include <QInputDialog>

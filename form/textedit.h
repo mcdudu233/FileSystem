@@ -28,6 +28,7 @@ public:
 private:
     Ui::textedit *ui;
     file *fi;
+    string last;
 
 public slots:
     void save();// 保存文件
