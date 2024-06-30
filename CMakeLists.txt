@@ -21,7 +21,7 @@ aux_source_directory(form FORM)
 aux_source_directory(include INCLUDE)
 include_directories(include)
 include_directories(form)
-add_executable(filesystem ${SRC} ${FORM} ${INCLUDE} form/mainwindow.h form/reformat.h form/login.h)
+add_executable(filesystem ${SRC} ${FORM} ${INCLUDE} form/mainwindow.h form/reformat.h form/login.h form/textedit.h)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 target_link_libraries(filesystem

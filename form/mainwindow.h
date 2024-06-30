@@ -8,6 +8,7 @@
 #include "filesystem.h"
 #include "login.h"
 #include "reformat.h"
+#include "textedit.h"
 #include <QAction>
 #include <QBrush>
 #include <QCloseEvent>
@@ -274,7 +275,6 @@ public:
     }
     void addSearchResult(const QModelIndex &index);
     void clearSearchResults();
-
 };
 
 // 主窗口类
@@ -314,7 +314,7 @@ public slots:
     void renameFile();//文件重命名
     void fileNature();// 文件属性
     /* 目录操作 */
-    void openDirectory(); // 打开目录
+    void openDirectory();  // 打开目录
     void newDirectory();   // 新文件夹
     void deleteDirectory();// 删除目录
     void renameDirectory();// 重命名目录
@@ -337,7 +337,6 @@ public:
     void updateDiskCapacity();                                                      // 更新磁盘容量
     bool isOpened();                                                                // 检测文件系统是否已经打开
     bool filterTreeView(const QModelIndex &index, const QRegularExpression &regExp);// 显示查找结果
-
 };
 
 
@@ -368,7 +367,7 @@ public:
             icon.addFile("../res/main.png");
         }
         setWindowIcon(icon);
-        
+
         // 设置布局和字体
         QVBoxLayout *layout = new QVBoxLayout(this);
         QFont font;

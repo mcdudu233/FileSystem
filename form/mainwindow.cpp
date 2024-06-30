@@ -254,8 +254,7 @@ void mainwindow::loginUser() {
 }
 
 void mainwindow::changeUser() {
-    if (isOpened()) {
-    }
+    loginUser();
 }
 
 void mainwindow::passwordUser() {
@@ -438,6 +437,11 @@ void mainwindow::renameFile() {
 // 打开文件
 void mainwindow::openFile() {
     if (isOpened()) {
+        file *f = fsModel->getFileFromIndex(ui->treeView->currentIndex());
+        textedit te(f, this);
+        if (te.exec() == QDialog::Accepted) {
+            updateDiskCapacity();
+        }
     }
 }
 
@@ -531,7 +535,7 @@ void mainwindow::exitSystem() {
     QApplication::quit();
 }
 
-// TODO 右键菜单处理
+// 右键菜单处理
 void mainwindow::onCustomContextMenuRequested(const QPoint &pos) {
     if (this->fsModel != nullptr) {
         // 获取当前元素

@@ -245,8 +245,10 @@ void file::deserialize(fstream &in) {
     size_t pointSize;
     in.read(reinterpret_cast<char *>(&pointSize), sizeof(pointSize));
     point.resize(pointSize);
-    for (auto p: point) {
-        in.read(reinterpret_cast<char *>(&p), sizeof(p));
+    for (int i = 0; i < pointSize; i++) {
+        int value;
+        in.read(reinterpret_cast<char *>(&value), sizeof(value));
+        point[i] = value;
     }
 
     in.read(reinterpret_cast<char *>(&master), sizeof(master));
