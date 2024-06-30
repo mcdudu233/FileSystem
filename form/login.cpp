@@ -7,7 +7,7 @@
 #include "login.h"
 #include "ui_login.h"
 
-login::login(QWidget *parent) : QDialog(parent), ui(new Ui::login) {
+login::login(filesystem *fs, QWidget *parent) : QDialog(parent), ui(new Ui::login) {
     ui->setupUi(this);
     setWindowTitle("登录");
     // 设置窗口图标
@@ -19,6 +19,13 @@ login::login(QWidget *parent) : QDialog(parent), ui(new Ui::login) {
 
     // 连接信号和槽
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(onLoginButtonClicked()));
+
+    // 加载所有用户
+    this->fs = fs;
+    const vector<user> &usrs = fs->usrs();
+    for (auto u: usrs) {
+        ui->usernameEdit->addItem(u.getName().c_str());
+    }
 }
 
 login::~login() {
@@ -27,25 +34,14 @@ login::~login() {
 
 void login::onLoginButtonClicked() {
     // 登录逻辑
-    // 这里需要实现用户名和密码的验证
-    QString username = ui->usernameEdit->text();
+    user usr = fs->userbyid(ui->usernameEdit->currentIndex());
     QString password = ui->passwordEdit->text();
-    if (username == "valid_username" && password == "valid_password") {
+    if (usr.checkPassword(password.toStdString())) {
         // 继续登录流程
-        QMessageBox::information(this, "登录成功", "请继续操作。");
+        QMessageBox::information(this, "登录成功", QString::fromStdString("您以 " + usr.getName() + " 身份成功登陆。请继续操作。"));
         accept();
     } else {
         QMessageBox::critical(this, "登录失败", "用户名或密码错误！");
         reject();
     }
-}
-
-void login::onRegisterLinkClicked() {
-    // 注册逻辑
-    // 这里需要打开注册界面
-}
-
-void login::onForgotPasswordLinkClicked() {
-    // 忘记密码逻辑
-    // 这里需要打开忘记密码界面
 }

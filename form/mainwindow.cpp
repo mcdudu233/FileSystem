@@ -248,7 +248,7 @@ void mainwindow::deleteUser() {
 
 void mainwindow::loginUser() {
     if (isOpened()) {
-        login l;
+        login l(fsX, this);
         l.exec();
     }
 }

@@ -31,7 +31,7 @@ string user::getPassword() {
 // 检查密码是否一致
 bool user::checkPassword(string password) {
     string md5 = MD5(password.c_str());
-    if (md5 == password || password.empty()) {
+    if (md5 == this->password || this->password.empty()) {
         return true;
     } else {
         return false;

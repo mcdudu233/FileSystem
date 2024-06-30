@@ -5,6 +5,7 @@
 #ifndef FILESYSTEM_LOGIN_H
 #define FILESYSTEM_LOGIN_H
 
+#include "filesystem.h"
 #include <QDialog>
 #include <QMessageBox>
 
@@ -18,19 +19,15 @@ class login : public QDialog {
     Q_OBJECT
 
 public:
-    explicit login(QWidget *parent = nullptr);
+    explicit login(filesystem *fs, QWidget *parent = nullptr);
     ~login() override;
 
 private:
     Ui::login *ui;
+    filesystem *fs;
 
 private slots:
     void onLoginButtonClicked();
-    void onRegisterLinkClicked();
-    void onForgotPasswordLinkClicked();
-signals:
-    void loginSuccess();// 登录成功的信号
-    void loginFailed(); // 登录失败信号;
 };
 
 #endif//FILESYSTEM_LOGIN_H
