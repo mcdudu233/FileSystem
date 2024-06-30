@@ -273,6 +273,14 @@ void FileSystemModel::addSearchResult(const QModelIndex &index) {
 
 // 打开目录
 void mainwindow::openDirectory() {
+    if (isOpened()) {
+        QModelIndex index = ui->treeView->currentIndex();
+        if (index.isValid() && ui->treeView->model()->hasChildren(index)) {
+            ui->treeView->expandAll();
+        } else {
+            QMessageBox::critical(this, "错误", "请选择一个目录！");
+        }
+    }
 }
 
 // 删除目录
@@ -290,6 +298,29 @@ void mainwindow::deleteDirectory() {
 // 目录重命名
 void mainwindow::renameDirectory() {
     if (isOpened()) {
+        QModelIndex index = ui->treeView->currentIndex();
+        if (fsModel->isDirectory(index)) {
+            bool ok;
+            QString newName = QInputDialog::getText(this, "重命名文件夹", "新的文件夹名称：", QLineEdit::Normal, "", &ok);
+            if (ok && !newName.isEmpty()) {
+                QModelIndex parentIndex = index.parent();
+                // 检查同一目录下是否有同名的文件夹
+                for (int i = 0; i < fsModel->rowCount(parentIndex); ++i) {
+                    QModelIndex siblingIndex = fsModel->index(i, 0, parentIndex);
+                    if (fsModel->data(siblingIndex, Qt::DisplayRole).toString() == newName && siblingIndex != index) {
+                        QMessageBox::critical(this, "错误", "同一目录下已存在同名文件夹！");
+                        return;
+                    }
+                }
+                directory *dir = fsModel->getDirectoryFromIndex(index);
+                dir->setName(newName.toStdString()); // 直接设置新名称
+                displayFileSystem(); // 更新显示
+            } else {
+                QMessageBox::critical(this, "错误", "文件夹名不允许为空！");
+            }
+        } else {
+            QMessageBox::critical(this, "错误", "请选择一个目录！");
+        }
     }
 }
 
@@ -340,6 +371,29 @@ void mainwindow::fileNature() {
 // 文件重命名
 void mainwindow::renameFile() {
     if (isOpened()) {
+        QModelIndex index = ui->treeView->currentIndex();
+        if (!fsModel->isDirectory(index)) {
+            bool ok;
+            QString newName = QInputDialog::getText(this, "重命名文件", "新的文件名称：", QLineEdit::Normal, "", &ok);
+            if (ok && !newName.isEmpty()) {
+                QModelIndex parentIndex = index.parent();
+                // 检查同一目录下是否有同名的文件
+                for (int i = 0; i < fsModel->rowCount(parentIndex); ++i) {
+                    QModelIndex siblingIndex = fsModel->index(i, 0, parentIndex);
+                    if (fsModel->data(siblingIndex, Qt::DisplayRole).toString() == newName && siblingIndex != index) {
+                        QMessageBox::critical(this, "错误", "同一目录下已存在同名文件！");
+                        return;
+                    }
+                }
+                file *file = fsModel->getFileFromIndex(index);
+                file->setName(newName.toStdString()); // 直接设置新名称
+                displayFileSystem(); // 更新显示
+            } else {
+                QMessageBox::critical(this, "错误", "文件名不允许为空！");
+            }
+        } else {
+            QMessageBox::critical(this, "错误", "请选择一个文件！");
+        }
     }
 }
 
