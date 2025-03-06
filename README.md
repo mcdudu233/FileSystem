@@ -1,12 +1,9 @@
 # QT界面的文件管理系统
 
+![](https://oss.mcso.top/wordpress/2025/03/20250306024548617.png)
+
 > 这是一个课程设计的项目。
-> 
-
----
-
-## 介绍
-
+> 用C++实现的开源文件系统项目！3689行代码详解FCB结构设计、目录权限管理、数据序列化与Qt图形界面开发。可二次开发的文件系统源码，学习如何通过位示图法实现磁盘空间管理！
 
 ---
 
@@ -34,11 +31,27 @@
 
 以下命令在项目文件夹下运行，因此先进入项目文件夹`cd filesystem`。
 
+修改本目录下的`QT_PATH`文件，填入你的`QT`路径，如：
+
+```vim
+H:\QT\6.7.0\mingw_64
+```
+
 然后再运行：
 ``` bash
-cmake -B build
-cmake --build build
+mkdir build
+cd build
+cmake -G "MinGW Makefiles" ..
+cmake --build .
 ```
 编译好后的 **exe** 文件在 `build/` ，运行该程序即可。
+
+注意可能需要以下库：
+
+```bash
+cp "C:\Qt\6.7.2\mingw_64\bin\libgcc_s_seh-1.dll" ".\"
+cp "C:\Qt\6.7.2\mingw_64\bin\libstdc++-6.dll" ".\"
+cp "C:\Qt\6.7.2\mingw_64\bin\libwinpthread-1.dll" ".\"
+```
 
 ---
